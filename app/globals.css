@@ -112,6 +112,54 @@ body {
   opacity: 0.85;
 }
 
+/* ── Ticker marquee ─────────────────────────────────────── */
+@keyframes tickerLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes tickerRight {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Ambient orb drift ──────────────────────────────────── */
+@keyframes orbDrift {
+  0%, 100% { transform: translate(0px,   0px)   scale(1);    opacity: 0.18; }
+  33%       { transform: translate(30px, -20px)  scale(1.08); opacity: 0.13; }
+  66%       { transform: translate(-20px, 15px)  scale(0.95); opacity: 0.20; }
+}
+
+/* ── Ember gradient shimmer ─────────────────────────────── */
+.text-ember-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--ember-light) 0%,
+    var(--ember) 40%,
+    var(--ember-dark) 70%,
+    var(--ember-light) 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 6s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+/* ── Section scroll reveal ──────────────────────────────── */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.75s var(--ease-ios), transform 0.75s var(--ease-ios);
+}
+.section-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ── Scrollbar ──────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--graphite); }
