@@ -19,7 +19,7 @@ export default function DownloadCTA() {
       </div>
 
       {/* Cube card — far left, clear of the T */}
-      <div className="absolute top-1/2 -translate-y-1/2 left-[2%] z-10">
+      <div className="absolute top-[58%] -translate-y-1/2 left-[2%] z-10">
         <div
           className="bg-white rounded-2xl flex flex-col items-center justify-center text-center shadow-2xl p-5 gap-3"
           style={{ width: "160px", height: "160px" }}
