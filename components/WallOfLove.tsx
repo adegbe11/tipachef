@@ -61,7 +61,7 @@ export default function WallOfLove() {
               {TOP_CHEFS.map((c, i) => (
                 <div
                   key={c.name}
-                  className="flex items-center gap-4 px-5 py-4 border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02] transition-colors"
+                  className="flex items-center gap-4 px-4 sm:px-5 py-4 border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02] transition-colors"
                 >
                   <span
                     className="font-display text-sm w-6 text-center flex-shrink-0"

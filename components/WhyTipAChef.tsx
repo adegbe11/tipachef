@@ -65,7 +65,7 @@ export default function WhyTipAChef() {
 
         <div className="glass rounded-3xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[520px]">
               <thead>
                 <tr className="border-b border-white/5">
                   <th className="text-left px-6 py-4 font-sans text-ivory/35 text-xs font-normal tracking-wide w-1/2">Feature</th>

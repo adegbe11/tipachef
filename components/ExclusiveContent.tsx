@@ -116,7 +116,7 @@ export default function ExclusiveContent() {
               <span className="text-ember-gradient italic">behind the magic.</span>
             </h2>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {(["all", "free", "members"] as const).map((f) => (
               <button key={f} onClick={() => setFilter(f)}
                 className={`press text-xs font-sans font-medium px-4 py-2 rounded-full transition-all duration-200 capitalize tracking-wide ${

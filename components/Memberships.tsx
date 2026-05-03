@@ -93,7 +93,7 @@ export default function Memberships() {
                   🇬🇧
                 </div>
                 <div>
-                  <p className="font-sans text-ivory text-sm font-medium">Marcus T.</p>
+                  <p className="font-sans text-ivory text-sm font-medium">Marco Esposito</p>
                   <p className="font-sans text-ivory/40 text-xs">Head Chef · The Meridian, London</p>
                 </div>
                 <div className="ml-auto glass rounded-lg px-2.5 py-1">
@@ -101,7 +101,7 @@ export default function Memberships() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
                 {EARNINGS.map((e) => (
                   <div key={e.label} className="text-center p-3 rounded-xl bg-white/[0.03]">
                     <p className="font-display text-ember text-xl font-light mb-0.5">{e.value}</p>

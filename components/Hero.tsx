@@ -97,7 +97,7 @@ export default function Hero() {
       </div>
 
       {/* ── Content ──────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-32 pb-20 w-full">
         <div className="flex items-center justify-between gap-12 xl:gap-20">
 
           {/* Left: copy ───────────────────────────────────────── */}

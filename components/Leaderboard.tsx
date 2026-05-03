@@ -46,7 +46,7 @@ export default function Leaderboard() {
               <span className="text-ember-gradient italic">chefs this month.</span>
             </h2>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {FILTERS.map((f, i) => (
               <button key={f} onClick={() => setFilter(i)}
                 className={`press text-xs font-sans font-medium px-4 py-2 rounded-full transition-all duration-200 ${

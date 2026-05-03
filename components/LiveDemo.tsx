@@ -140,7 +140,7 @@ export default function LiveDemo() {
                   placeholder="Custom amount"
                   value={custom}
                   onChange={(e) => { setCustom(e.target.value); setSent(false); }}
-                  className="w-full glass rounded-xl px-4 py-2.5 text-sm font-sans text-ivory placeholder:text-ivory/25 outline-none border border-transparent focus:border-ember/30 mb-4 transition-colors"
+                  className="w-full glass rounded-xl px-4 py-2.5 text-base font-sans text-ivory placeholder:text-ivory/25 outline-none border border-transparent focus:border-ember/30 mb-4 transition-colors"
                 />
 
                 {/* Message */}
@@ -150,7 +150,7 @@ export default function LiveDemo() {
                     rows={2}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="w-full glass rounded-xl px-4 py-3 text-sm font-sans text-ivory/80 placeholder:text-ivory/25 outline-none border border-transparent focus:border-ember/30 resize-none transition-colors leading-relaxed"
+                    className="w-full glass rounded-xl px-4 py-3 text-base font-sans text-ivory/80 placeholder:text-ivory/25 outline-none border border-transparent focus:border-ember/30 resize-none transition-colors leading-relaxed"
                   />
                   <div className="flex gap-1.5 mt-2 flex-wrap">
                     {MESSAGES.slice(0, 2).map((m) => (

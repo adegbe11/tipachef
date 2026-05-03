@@ -57,7 +57,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/5 bg-graphite">
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mb-14">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-5">
               <Image src="/tipchef-logo.png" alt="Tip a Chef" width={32} height={32} className="rounded-lg" />
