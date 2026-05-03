@@ -19,7 +19,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Tip a Chef · Honour the hands behind every dish",
   description:
-    "Tip a Chef lets diners send gratitude directly to the chefs and kitchen teams who create their meals. Scan a QR code, send a direct tip, honour the craft.",
+    "Great food deserves more than applause. TipAChef lets your fans tip you in seconds, leave a note, and support the chef behind every dish they love.",
   keywords: ["tip a chef", "chef tipping", "restaurant kitchen tips", "Tip a Chef", "direct chef tips"],
   openGraph: {
     title: "Tip a Chef · Honour the craft",
