@@ -1,76 +1,115 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-
-const STEPS = [
+const DINERS = [
   {
-    n: "01",
-    title: "Create your free profile",
-    body:  "Build your chef page in 2 minutes. Your story, your dishes, your QR. No card required.",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    ),
+    label: "Discover chefs",
   },
   {
-    n: "02",
-    title: "Display your QR code",
-    body:  "Put it on the table, share it on social, hand it out at events. Diners scan — no app on their end.",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    ),
+    label: "View their story & dishes",
   },
   {
-    n: "03",
-    title: "Get paid. Instantly.",
-    body:  "Tips land in your account within minutes. 100% to you. No 30-day hold, no management cut.",
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    ),
+    label: "Send a tip instantly",
   },
 ];
 
-function useReveal(ref: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => e.isIntersecting && el.classList.add("visible"),
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [ref]);
+const CHEFS = [
+  {
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    ),
+    label: "Create a profile",
+  },
+  {
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+    ),
+    label: "Share your story & dishes",
+  },
+  {
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/>
+        <line x1="2" y1="10" x2="22" y2="10"/>
+      </svg>
+    ),
+    label: "Receive tips directly",
+  },
+];
+
+function StepColumn({ n, icon, label }: { n: string; icon: React.ReactNode; label: string }) {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-16 h-16 rounded-2xl bg-ember/10 border border-ember/20 flex items-center justify-center text-ember">
+        {icon}
+      </div>
+      <p className="font-sans text-ivory text-sm font-medium text-center leading-snug max-w-[130px]">
+        {label}
+      </p>
+      <span className="font-display text-ember/25 text-xs tracking-widest">{n}</span>
+    </div>
+  );
 }
 
 export default function HowItWorks() {
-  const headRef = useRef<HTMLHeadingElement>(null);
-  useReveal(headRef as React.RefObject<HTMLElement>);
-
   return (
-    <section id="how-it-works" className="py-24 md:py-36 relative overflow-hidden">
-      <div
-        className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full opacity-[0.04] pointer-events-none"
-        style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
-      />
+    <section id="how-it-works" className="py-24 md:py-36">
+      <div className="content-container text-center">
 
-      <div className="content-container">
-        <p className="eyebrow mb-4">Get set up in minutes</p>
+        <p className="eyebrow mb-4">How it works</p>
         <h2
-          ref={headRef}
-          className="reveal fluid-heading font-display text-ivory leading-tight mb-12"
-          style={{ fontWeight: 300 }}
+          className="font-display text-ivory leading-tight mb-16"
+          style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.8rem)", fontWeight: 300 }}
         >
-          Three steps to start{" "}
-          <span className="text-ember-gradient italic">earning directly.</span>
+          Simple for every chef.{" "}
+          <span className="text-ember-gradient italic">Instant for every tipper.</span>
         </h2>
 
-        <div className="space-y-0">
-          {STEPS.map((step, i) => (
-            <div
-              key={step.n}
-              className={`flex items-start gap-6 py-7 ${i < STEPS.length - 1 ? "border-b border-white/5" : ""}`}
-            >
-              <span className="font-display text-ember/30 text-4xl font-light leading-none flex-shrink-0 w-14 text-right">
-                {step.n}
-              </span>
-              <div>
-                <h3 className="font-sans text-ivory font-medium text-base mb-1">{step.title}</h3>
-                <p className="font-sans text-ivory/60 text-sm leading-relaxed font-light">{step.body}</p>
-              </div>
+        <div className="grid md:grid-cols-2 gap-0 max-w-2xl mx-auto">
+
+          {/* Diners */}
+          <div className="flex flex-col items-center pb-12 md:pb-0 md:pr-12 border-b border-white/5 md:border-b-0 md:border-r md:border-white/5">
+            <p className="eyebrow text-ivory/30 mb-10" style={{ fontSize: "0.65rem" }}>For diners</p>
+            <div className="flex flex-col gap-10 w-full items-center">
+              {DINERS.map((s, i) => (
+                <StepColumn key={s.label} n={`0${i + 1}`} icon={s.icon} label={s.label} />
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Chefs */}
+          <div className="flex flex-col items-center pt-12 md:pt-0 md:pl-12">
+            <p className="eyebrow text-ivory/30 mb-10" style={{ fontSize: "0.65rem" }}>For chefs</p>
+            <div className="flex flex-col gap-10 w-full items-center">
+              {CHEFS.map((s, i) => (
+                <StepColumn key={s.label} n={`0${i + 1}`} icon={s.icon} label={s.label} />
+              ))}
+            </div>
+          </div>
+
         </div>
+
       </div>
     </section>
   );

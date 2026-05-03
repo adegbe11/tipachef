@@ -1,123 +1,90 @@
-"use client";
+import Link from "next/link";
 
-import { useEffect, useRef } from "react";
-
-const FEATURES = [
-  { title: "Personal QR code",    body: "Download and display it anywhere. Diners scan and tip you directly." },
-  { title: "Instant payouts",     body: "Money in your account within minutes. Link your bank once." },
-  { title: "Earnings dashboard",  body: "Track tips by shift, week or venue. Always know what you're owed." },
-  { title: "Diner messages",      body: "Every tip comes with a note. Read what your cooking means to people." },
+const BENEFITS = [
+  {
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/>
+        <line x1="2" y1="10" x2="22" y2="10"/>
+      </svg>
+    ),
+    title:  "Earn directly from your audience",
+    body:   "Every tip goes straight to you. No middleman, no monthly hold, no management cut.",
+  },
+  {
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
+    title:  "Build a personal brand",
+    body:   "Your profile travels with you. From restaurant to pop-up to private kitchen — you own it.",
+  },
+  {
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+    ),
+    title:  "Live in minutes",
+    body:   "Create your profile, get your QR code, start receiving tips — in under two minutes.",
+  },
 ];
 
-function useReveal(ref: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => e.isIntersecting && el.classList.add("visible"),
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [ref]);
-}
-
 export default function ForChefs() {
-  const headRef = useRef<HTMLHeadingElement>(null);
-  useReveal(headRef as React.RefObject<HTMLElement>);
-
   return (
-    <section id="for-chefs" className="py-24 md:py-36 relative overflow-hidden">
-      <div
-        className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-[0.04] pointer-events-none"
-        style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
-      />
-
+    <section id="for-chefs" className="py-24 md:py-36">
       <div className="content-container">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-          {/* Left */}
-          <div>
-            <p className="eyebrow mb-4">For chefs</p>
-            <h2
-              ref={headRef}
-              className="reveal fluid-heading font-display text-ivory leading-tight mb-5"
-              style={{ fontWeight: 300 }}
-            >
-              Front-of-house gets tipped.<br />
-              <span className="text-ember-gradient italic">Now you do too.</span>
-            </h2>
-            <p className="font-sans text-ivory/70 leading-relaxed font-light mb-8 max-w-md text-sm">
-              Set up in 2 minutes. Move between kitchens, pop-ups and events — your profile and QR travel with you.
-            </p>
-
-            <div className="space-y-0 mb-8">
-              {FEATURES.map((f, i) => (
-                <div key={f.title} className={`flex gap-4 py-4 ${i < FEATURES.length - 1 ? "border-b border-white/5" : ""}`}>
-                  <div className="w-5 h-5 rounded-full bg-ember/15 border border-ember/35 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-sans text-ivory text-sm font-medium mb-0.5">{f.title}</p>
-                    <p className="font-sans text-ivory/55 text-xs leading-relaxed">{f.body}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <a
-              href="#download"
-              className="press inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-ember text-graphite font-sans font-semibold text-sm tracking-wide hover:bg-ember-light transition-all duration-300"
-            >
-              Claim your chef profile
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-
-          {/* Right: earnings mockup */}
-          <div className="glass rounded-3xl p-8 relative overflow-hidden">
-            <div
-              className="absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-10"
-              style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
-            />
-            <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-full bg-ember/20 border border-ember/30 flex items-center justify-center text-lg">
-                  🇬🇧
-                </div>
-                <div>
-                  <p className="font-sans text-ivory font-medium text-sm">Chef Marco Esposito</p>
-                  <p className="font-sans text-ivory/40 text-xs">Head Chef · The Meridian, London</p>
-                </div>
-                <div className="ml-auto glass rounded-xl px-3 py-1.5">
-                  <span className="text-ember text-xs font-sans font-medium">● Live</span>
-                </div>
-              </div>
-
-              <div className="space-y-0 mb-6">
-                {[
-                  { label: "Tonight's service", amount: "$47" },
-                  { label: "Saturday lunch",    amount: "$83" },
-                  { label: "Friday dinner",     amount: "$62" },
-                ].map((row, i, arr) => (
-                  <div key={row.label} className={`flex items-center justify-between py-4 ${i < arr.length - 1 ? "border-b border-white/5" : ""}`}>
-                    <span className="font-sans text-ivory/55 text-sm">{row.label}</span>
-                    <span className="font-sans text-ivory text-sm font-medium">{row.amount}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-4 border-t border-white/8 flex items-center justify-between">
-                <span className="eyebrow text-ivory/30">This week</span>
-                <span className="font-display text-ember text-2xl font-light">$192</span>
-              </div>
-            </div>
-          </div>
+        {/* Header */}
+        <div className="text-center max-w-xl mx-auto mb-16">
+          <p className="eyebrow mb-4">For chefs</p>
+          <h2
+            className="font-display text-ivory leading-tight mb-4"
+            style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.8rem)", fontWeight: 300 }}
+          >
+            Built for the people<br />
+            <span className="text-ember-gradient italic">behind every great meal.</span>
+          </h2>
+          <p className="font-sans text-ivory/45 text-sm leading-relaxed font-light">
+            You put everything into the food. It's time the recognition caught up.
+          </p>
         </div>
+
+        {/* Benefits grid */}
+        <div className="grid md:grid-cols-3 gap-4 mb-14">
+          {BENEFITS.map((b) => (
+            <div
+              key={b.title}
+              className="flex flex-col gap-5 rounded-2xl bg-charcoal border border-white/[0.07] p-8 hover:border-white/[0.14] transition-colors duration-300"
+            >
+              <div className="w-12 h-12 rounded-xl bg-ember/10 border border-ember/15 flex items-center justify-center text-ember flex-shrink-0">
+                {b.icon}
+              </div>
+              <div>
+                <p className="font-sans text-ivory font-semibold text-sm mb-2">{b.title}</p>
+                <p className="font-sans text-ivory/45 text-sm leading-relaxed font-light">{b.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="text-center">
+          <Link
+            href="/signup"
+            className="press inline-flex items-center gap-2 px-9 py-4 rounded-full bg-ember text-graphite font-sans font-semibold text-sm tracking-wide hover:bg-ember-light transition-all duration-200 shadow-lg shadow-ember/25"
+          >
+            Join as a Chef
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </Link>
+          <p className="font-sans text-ivory/25 text-xs mt-4">Free to join. No card required.</p>
+        </div>
+
       </div>
     </section>
   );

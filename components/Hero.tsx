@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 
 const CYCLING_WORDS = ["cooking", "craft", "passion", "art"];
 
@@ -38,16 +37,17 @@ export default function Hero() {
 
       {/* ── Background layer ─────────────────────────────────── */}
       <div className="absolute inset-0">
-        {/* Parallax photo */}
+        {/* Parallax video */}
         <div ref={imgRef} className="absolute inset-0 scale-110 will-change-transform">
-          <Image
-            src="/tipchef-welcome.png"
-            alt="Chef at work"
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          >
+            <source src="/tipachef.mp4" type="video/mp4" />
+          </video>
         </div>
 
         {/* Centered radial vignette — keeps subject visible, darkens edges (Apple-style) */}
@@ -119,8 +119,7 @@ export default function Hero() {
             animationFillMode: "forwards",
           }}
         >
-          Diners scan a QR, tip you directly, and send a thank-you message.
-          100% goes to the kitchen — no app required on their side.
+          Join thousands of chefs getting tipped directly by the people who love their food.
         </p>
 
         <div
@@ -135,17 +134,17 @@ export default function Hero() {
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            Claim your free chef profile
+            Create Your Chef Profile
           </a>
           <a
-            href="#restaurants"
+            href="/search"
             className="press inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/15 text-ivory font-sans font-medium text-sm tracking-wide hover:bg-white/[0.08] transition-all duration-300"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
               <polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
-            For restaurants
+            Tip a Chef
           </a>
         </div>
       </div>
