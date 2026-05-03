@@ -51,7 +51,7 @@ export default function LiveDemo() {
   }
 
   return (
-    <section className="py-28 md:py-36 relative overflow-hidden bg-charcoal/20">
+    <section className="py-28 md:py-40 relative overflow-hidden bg-charcoal/20">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{ background: "radial-gradient(ellipse 70% 50% at 30% 50%, #C9A96E 0%, transparent 70%)" }} />
 
@@ -65,7 +65,7 @@ export default function LiveDemo() {
             Your profile. Their{" "}
             <span className="text-ember-gradient italic">gratitude. Your money.</span>
           </h2>
-          <p className="font-sans text-ivory/55 leading-relaxed font-light mb-8 max-w-md">
+          <p className="font-sans text-ivory/70 leading-relaxed font-light mb-8 max-w-md">
             This is what a diner sees when they scan your QR code. Zero friction on their side means
             more tips in your pocket. No app, no account, no barrier between their appreciation and your earnings.
           </p>

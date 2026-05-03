@@ -37,8 +37,8 @@ export default function WallOfLove() {
   useReveal(headRef as React.RefObject<HTMLElement>);
 
   return (
-    <section className="py-20 md:py-28 relative overflow-hidden bg-charcoal/20">
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-[0.04] pointer-events-none"
+    <section className="py-24 md:py-36 relative overflow-hidden bg-charcoal/20">
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-[0.035] pointer-events-none"
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }} />
 
       <div className="content-container">
@@ -56,7 +56,7 @@ export default function WallOfLove() {
 
           {/* Leaderboard */}
           <div>
-            <p className="font-sans text-ivory/40 text-xs tracking-widest uppercase mb-4">Top earning chefs this month</p>
+            <p className="font-sans text-ivory/55 text-xs tracking-widest uppercase mb-4">Top earning chefs this month</p>
             <div className="glass rounded-3xl overflow-hidden">
               {TOP_CHEFS.map((c, i) => (
                 <div
@@ -88,7 +88,7 @@ export default function WallOfLove() {
 
           {/* Message feed */}
           <div>
-            <p className="font-sans text-ivory/40 text-xs tracking-widest uppercase mb-4">Latest diner messages</p>
+            <p className="font-sans text-ivory/55 text-xs tracking-widest uppercase mb-4">Latest diner messages</p>
             <div className="space-y-3">
               {MESSAGES.map((m) => (
                 <div key={m.name + m.message} className="glass rounded-2xl px-5 py-4">
@@ -100,7 +100,7 @@ export default function WallOfLove() {
                     <span className="font-sans text-ember text-xs font-semibold ml-auto">${m.amount}</span>
                     <span className="font-sans text-ivory/20 text-xs">to {m.chef}</span>
                   </div>
-                  <p className="font-sans text-ivory/50 text-sm italic leading-relaxed">&ldquo;{m.message}&rdquo;</p>
+                  <p className="font-sans text-ivory/65 text-sm italic leading-relaxed">&ldquo;{m.message}&rdquo;</p>
                 </div>
               ))}
             </div>

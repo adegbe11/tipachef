@@ -27,7 +27,7 @@ export default function ForChefs() {
   useReveal(headRef as React.RefObject<HTMLElement>);
 
   return (
-    <section id="for-chefs" className="py-20 md:py-28 relative overflow-hidden">
+    <section id="for-chefs" className="py-24 md:py-36 relative overflow-hidden">
       <div
         className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full opacity-[0.04] pointer-events-none"
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
@@ -47,17 +47,21 @@ export default function ForChefs() {
               Front-of-house gets tipped.<br />
               <span className="text-ember-gradient italic">Now you do too.</span>
             </h2>
-            <p className="font-sans text-ivory/55 leading-relaxed font-light mb-8 max-w-md text-sm">
+            <p className="font-sans text-ivory/70 leading-relaxed font-light mb-8 max-w-md text-sm">
               Set up in 2 minutes. Move between kitchens, pop-ups and events — your profile and QR travel with you.
             </p>
 
             <div className="space-y-0 mb-8">
               {FEATURES.map((f, i) => (
                 <div key={f.title} className={`flex gap-4 py-4 ${i < FEATURES.length - 1 ? "border-b border-white/5" : ""}`}>
-                  <div className="w-1.5 h-1.5 rounded-full bg-ember mt-2 flex-shrink-0" />
+                  <div className="w-5 h-5 rounded-full bg-ember/15 border border-ember/35 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
                   <div>
                     <p className="font-sans text-ivory text-sm font-medium mb-0.5">{f.title}</p>
-                    <p className="font-sans text-ivory/40 text-xs leading-relaxed">{f.body}</p>
+                    <p className="font-sans text-ivory/55 text-xs leading-relaxed">{f.body}</p>
                   </div>
                 </div>
               ))}

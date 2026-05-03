@@ -132,11 +132,11 @@ export default function Hero() {
             </h1>
 
             <p
-              className="opacity-0 animate-fade-up fluid-body-lg font-sans text-ivory/70 font-light leading-relaxed mb-10 max-w-lg"
+              className="opacity-0 animate-fade-up fluid-body-lg font-sans text-ivory/75 font-light leading-relaxed mb-10 max-w-lg"
               style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}
             >
-              Tip a Chef connects you directly with every diner you impress.
-              Set up your profile in 2 minutes. Get paid instantly. Build a following that loves you.
+              Diners scan your QR, choose an amount, and tip you directly.
+              No app on their side. No waiting on a paycheck. Just gratitude, instantly paid.
             </p>
 
             <div
@@ -151,7 +151,7 @@ export default function Hero() {
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
                 </svg>
-                Claim your free chef profile
+                Start earning from your craft
               </a>
               <a
                 href="#restaurants"

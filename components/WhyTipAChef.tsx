@@ -48,7 +48,7 @@ export default function WhyTipAChef() {
   useReveal(headRef as React.RefObject<HTMLElement>);
 
   return (
-    <section className="py-20 md:py-28 relative overflow-hidden">
+    <section className="py-24 md:py-36 relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
         style={{ background: "radial-gradient(ellipse 60% 40% at 50% 50%, #C9A96E 0%, transparent 70%)" }} />
 

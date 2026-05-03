@@ -38,7 +38,7 @@ export default function HowItWorks() {
   useReveal(headRef as React.RefObject<HTMLElement>);
 
   return (
-    <section id="how-it-works" className="py-20 md:py-28 relative overflow-hidden">
+    <section id="how-it-works" className="py-24 md:py-36 relative overflow-hidden">
       <div
         className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full opacity-[0.04] pointer-events-none"
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
@@ -66,7 +66,7 @@ export default function HowItWorks() {
               </span>
               <div>
                 <h3 className="font-sans text-ivory font-medium text-base mb-1">{step.title}</h3>
-                <p className="font-sans text-ivory/45 text-sm leading-relaxed font-light">{step.body}</p>
+                <p className="font-sans text-ivory/60 text-sm leading-relaxed font-light">{step.body}</p>
               </div>
             </div>
           ))}
