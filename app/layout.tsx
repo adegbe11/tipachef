@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Tip a Chef · Honour the hands behind every dish",
+  title: "TipAChef — Tip Your Favourite Chef in Seconds",
   description:
     "Great food deserves more than applause. TipAChef lets your fans tip you in seconds, leave a note, and support the chef behind every dish they love.",
   keywords: ["tip a chef", "chef tipping", "restaurant kitchen tips", "Tip a Chef", "direct chef tips"],
