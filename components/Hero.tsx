@@ -83,33 +83,6 @@ export default function Hero() {
         />
       </div>
 
-      {/* ── Top: brand lockup ─────────────────────────────────── */}
-      <div
-        className="relative z-10 flex flex-col items-center gap-2.5 pt-24 md:pt-28 opacity-0 animate-fade-in"
-        style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
-      >
-        <div className="flex items-center gap-4">
-          <Image
-            src="/tipchef-logo.png"
-            alt="Tip a Chef"
-            width={42}
-            height={42}
-            className="rounded-xl"
-            priority
-          />
-          <div className="w-px h-8 bg-ivory/20" />
-          <span
-            className="font-display text-ivory leading-none italic"
-            style={{ fontSize: "1.3rem", fontWeight: 500, letterSpacing: "0.01em" }}
-          >
-            Tip a Chef
-          </span>
-        </div>
-        <p className="font-sans text-ivory/55 text-[0.7rem] tracking-[0.2em] uppercase">
-          The direct-to-kitchen tipping platform
-        </p>
-      </div>
-
       {/* ── Middle: headline + subtitle + CTAs ────────────────── */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto py-10">
         <h1
@@ -177,20 +150,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Bottom: trust badges ──────────────────────────────── */}
-      <div
-        className="relative z-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 pb-10 px-6 opacity-0 animate-fade-in"
-        style={{ animationDelay: "1s", animationFillMode: "forwards" }}
-      >
-        {["Free to set up", "Instant payouts", "2,400+ chefs earning", "No monthly fees"].map((badge) => (
-          <span key={badge} className="flex items-center gap-1.5 text-xs font-sans text-ivory/55">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-            {badge}
-          </span>
-        ))}
-      </div>
     </section>
   );
 }
