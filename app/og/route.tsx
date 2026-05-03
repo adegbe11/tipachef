@@ -96,81 +96,58 @@ export async function GET() {
           </div>
 
           {/* Middle: headline */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <div
-              style={{
-                width: "40px",
-                height: "2px",
-                background: "#C9A96E",
-                borderRadius: "2px",
-              }}
-            />
+          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
             <div
               style={{
                 fontFamily: "Georgia, serif",
-                fontSize: "58px",
-                fontWeight: "300",
+                fontSize: "78px",
+                fontWeight: "700",
                 color: "#FAF8F4",
-                lineHeight: "1.12",
-                letterSpacing: "-0.02em",
+                lineHeight: "1",
+                letterSpacing: "-0.03em",
               }}
             >
-              The chef who made
-              <br />
-              your meal{" "}
-              <span style={{ color: "#C9A96E", fontStyle: "italic" }}>
-                deserves
-              </span>
-              <br />
-              <span style={{ color: "#C9A96E", fontStyle: "italic" }}>
-                to know.
-              </span>
+              TIP A CHEF
             </div>
             <div
               style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: "19px",
+                fontFamily: "Georgia, serif",
+                fontSize: "28px",
                 fontWeight: "300",
-                color: "rgba(250,248,244,0.45)",
+                color: "#C9A96E",
+                fontStyle: "italic",
                 letterSpacing: "0.01em",
-                lineHeight: "1.5",
+                lineHeight: "1.3",
               }}
             >
-              Tip directly. No app needed. Free to join.
+              Support the hands behind the flavor.
             </div>
           </div>
 
-          {/* Bottom: URL pill */}
+          {/* Bottom: Join CTA pill */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "10px",
-              background: "rgba(201,169,110,0.08)",
-              border: "1px solid rgba(201,169,110,0.2)",
+              gap: "12px",
+              background: "#C9A96E",
               borderRadius: "100px",
-              padding: "10px 20px",
+              padding: "14px 28px",
               width: "fit-content",
             }}
           >
-            <div
-              style={{
-                width: "7px",
-                height: "7px",
-                borderRadius: "50%",
-                background: "#C9A96E",
-              }}
-            />
             <span
               style={{
                 fontFamily: "system-ui, sans-serif",
-                fontSize: "15px",
-                color: "rgba(250,248,244,0.55)",
+                fontSize: "16px",
+                fontWeight: "600",
+                color: "#111111",
                 letterSpacing: "0.04em",
               }}
             >
-              tipachef.com
+              Join Here
             </span>
+            <span style={{ color: "#111111", fontSize: "16px" }}>→</span>
           </div>
         </div>
 
