@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 const CYCLING_WORDS = ["cooking", "craft", "passion", "art"];
 
 export default function Hero() {
+  const imgRef = useRef<HTMLDivElement>(null);
   const [wordIdx, setWordIdx] = useState(0);
   const [wordVisible, setWordVisible] = useState(true);
 
+  // Cycling headline word
   useEffect(() => {
     const id = setInterval(() => {
       setWordVisible(false);
@@ -20,65 +22,124 @@ export default function Hero() {
     return () => clearInterval(id);
   }, []);
 
+  // Parallax scroll on the background image
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      el.style.transform = `translateY(${window.scrollY * 0.22}px)`;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <section className="min-h-screen bg-ivory text-graphite relative flex flex-col items-center px-6 pt-20 md:pt-24 pb-10">
+    <section className="relative min-h-screen flex flex-col items-center overflow-hidden text-ivory">
+
+      {/* ── Background layer ─────────────────────────────────── */}
+      <div className="absolute inset-0">
+        {/* Parallax photo */}
+        <div ref={imgRef} className="absolute inset-0 scale-110 will-change-transform">
+          <Image
+            src="/tipchef-welcome.png"
+            alt="Chef at work"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+        </div>
+
+        {/* Centered radial vignette — keeps subject visible, darkens edges (Apple-style) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 90% 75% at 50% 45%, rgba(17,17,17,0.55) 0%, rgba(17,17,17,0.85) 70%, rgba(17,17,17,0.95) 100%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-graphite/40 via-transparent to-graphite/80" />
+
+        {/* Ambient ember glow */}
+        <div
+          className="absolute w-[700px] h-[700px] rounded-full blur-3xl pointer-events-none"
+          style={{
+            top: "30%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%)",
+            animation: "orbDrift 16s ease-in-out infinite",
+          }}
+        />
+
+        {/* Film grain */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+            opacity: 0.04,
+            mixBlendMode: "overlay",
+          }}
+        />
+      </div>
+
       {/* ── Top: brand lockup ─────────────────────────────────── */}
-      <div className="flex flex-col items-center gap-3 z-10 opacity-0 animate-fade-in"
+      <div
+        className="relative z-10 flex flex-col items-center gap-2.5 pt-24 md:pt-28 opacity-0 animate-fade-in"
         style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
       >
         <div className="flex items-center gap-4">
           <Image
             src="/tipchef-logo.png"
             alt="Tip a Chef"
-            width={44}
-            height={44}
+            width={42}
+            height={42}
             className="rounded-xl"
             priority
           />
-          <div className="w-px h-9 bg-graphite/15" />
+          <div className="w-px h-8 bg-ivory/20" />
           <span
-            className="font-display text-graphite leading-none"
-            style={{ fontSize: "1.35rem", fontWeight: 500, fontStyle: "italic", letterSpacing: "0.01em" }}
+            className="font-display text-ivory leading-none italic"
+            style={{ fontSize: "1.3rem", fontWeight: 500, letterSpacing: "0.01em" }}
           >
             Tip a Chef
           </span>
         </div>
-        <p className="font-sans text-graphite/55 text-[0.7rem] tracking-[0.18em] uppercase mt-1">
+        <p className="font-sans text-ivory/55 text-[0.7rem] tracking-[0.2em] uppercase">
           The direct-to-kitchen tipping platform
         </p>
       </div>
 
-      {/* ── Middle: massive headline + CTA ────────────────────── */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center max-w-5xl mx-auto py-16">
+      {/* ── Middle: headline + subtitle + CTAs ────────────────── */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto py-10">
         <h1
-          className="font-sans uppercase text-graphite mb-8 opacity-0 animate-fade-up"
+          className="font-display leading-none mb-8 opacity-0 animate-fade-up"
           style={{
-            fontSize: "clamp(2.4rem, 9vw, 6.6rem)",
-            fontWeight: 800,
-            letterSpacing: "-0.025em",
-            lineHeight: 0.92,
+            fontSize: "clamp(2.8rem, 9vw, 7rem)",
+            fontWeight: 300,
             animationDelay: "0.35s",
             animationFillMode: "forwards",
           }}
         >
           Earn what your{" "}
           <span
-            className="inline-block text-ember-dark"
+            className="text-ember-gradient italic inline-block"
             style={{
               opacity: wordVisible ? 1 : 0,
               transform: wordVisible ? "translateY(0)" : "translateY(-12px)",
               transition: "opacity 0.35s ease, transform 0.38s ease",
               minWidth: "5ch",
+              display: "inline-block",
             }}
           >
             {CYCLING_WORDS[wordIdx]}
           </span>
           <br />
-          deserves.
+          <span className="text-ember-gradient italic">deserves.</span>
         </h1>
 
         <p
-          className="font-sans text-graphite/70 max-w-xl mx-auto mb-10 opacity-0 animate-fade-up leading-relaxed"
+          className="font-sans text-ivory/75 max-w-xl mx-auto mb-10 leading-relaxed font-light opacity-0 animate-fade-up"
           style={{
             fontSize: "clamp(1.05rem, 1.5vw, 1.25rem)",
             animationDelay: "0.55s",
@@ -89,22 +150,47 @@ export default function Hero() {
           100% goes to the kitchen — no app required on their side.
         </p>
 
-        <a
-          href="/signup"
-          className="press inline-flex items-center bg-ember text-graphite font-sans font-semibold px-10 py-3.5 rounded-full text-sm tracking-wide hover:bg-ember-dark hover:text-ivory transition-all duration-200 opacity-0 animate-fade-up shadow-md shadow-ember/20"
+        <div
+          className="flex flex-wrap items-center justify-center gap-4 opacity-0 animate-fade-up"
           style={{ animationDelay: "0.75s", animationFillMode: "forwards" }}
         >
-          Get started
-        </a>
+          <a
+            href="/signup"
+            className="press inline-flex items-center gap-2 px-9 py-4 rounded-full bg-ember text-graphite font-sans font-semibold text-sm tracking-wide hover:bg-ember-light transition-all duration-300 shadow-lg shadow-ember/25"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            Claim your free chef profile
+          </a>
+          <a
+            href="#restaurants"
+            className="press inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/15 text-ivory font-sans font-medium text-sm tracking-wide hover:bg-white/[0.08] transition-all duration-300"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            For restaurants
+          </a>
+        </div>
       </div>
 
-      {/* ── Bottom: fine print ────────────────────────────────── */}
-      <p
-        className="font-sans text-graphite/50 text-xs text-center max-w-md opacity-0 animate-fade-in"
+      {/* ── Bottom: trust badges ──────────────────────────────── */}
+      <div
+        className="relative z-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 pb-10 px-6 opacity-0 animate-fade-in"
         style={{ animationDelay: "1s", animationFillMode: "forwards" }}
       >
-        Free for chefs and restaurants. Instant payouts. No app required for diners.
-      </p>
+        {["Free to set up", "Instant payouts", "2,400+ chefs earning", "No monthly fees"].map((badge) => (
+          <span key={badge} className="flex items-center gap-1.5 text-xs font-sans text-ivory/55">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {badge}
+          </span>
+        ))}
+      </div>
     </section>
   );
 }

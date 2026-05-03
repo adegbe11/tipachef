@@ -78,9 +78,7 @@ export default function Navbar() {
               <div className="absolute inset-0 rounded-xl ring-1 ring-ember/20 group-hover:ring-ember/50 transition-all duration-300" />
             </div>
             <span
-              className={`font-display leading-none select-none transition-colors duration-300 ${
-                scrolled ? "text-ivory" : "text-graphite"
-              }`}
+              className="font-display text-ivory leading-none select-none"
               style={{ fontSize: "1.35rem", fontWeight: 400, fontStyle: "italic", letterSpacing: "0.01em" }}
             >
               Tip a Chef
@@ -93,11 +91,7 @@ export default function Navbar() {
               <a
                 key={l.href}
                 href={l.href}
-                className={`relative text-sm font-sans font-normal transition-colors duration-300 tracking-wide group ${
-                  scrolled
-                    ? "text-ivory/55 hover:text-ivory"
-                    : "text-graphite/65 hover:text-graphite"
-                }`}
+                className="relative text-sm font-sans font-normal text-ivory/55 hover:text-ivory transition-colors duration-200 tracking-wide group"
               >
                 {l.label}
                 <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-ember group-hover:w-full transition-all duration-300" />
@@ -110,12 +104,8 @@ export default function Navbar() {
             <div
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-full transition-all duration-300 cursor-text ${
                 searchOpen
-                  ? scrolled
-                    ? "bg-white/8 border border-ember/40 shadow-lg shadow-ember/10"
-                    : "bg-graphite/5 border border-ember/40 shadow-lg shadow-ember/10"
-                  : scrolled
-                    ? "bg-white/5 border border-white/8 hover:border-white/15 hover:bg-white/7"
-                    : "bg-graphite/[0.04] border border-graphite/10 hover:border-graphite/20 hover:bg-graphite/[0.06]"
+                  ? "bg-white/8 border border-ember/40 shadow-lg shadow-ember/10"
+                  : "bg-white/5 border border-white/8 hover:border-white/15 hover:bg-white/7"
               }`}
               onClick={() => setSearchOpen(true)}
             >
@@ -128,9 +118,7 @@ export default function Navbar() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`flex-shrink-0 transition-colors duration-300 ${
-                  searchOpen ? "text-ember" : scrolled ? "text-ivory/35" : "text-graphite/40"
-                }`}
+                className={`flex-shrink-0 transition-colors duration-300 ${searchOpen ? "text-ember" : "text-ivory/35"}`}
               >
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -142,11 +130,7 @@ export default function Navbar() {
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setSearchOpen(true)}
                 placeholder="Search chefs & restaurants..."
-                className={`flex-1 bg-transparent text-sm font-sans outline-none min-w-0 transition-colors duration-300 ${
-                  scrolled
-                    ? "text-ivory placeholder:text-ivory/30"
-                    : "text-graphite placeholder:text-graphite/40"
-                }`}
+                className="flex-1 bg-transparent text-sm font-sans text-ivory placeholder:text-ivory/30 outline-none min-w-0"
               />
               {query && (
                 <button
@@ -217,11 +201,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-2.5 flex-shrink-0 ml-auto lg:ml-0">
             <a
               href="/login"
-              className={`press text-sm font-sans font-medium px-5 py-2.5 rounded-full transition-colors duration-300 tracking-wide whitespace-nowrap ${
-                scrolled
-                  ? "text-ivory/65 hover:text-ivory"
-                  : "text-graphite/70 hover:text-graphite"
-              }`}
+              className="press text-sm font-sans font-medium px-5 py-2.5 rounded-full text-ivory/65 hover:text-ivory transition-colors duration-200 tracking-wide whitespace-nowrap"
             >
               Sign in
             </a>
@@ -237,9 +217,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center gap-3 ml-auto">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className={`press p-3 hover:text-ember transition-colors duration-300 ${
-                scrolled ? "text-ivory/60" : "text-graphite/65"
-              }`}
+              className="press p-3 text-ivory/60 hover:text-ember transition-colors"
               aria-label="Search"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -251,9 +229,9 @@ export default function Navbar() {
               className="flex flex-col gap-1.5 p-3 press"
               aria-label="Menu"
             >
-              <span className={`block h-px w-5 transition-all duration-300 ${scrolled ? "bg-ivory" : "bg-graphite"} ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-              <span className={`block h-px w-5 transition-all duration-300 ${scrolled ? "bg-ivory" : "bg-graphite"} ${menuOpen ? "opacity-0" : ""}`} />
-              <span className={`block h-px w-5 transition-all duration-300 ${scrolled ? "bg-ivory" : "bg-graphite"} ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+              <span className={`block h-px w-5 bg-ivory transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+              <span className={`block h-px w-5 bg-ivory transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+              <span className={`block h-px w-5 bg-ivory transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
             </button>
           </div>
         </div>
