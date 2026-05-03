@@ -217,7 +217,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center gap-3 ml-auto">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="press p-2 text-ivory/60 hover:text-ember transition-colors"
+              className="press p-3 text-ivory/60 hover:text-ember transition-colors"
               aria-label="Search"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -226,7 +226,7 @@ export default function Navbar() {
             </button>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex flex-col gap-1.5 p-2 press"
+              className="flex flex-col gap-1.5 p-3 press"
               aria-label="Menu"
             >
               <span className={`block h-px w-5 bg-ivory transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
