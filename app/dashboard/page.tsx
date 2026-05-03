@@ -317,7 +317,7 @@ export default function Dashboard() {
                 : NAV.find(n => n.id === activeTab)?.label}
             </h1>
             {activeTab === "overview" && (
-              <p className="text-gray-400 text-xs mt-0.5">Here's how your kitchen is doing.</p>
+              <p className="text-gray-400 text-xs mt-0.5">Here&apos;s how your kitchen is doing.</p>
             )}
           </div>
           <div className="flex items-center gap-3">
