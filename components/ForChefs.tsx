@@ -86,7 +86,7 @@ export default function ForChefs() {
                   🇬🇧
                 </div>
                 <div>
-                  <p className="font-sans text-ivory font-medium text-sm">Chef Marcus T.</p>
+                  <p className="font-sans text-ivory font-medium text-sm">Chef Daniel Osei</p>
                   <p className="font-sans text-ivory/40 text-xs">Head Chef · The Meridian, London</p>
                 </div>
                 <div className="ml-auto glass rounded-xl px-3 py-1.5">

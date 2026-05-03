@@ -3,20 +3,20 @@
 import { useEffect, useRef } from "react";
 
 const TOP_CHEFS = [
-  { rank: 1,  name: "Marcus T.",   restaurant: "The Meridian, London",      earned: "$4,820", flag: "🇬🇧", tips: 312 },
-  { rank: 2,  name: "Yuki N.",     restaurant: "Sora, Tokyo",               earned: "$3,940", flag: "🇯🇵", tips: 271 },
-  { rank: 3,  name: "Dominic A.",  restaurant: "Firefly Kitchen, Dublin",   earned: "$3,105", flag: "🇮🇪", tips: 198 },
-  { rank: 4,  name: "Sofia R.",    restaurant: "Carta, New York",           earned: "$2,740", flag: "🇮🇹", tips: 184 },
-  { rank: 5,  name: "Elena M.",    restaurant: "Bistro Velour, Melbourne",  earned: "$2,310", flag: "🇦🇺", tips: 156 },
+  { rank: 1,  name: "Daniel Osei",       restaurant: "The Meridian, London",      earned: "$4,820", flag: "🇬🇧", tips: 312 },
+  { rank: 2,  name: "Tomás Ferreira",    restaurant: "Sora, Tokyo",               earned: "$3,940", flag: "🇵🇹", tips: 271 },
+  { rank: 3,  name: "Ama Owusu",         restaurant: "Firefly Kitchen, Dublin",   earned: "$3,105", flag: "🇬🇭", tips: 198 },
+  { rank: 4,  name: "Beatrice Hartmann", restaurant: "Carta, New York",           earned: "$2,740", flag: "🇩🇪", tips: 184 },
+  { rank: 5,  name: "Ingrid Sandvik",    restaurant: "Bistro Velour, Melbourne",  earned: "$2,310", flag: "🇳🇴", tips: 156 },
 ];
 
 const MESSAGES = [
-  { name: "Sarah M.",   amount: 10, message: "That lamb was the best thing I've ever eaten. You're a legend.",      chef: "Marcus T."  },
-  { name: "James K.",   amount: 5,  message: "The herb crust on the cod — absolutely stunning.",                     chef: "Dominic A." },
-  { name: "Priya R.",   amount: 25, message: "Three years at The Meridian. Every visit is worth it.",                chef: "Marcus T."  },
-  { name: "Tom B.",     amount: 3,  message: "My kids won't stop talking about your pasta. Life-changing.",          chef: "Yuki N."    },
-  { name: "Mei L.",     amount: 10, message: "The tasting menu was transcendent. Thank you.",                        chef: "Sofia R."   },
-  { name: "David H.",   amount: 5,  message: "Flew from Paris just for your kitchen. Would do it again tomorrow.",   chef: "Elena M."   },
+  { name: "Elena Vasquez",    amount: 10, message: "That lamb was the best thing I've ever eaten. You're a legend.",      chef: "Daniel Osei"       },
+  { name: "Oliver Pemberton", amount: 5,  message: "The herb crust on the cod — absolutely stunning.",                     chef: "Ama Owusu"         },
+  { name: "Fatima Al-Rashid", amount: 25, message: "Three years at The Meridian. Every visit is worth it.",                chef: "Daniel Osei"       },
+  { name: "George Whitfield", amount: 3,  message: "My kids won't stop talking about your pasta. Life-changing.",          chef: "Tomás Ferreira"    },
+  { name: "Linh Nguyen",      amount: 10, message: "The tasting menu was transcendent. Thank you.",                        chef: "Beatrice Hartmann" },
+  { name: "Rashida Kamara",   amount: 5,  message: "Flew from Paris just for your kitchen. Would do it again tomorrow.",   chef: "Ingrid Sandvik"    },
 ];
 
 function useReveal(ref: React.RefObject<HTMLElement | null>) {

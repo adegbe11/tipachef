@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 
 const CHEFS = [
-  { rank: 1,  name: "Marcus T.",    emoji: "🇬🇧", cuisine: "Modern British",   venue: "The Meridian, London",    earned: "$4,210", members: 168, badge: "🏆" },
-  { rank: 2,  name: "Yuki N.",      emoji: "🇯🇵", cuisine: "Japanese Pastry",  venue: "Sora, Tokyo",             earned: "$3,840", members: 154, badge: "🥈" },
-  { rank: 3,  name: "Sofia M.",     emoji: "🇮🇹", cuisine: "Italian",          venue: "Osteria Blu, Rome",       earned: "$3,190", members: 127, badge: "🥉" },
-  { rank: 4,  name: "Kwame O.",     emoji: "🇬🇭", cuisine: "West African",     venue: "Accra Kitchen, NYC",      earned: "$2,780", members: 111, badge: null  },
-  { rank: 5,  name: "Dominic A.",   emoji: "🇮🇪", cuisine: "New Irish",        venue: "Firefly Kitchen, Dublin", earned: "$2,410", members: 97,  badge: null  },
-  { rank: 6,  name: "Elena R.",     emoji: "🇦🇺", cuisine: "Modern Australian", venue: "Forage, Melbourne",      earned: "$2,190", members: 88,  badge: null  },
+  { rank: 1,  name: "Daniel Osei",       emoji: "🇬🇧", cuisine: "Modern British",    venue: "The Meridian, London",    earned: "$4,210", members: 168, badge: "🏆" },
+  { rank: 2,  name: "Tomás Ferreira",    emoji: "🇵🇹", cuisine: "Japanese Pastry",   venue: "Sora, Tokyo",             earned: "$3,840", members: 154, badge: "🥈" },
+  { rank: 3,  name: "Beatrice Hartmann", emoji: "🇩🇪", cuisine: "Italian",           venue: "Osteria Blu, Rome",       earned: "$3,190", members: 127, badge: "🥉" },
+  { rank: 4,  name: "Ravi Krishnan",     emoji: "🇮🇳", cuisine: "West African",      venue: "Accra Kitchen, NYC",      earned: "$2,780", members: 111, badge: null  },
+  { rank: 5,  name: "Ama Owusu",         emoji: "🇬🇭", cuisine: "New Irish",         venue: "Firefly Kitchen, Dublin", earned: "$2,410", members: 97,  badge: null  },
+  { rank: 6,  name: "Ingrid Sandvik",    emoji: "🇳🇴", cuisine: "Modern Australian", venue: "Forage, Melbourne",       earned: "$2,190", members: 88,  badge: null  },
 ];
 
 const FILTERS = ["This month", "All time", "Rising stars"];

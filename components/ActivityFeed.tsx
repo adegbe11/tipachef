@@ -3,14 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 
 const FEED_ITEMS = [
-  { emoji: "🇬🇧", tipper: "Sarah M.",   chef: "Marcus T.",   amount: "$8",  msg: "The lamb was transcendent.",      time: "2m ago"  },
-  { emoji: "🇯🇵", tipper: "James K.",   chef: "Yuki N.",     amount: "$25", msg: "Best pastry I've ever had.",      time: "5m ago"  },
-  { emoji: "🇮🇪", tipper: "Priya S.",   chef: "Dominic A.",  amount: "$10", msg: "You made our anniversary.",       time: "8m ago"  },
-  { emoji: "🇮🇹", tipper: "Luca B.",    chef: "Sofia M.",    amount: "$50", msg: "A master at work. Thank you.",    time: "11m ago" },
-  { emoji: "🇬🇭", tipper: "Amara J.",   chef: "Kwame O.",    amount: "$15", msg: "Every dish told a story.",        time: "14m ago" },
-  { emoji: "🇦🇺", tipper: "Tom R.",     chef: "Elena R.",    amount: "$5",  msg: "The ferments were incredible.",   time: "17m ago" },
-  { emoji: "🇫🇷", tipper: "Claire D.",  chef: "Pierre L.",   amount: "$20", msg: "Michelin who? You're better.",   time: "23m ago" },
-  { emoji: "🇲🇽", tipper: "Rosa V.",    chef: "Diego H.",    amount: "$10", msg: "My abuela would approve.",        time: "29m ago" },
+  { emoji: "🇬🇧", tipper: "Elena Vasquez",     chef: "Daniel Osei",       amount: "$8",  msg: "The lamb was transcendent.",      time: "2m ago"  },
+  { emoji: "🇯🇵", tipper: "Oliver Pemberton",  chef: "Tomás Ferreira",    amount: "$25", msg: "Best pastry I've ever had.",      time: "5m ago"  },
+  { emoji: "🇮🇪", tipper: "Fatima Al-Rashid",  chef: "Ama Owusu",         amount: "$10", msg: "You made our anniversary.",       time: "8m ago"  },
+  { emoji: "🇮🇹", tipper: "Viktor Johansson",  chef: "Beatrice Hartmann", amount: "$50", msg: "A master at work. Thank you.",    time: "11m ago" },
+  { emoji: "🇬🇭", tipper: "Chidinma Eze",      chef: "Ravi Krishnan",     amount: "$15", msg: "Every dish told a story.",        time: "14m ago" },
+  { emoji: "🇦🇺", tipper: "George Whitfield",  chef: "Ingrid Sandvik",    amount: "$5",  msg: "The ferments were incredible.",   time: "17m ago" },
+  { emoji: "🇫🇷", tipper: "Sylvie Moreau",     chef: "Olivier Bouchard",  amount: "$20", msg: "Michelin who? You're better.",   time: "23m ago" },
+  { emoji: "🇲🇽", tipper: "Esperanza Cruz",    chef: "Carlos Montoya",    amount: "$10", msg: "My abuela would approve.",        time: "29m ago" },
 ];
 
 function useReveal(ref: React.RefObject<HTMLElement | null>) {

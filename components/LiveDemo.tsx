@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 
 const CHEFS = [
-  { name: "Marcus T.",    role: "Head Chef",   venue: "The Meridian",    emoji: "🇬🇧", cuisine: "Modern British" },
-  { name: "Yuki N.",      role: "Pastry Chef", venue: "Sora",            emoji: "🇯🇵", cuisine: "Japanese Pastry" },
-  { name: "Dominic A.",   role: "Sous Chef",   venue: "Firefly Kitchen", emoji: "🇮🇪", cuisine: "New Irish"       },
+  { name: "Daniel Osei",    role: "Head Chef",   venue: "The Meridian",    emoji: "🇬🇧", cuisine: "Modern British"  },
+  { name: "Tomás Ferreira", role: "Pastry Chef", venue: "Sora",            emoji: "🇵🇹", cuisine: "Japanese Pastry" },
+  { name: "Ama Owusu",      role: "Sous Chef",   venue: "Firefly Kitchen", emoji: "🇬🇭", cuisine: "New Irish"       },
 ];
 
 const AMOUNTS   = [3, 5, 10, 20];

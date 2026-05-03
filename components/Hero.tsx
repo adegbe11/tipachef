@@ -5,12 +5,6 @@ import Image from "next/image";
 
 const CYCLING_WORDS = ["cooking", "craft", "passion", "art"];
 
-const LIVE_TIPS = [
-  { name: "Sarah M.",  amount: "£10", chef: "Marcus T.", venue: "The Meridian",    emoji: "🌿", time: "2m ago"  },
-  { name: "Priya R.",  amount: "£25", chef: "Yuki N.",   venue: "Sora Tokyo",      emoji: "🥩", time: "5m ago"  },
-  { name: "James K.",  amount: "£5",  chef: "Dom A.",    venue: "Firefly Kitchen", emoji: "🧂", time: "9m ago"  },
-];
-
 export default function Hero() {
   const headRef = useRef<HTMLHeadingElement>(null);
   const imgRef  = useRef<HTMLDivElement>(null);
@@ -184,55 +178,6 @@ export default function Hero() {
                 </span>
               ))}
             </div>
-          </div>
-
-          {/* Right: floating live tip toasts ─────────────────── */}
-          <div className="hidden lg:flex flex-col gap-3.5 flex-shrink-0">
-
-            {/* Live badge */}
-            <div
-              className="opacity-0 animate-fade-in flex items-center gap-2 mb-1"
-              style={{ animationDelay: "1.4s", animationFillMode: "forwards" }}
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
-              </span>
-              <span className="eyebrow text-ivory/35" style={{ fontSize: "0.58rem" }}>Live tips</span>
-            </div>
-
-            {LIVE_TIPS.map((tip, i) => (
-              <div
-                key={tip.name}
-                style={{ animation: `float ${5.5 + i * 0.8}s ease-in-out ${2.8 + i * 0.4}s infinite` }}
-              >
-                <div
-                  className="opacity-0 animate-slide-left"
-                  style={{ animationDelay: `${1.6 + i * 0.38}s`, animationFillMode: "forwards" }}
-                >
-                  <div className="glass rounded-2xl px-5 py-4 w-[17rem] border border-white/8 hover:border-ember/25 transition-all duration-300 cursor-default group">
-                    <div className="flex items-start gap-3">
-                      <span className="text-2xl leading-none mt-0.5">{tip.emoji}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2 mb-0.5">
-                          <p className="text-sm font-sans font-medium text-ivory truncate group-hover:text-ember-light transition-colors duration-300">{tip.name}</p>
-                          <span
-                            className="font-display font-light text-base flex-shrink-0"
-                            style={{ color: "#C9A96E" }}
-                          >
-                            {tip.amount}
-                          </span>
-                        </div>
-                        <p className="text-xs font-sans text-ivory/40 truncate">
-                          tipped <span className="text-ivory/60">{tip.chef}</span> · {tip.venue}
-                        </p>
-                        <p className="text-xs font-sans text-ivory/22 mt-0.5">{tip.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
 
         </div>

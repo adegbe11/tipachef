@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 const POSTS = [
   {
-    chef:     "Marcus T.",
+    chef:     "Daniel Osei",
     emoji:    "🇬🇧",
     title:    "My 48-hour lamb shoulder — the recipe I've never written down",
     type:     "Recipe PDF",
@@ -15,8 +15,8 @@ const POSTS = [
     time:     "2h ago",
   },
   {
-    chef:     "Yuki N.",
-    emoji:    "🇯🇵",
+    chef:     "Tomás Ferreira",
+    emoji:    "🇵🇹",
     title:    "Japanese milk bread — the loaf that took me 3 years to perfect",
     type:     "Cook-along video",
     locked:   true,
@@ -26,8 +26,8 @@ const POSTS = [
     time:     "Yesterday",
   },
   {
-    chef:     "Dominic A.",
-    emoji:    "🇮🇪",
+    chef:     "Ama Owusu",
+    emoji:    "🇬🇭",
     title:    "Behind the menu — how we design a seasonal tasting course",
     type:     "Behind the scenes",
     locked:   false,
@@ -37,8 +37,8 @@ const POSTS = [
     time:     "3 days ago",
   },
   {
-    chef:     "Sofia M.",
-    emoji:    "🇮🇹",
+    chef:     "Beatrice Hartmann",
+    emoji:    "🇩🇪",
     title:    "Cacio e pepe — why yours is wrong and how to fix it",
     type:     "Recipe PDF",
     locked:   true,
@@ -48,8 +48,8 @@ const POSTS = [
     time:     "4 days ago",
   },
   {
-    chef:     "Kwame O.",
-    emoji:    "🇬🇭",
+    chef:     "Ravi Krishnan",
+    emoji:    "🇮🇳",
     title:    "West African spice sourcing — my personal supplier list",
     type:     "Resource",
     locked:   true,
@@ -59,8 +59,8 @@ const POSTS = [
     time:     "1 week ago",
   },
   {
-    chef:     "Elena R.",
-    emoji:    "🇦🇺",
+    chef:     "Ingrid Sandvik",
+    emoji:    "🇳🇴",
     title:    "Fermentation diary — 30 days building our house kimchi",
     type:     "Video series",
     locked:   false,

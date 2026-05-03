@@ -11,12 +11,12 @@ const NAV_LINKS = [
 ];
 
 const SEARCH_SUGGESTIONS = [
-  { type: "chef",       name: "Marcus T.",      sub: "Head Chef · The Meridian, London"     },
-  { type: "chef",       name: "Yuki Nakamura",  sub: "Pastry Chef · Sora, Tokyo"            },
-  { type: "chef",       name: "Dominic Asante", sub: "Sous Chef · Firefly Kitchen, Dublin"  },
-  { type: "restaurant", name: "The Meridian",   sub: "Restaurant · London, UK"              },
-  { type: "restaurant", name: "Carta NYC",      sub: "Restaurant · New York, USA"           },
-  { type: "restaurant", name: "Bistro Velour",  sub: "Restaurant · Melbourne, AU"           },
+  { type: "chef",       name: "Daniel Osei",       sub: "Head Chef · The Meridian, London"     },
+  { type: "chef",       name: "Tomás Ferreira",    sub: "Pastry Chef · Sora, Tokyo"            },
+  { type: "chef",       name: "Ama Owusu",         sub: "Sous Chef · Firefly Kitchen, Dublin"  },
+  { type: "restaurant", name: "The Meridian",      sub: "Restaurant · London, UK"              },
+  { type: "restaurant", name: "Carta NYC",         sub: "Restaurant · New York, USA"           },
+  { type: "restaurant", name: "Bistro Velour",     sub: "Restaurant · Melbourne, AU"           },
 ];
 
 export default function Navbar() {
