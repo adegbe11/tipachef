@@ -67,7 +67,7 @@ export default function Hero() {
             style={{ animationDelay: "0.7s", animationFillMode: "forwards" }}
           >
             <a
-              href="#for-chefs"
+              href="/signup"
               className="press inline-flex items-center gap-2 px-8 py-4 rounded-full bg-ember text-graphite font-sans font-semibold text-sm tracking-wide hover:bg-ember-light transition-all duration-300 shadow-lg shadow-ember/20"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

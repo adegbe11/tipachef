@@ -127,7 +127,7 @@ export default function Leaderboard() {
           <p className="font-sans text-ivory/40 text-sm mb-4 font-light">
             Ready to be on this list?
           </p>
-          <a href="#for-chefs"
+          <a href="/signup"
             className="press inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-ember/40 text-ember font-sans font-medium text-sm tracking-wide hover:bg-ember/10 transition-all duration-300">
             Claim your free chef profile
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
