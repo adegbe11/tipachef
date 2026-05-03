@@ -3,20 +3,20 @@
 import { useEffect, useRef } from "react";
 
 const TOP_CHEFS = [
-  { rank: 1,  name: "Daniel Osei",       restaurant: "The Meridian, London",      earned: "$4,820", flag: "🇬🇧", tips: 312 },
-  { rank: 2,  name: "Tomás Ferreira",    restaurant: "Sora, Tokyo",               earned: "$3,940", flag: "🇵🇹", tips: 271 },
-  { rank: 3,  name: "Ama Owusu",         restaurant: "Firefly Kitchen, Dublin",   earned: "$3,105", flag: "🇬🇭", tips: 198 },
-  { rank: 4,  name: "Beatrice Hartmann", restaurant: "Carta, New York",           earned: "$2,740", flag: "🇩🇪", tips: 184 },
-  { rank: 5,  name: "Ingrid Sandvik",    restaurant: "Bistro Velour, Melbourne",  earned: "$2,310", flag: "🇳🇴", tips: 156 },
+  { rank: 1,  name: "Marco Esposito",  restaurant: "Osteria del Fuoco, Rome",    earned: "$4,820", flag: "🇮🇹", tips: 312 },
+  { rank: 2,  name: "Nikos Stavridis", restaurant: "Kuzina, Athens",             earned: "$3,940", flag: "🇬🇷", tips: 271 },
+  { rank: 3,  name: "Pierre Leclerc",  restaurant: "Le Comptoir, Paris",         earned: "$3,105", flag: "🇫🇷", tips: 198 },
+  { rank: 4,  name: "Sofia Ricci",     restaurant: "Trattoria Ricci, London",    earned: "$2,740", flag: "🇮🇹", tips: 184 },
+  { rank: 5,  name: "Mehmet Yilmaz",   restaurant: "Mikla, Istanbul",            earned: "$2,310", flag: "🇹🇷", tips: 156 },
 ];
 
 const MESSAGES = [
-  { name: "Elena Vasquez",    amount: 10, message: "That lamb was the best thing I've ever eaten. You're a legend.",      chef: "Daniel Osei"       },
-  { name: "Oliver Pemberton", amount: 5,  message: "The herb crust on the cod — absolutely stunning.",                     chef: "Ama Owusu"         },
-  { name: "Fatima Al-Rashid", amount: 25, message: "Three years at The Meridian. Every visit is worth it.",                chef: "Daniel Osei"       },
-  { name: "George Whitfield", amount: 3,  message: "My kids won't stop talking about your pasta. Life-changing.",          chef: "Tomás Ferreira"    },
-  { name: "Linh Nguyen",      amount: 10, message: "The tasting menu was transcendent. Thank you.",                        chef: "Beatrice Hartmann" },
-  { name: "Rashida Kamara",   amount: 5,  message: "Flew from Paris just for your kitchen. Would do it again tomorrow.",   chef: "Ingrid Sandvik"    },
+  { name: "James Whitmore",   amount: 10, message: "That lamb was the best thing I've ever eaten. You're a legend.",      chef: "Marco Esposito"  },
+  { name: "Claire Dubois",    amount: 5,  message: "The herb crust on the cod — absolutely stunning.",                     chef: "Pierre Leclerc"  },
+  { name: "Luca Bianchi",     amount: 25, message: "Three years at this table. Every visit is worth the flight.",          chef: "Marco Esposito"  },
+  { name: "Thomas Brauer",    amount: 3,  message: "My kids won't stop talking about your pasta. Life-changing.",          chef: "Sofia Ricci"     },
+  { name: "Katerina Alexiou", amount: 10, message: "The tasting menu was transcendent. Thank you.",                        chef: "Nikos Stavridis" },
+  { name: "Isabel Castillo",  amount: 5,  message: "Flew from Madrid just for your kitchen. Would do it again tomorrow.",  chef: "Mehmet Yilmaz"   },
 ];
 
 function useReveal(ref: React.RefObject<HTMLElement | null>) {

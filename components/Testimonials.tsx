@@ -5,18 +5,18 @@ import { useEffect, useRef } from "react";
 const TESTIMONIALS = [
   {
     quote: "After fifteen years behind the pass, someone finally built something for us. I made more in tips last month than I have in my entire career.",
-    name:  "Daniel Osei",
-    role:  "Head Chef, The Meridian",
+    name:  "Marco Esposito",
+    role:  "Head Chef, Osteria del Fuoco, Rome",
   },
   {
     quote: "We've had two senior chefs tell us Tip a Chef is the reason they turned down other offers. That alone is worth more than anything.",
-    name:  "Ingrid Sandvik",
-    role:  "Restaurant Director, Bistro Velour",
+    name:  "Pierre Leclerc",
+    role:  "Restaurant Director, Le Comptoir, Paris",
   },
   {
     quote: "The messages from diners hit different. One guest wrote three paragraphs about my lamb. I printed it and put it on my station.",
-    name:  "Ama Owusu",
-    role:  "Sous Chef, Firefly Kitchen",
+    name:  "Mehmet Yilmaz",
+    role:  "Sous Chef, Mikla, Istanbul",
   },
 ];
 

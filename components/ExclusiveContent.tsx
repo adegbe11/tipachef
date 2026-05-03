@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 
 const POSTS = [
   {
-    chef:     "Daniel Osei",
-    emoji:    "🇬🇧",
+    chef:     "Marco Esposito",
+    emoji:    "🇮🇹",
     title:    "My 48-hour lamb shoulder — the recipe I've never written down",
     type:     "Recipe PDF",
     locked:   true,
@@ -15,9 +15,9 @@ const POSTS = [
     time:     "2h ago",
   },
   {
-    chef:     "Tomás Ferreira",
-    emoji:    "🇵🇹",
-    title:    "Japanese milk bread — the loaf that took me 3 years to perfect",
+    chef:     "Nikos Stavridis",
+    emoji:    "🇬🇷",
+    title:    "Greek milk bread — the loaf that took me 3 years to perfect",
     type:     "Cook-along video",
     locked:   true,
     tier:     "Foodie",
@@ -26,8 +26,8 @@ const POSTS = [
     time:     "Yesterday",
   },
   {
-    chef:     "Ama Owusu",
-    emoji:    "🇬🇭",
+    chef:     "Mehmet Yilmaz",
+    emoji:    "🇹🇷",
     title:    "Behind the menu — how we design a seasonal tasting course",
     type:     "Behind the scenes",
     locked:   false,
@@ -37,8 +37,8 @@ const POSTS = [
     time:     "3 days ago",
   },
   {
-    chef:     "Beatrice Hartmann",
-    emoji:    "🇩🇪",
+    chef:     "Sofia Ricci",
+    emoji:    "🇮🇹",
     title:    "Cacio e pepe — why yours is wrong and how to fix it",
     type:     "Recipe PDF",
     locked:   true,
@@ -48,9 +48,9 @@ const POSTS = [
     time:     "4 days ago",
   },
   {
-    chef:     "Ravi Krishnan",
-    emoji:    "🇮🇳",
-    title:    "West African spice sourcing — my personal supplier list",
+    chef:     "Alessandro Ferri",
+    emoji:    "🇮🇹",
+    title:    "Mediterranean spice sourcing — my personal supplier list",
     type:     "Resource",
     locked:   true,
     tier:     "Chef's Patron",
@@ -59,8 +59,8 @@ const POSTS = [
     time:     "1 week ago",
   },
   {
-    chef:     "Ingrid Sandvik",
-    emoji:    "🇳🇴",
+    chef:     "Eleni Papadaki",
+    emoji:    "🇬🇷",
     title:    "Fermentation diary — 30 days building our house kimchi",
     type:     "Video series",
     locked:   false,

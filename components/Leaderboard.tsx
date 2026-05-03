@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 
 const CHEFS = [
-  { rank: 1,  name: "Daniel Osei",       emoji: "🇬🇧", cuisine: "Modern British",    venue: "The Meridian, London",    earned: "$4,210", members: 168, badge: "🏆" },
-  { rank: 2,  name: "Tomás Ferreira",    emoji: "🇵🇹", cuisine: "Japanese Pastry",   venue: "Sora, Tokyo",             earned: "$3,840", members: 154, badge: "🥈" },
-  { rank: 3,  name: "Beatrice Hartmann", emoji: "🇩🇪", cuisine: "Italian",           venue: "Osteria Blu, Rome",       earned: "$3,190", members: 127, badge: "🥉" },
-  { rank: 4,  name: "Ravi Krishnan",     emoji: "🇮🇳", cuisine: "West African",      venue: "Accra Kitchen, NYC",      earned: "$2,780", members: 111, badge: null  },
-  { rank: 5,  name: "Ama Owusu",         emoji: "🇬🇭", cuisine: "New Irish",         venue: "Firefly Kitchen, Dublin", earned: "$2,410", members: 97,  badge: null  },
-  { rank: 6,  name: "Ingrid Sandvik",    emoji: "🇳🇴", cuisine: "Modern Australian", venue: "Forage, Melbourne",       earned: "$2,190", members: 88,  badge: null  },
+  { rank: 1,  name: "Marco Esposito",  emoji: "🇮🇹", cuisine: "Italian",           venue: "Osteria del Fuoco, Rome",       earned: "$4,210", members: 168, badge: "🏆" },
+  { rank: 2,  name: "Nikos Stavridis", emoji: "🇬🇷", cuisine: "Modern Greek",      venue: "Kuzina, Athens",                earned: "$3,840", members: 154, badge: "🥈" },
+  { rank: 3,  name: "Pierre Leclerc",  emoji: "🇫🇷", cuisine: "French Bistro",     venue: "Le Comptoir, Paris",            earned: "$3,190", members: 127, badge: "🥉" },
+  { rank: 4,  name: "Mehmet Yilmaz",   emoji: "🇹🇷", cuisine: "Turkish Modern",    venue: "Mikla, Istanbul",               earned: "$2,780", members: 111, badge: null  },
+  { rank: 5,  name: "Sofia Ricci",     emoji: "🇮🇹", cuisine: "Sicilian",          venue: "Trattoria Ricci, London",       earned: "$2,410", members: 97,  badge: null  },
+  { rank: 6,  name: "Carlos Ibáñez",   emoji: "🇪🇸", cuisine: "Modern Spanish",    venue: "Sal y Pimienta, Barcelona",     earned: "$2,190", members: 88,  badge: null  },
 ];
 
 const FILTERS = ["This month", "All time", "Rising stars"];
