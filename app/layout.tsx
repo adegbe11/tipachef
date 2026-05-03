@@ -35,6 +35,9 @@ export const metadata: Metadata = {
     description: "Send gratitude directly to the chefs who craft your meals.",
   },
   metadataBase: new URL("https://tipachef.com"),
+  verification: {
+    google: "K6c5ygCR2Dr55gf0sLPgPm6oiSwCj1213-TCuNbCfm4",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
