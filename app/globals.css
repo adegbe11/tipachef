@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --graphite:     #111111;
+  --charcoal:     #1E1E1E;
+  --ash:          #2E2E2E;
+  --ember:        #C9A96E;
+  --ember-light:  #D9BC8E;
+  --ember-dark:   #A07840;
+  --ivory:        #FAF8F4;
+  --ivory-dim:    #F0EDE7;
+  --smoke:        #6B6B6B;
+
+  --ease-ios:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--graphite);
+  color: var(--ivory);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Typography ─────────────────────────────────────────── */
+.display-xl {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+}
+
+.display-lg {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+
+.display-md {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.eyebrow {
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ember);
+}
+
+/* ── Glass ──────────────────────────────────────────────── */
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.glass-dark {
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ── Utility ────────────────────────────────────────────── */
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ember) 40%, transparent);
+}
+
+.text-ember-gradient {
+  background: linear-gradient(135deg, var(--ember-light) 0%, var(--ember) 50%, var(--ember-dark) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s var(--ease-ios), transform 0.8s var(--ease-ios);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.press {
+  transition: transform 0.15s var(--ease-ios), opacity 0.15s ease;
+}
+.press:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--graphite); }
+::-webkit-scrollbar-thumb { background: var(--ash); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ember-dark); }

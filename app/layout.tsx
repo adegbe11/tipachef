@@ -1,0 +1,46 @@
+import type { Metadata } from "next";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import "./globals.css";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "Tip a Chef · Honour the hands behind every dish",
+  description:
+    "Tip a Chef lets diners send gratitude directly to the chefs and kitchen teams who create their meals. Scan a QR code, send a direct tip, honour the craft.",
+  keywords: ["tip a chef", "chef tipping", "restaurant kitchen tips", "Tip a Chef", "direct chef tips"],
+  openGraph: {
+    title: "Tip a Chef · Honour the craft",
+    description: "Send tips directly to the chefs and kitchen teams behind every great meal.",
+    url: "https://tipachef.com",
+    siteName: "Tip a Chef",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tip a Chef",
+    description: "Send gratitude directly to the chefs who craft your meals.",
+  },
+  metadataBase: new URL("https://tipachef.com"),
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
+      <body>{children}</body>
+    </html>
+  );
+}
