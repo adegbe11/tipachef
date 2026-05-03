@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -65,7 +65,7 @@ function tipEmoji(amountCents: number) {
   return "🧂";
 }
 
-export default function Dashboard() {
+function DashboardInner() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const supabase     = createClient();
@@ -748,5 +748,20 @@ export default function Dashboard() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-amber-400 border-t-transparent animate-spin" />
+          <p className="text-gray-400 text-sm">Loading your dashboard...</p>
+        </div>
+      </div>
+    }>
+      <DashboardInner />
+    </Suspense>
   );
 }
