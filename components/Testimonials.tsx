@@ -44,12 +44,12 @@ export default function Testimonials() {
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
       />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
         <p className="eyebrow mb-4">What people say</p>
         <h2
           ref={headRef}
-          className="reveal font-display text-ivory leading-tight mb-12"
-          style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 300 }}
+          className="reveal fluid-heading font-display text-ivory leading-tight mb-12"
+          style={{ fontWeight: 300 }}
         >
           The craft finally{" "}
           <span className="text-ember-gradient italic">gets noticed.</span>

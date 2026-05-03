@@ -44,12 +44,12 @@ export default function HowItWorks() {
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
       />
 
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-4 xs:px-5 md:px-6">
         <p className="eyebrow mb-4">Get set up in minutes</p>
         <h2
           ref={headRef}
-          className="reveal font-display text-ivory leading-tight mb-12"
-          style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 300 }}
+          className="reveal fluid-heading font-display text-ivory leading-tight mb-12"
+          style={{ fontWeight: 300 }}
         >
           Three steps to start{" "}
           <span className="text-ember-gradient italic">earning directly.</span>

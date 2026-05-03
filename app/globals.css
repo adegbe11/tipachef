@@ -15,6 +15,19 @@
 
   --ease-ios:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Fluid type scale (360px → 1440px) ─────────────────── */
+  /* Formula: clamp(min, Xvw + Yrem, max) — linear between breakpoints */
+  --fluid-hero:    clamp(2.4rem, 8vw + 0.5rem, 7.5rem);
+  --fluid-display: clamp(2.1rem, 4vw + 0.9rem, 4.2rem);
+  --fluid-heading: clamp(1.9rem, 3vw + 0.8rem, 3.6rem);
+  --fluid-subhead: clamp(1.5rem, 2vw + 0.7rem, 2.6rem);
+  --fluid-body-lg: clamp(1rem,   0.8vw + 0.7rem, 1.2rem);
+  --fluid-body:    clamp(0.875rem, 0.5vw + 0.7rem, 1rem);
+
+  /* ── Fluid section spacing ───────────────────────────────── */
+  --section-py:    clamp(4rem, 7vw, 9rem);
+  --section-px:    clamp(1rem, 4vw, 1.5rem);
 }
 
 * { box-sizing: border-box; }
@@ -90,6 +103,18 @@ input, textarea, select {
   text-transform: uppercase;
   color: var(--ember);
 }
+
+/* ── Fluid typography utilities ─────────────────────────── */
+.fluid-hero    { font-size: var(--fluid-hero); }
+.fluid-display { font-size: var(--fluid-display); }
+.fluid-heading { font-size: var(--fluid-heading); }
+.fluid-subhead { font-size: var(--fluid-subhead); }
+.fluid-body-lg { font-size: var(--fluid-body-lg); }
+.fluid-body    { font-size: var(--fluid-body); }
+
+/* ── Fluid section spacing ───────────────────────────────── */
+.section-pad { padding-top: var(--section-py); padding-bottom: var(--section-py); }
+.container-px { padding-left: var(--section-px); padding-right: var(--section-px); }
 
 /* ── Glass ──────────────────────────────────────────────── */
 .glass {

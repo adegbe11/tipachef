@@ -36,12 +36,12 @@ export default function Leaderboard() {
       <div className="absolute right-0 bottom-0 w-[400px] h-[400px] opacity-[0.04] pointer-events-none"
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <p className="eyebrow mb-4">Wall of fame</p>
-            <h2 ref={headRef} className="reveal font-display text-ivory leading-tight"
-              style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", fontWeight: 300 }}>
+            <h2 ref={headRef} className="reveal fluid-display font-display text-ivory leading-tight"
+              style={{ fontWeight: 300 }}>
               The most loved{" "}
               <span className="text-ember-gradient italic">chefs this month.</span>
             </h2>

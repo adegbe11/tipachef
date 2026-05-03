@@ -30,8 +30,8 @@ export default function DownloadCTA() {
             className="rounded-xl mb-5"
           />
           <h2
-            className="font-display text-ivory leading-tight mb-6"
-            style={{ fontSize: "clamp(2rem, 8vw, 2.8rem)", fontWeight: 300 }}
+            className="fluid-heading font-display text-ivory leading-tight mb-6"
+            style={{ fontWeight: 300 }}
           >
             Your craft.<br />
             <span className="text-ember-gradient italic">Finally rewarded.</span>

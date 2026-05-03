@@ -46,13 +46,13 @@ export default function ActivityFeed() {
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-[0.04] pointer-events-none"
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
         {/* Left copy */}
         <div>
           <p className="eyebrow mb-4">Live activity</p>
-          <h2 ref={headRef} className="reveal font-display text-ivory leading-tight mb-6"
-            style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", fontWeight: 300 }}>
+          <h2 ref={headRef} className="reveal fluid-display font-display text-ivory leading-tight mb-6"
+            style={{ fontWeight: 300 }}>
             Right now, chefs are{" "}
             <span className="text-ember-gradient italic">being loved.</span>
           </h2>

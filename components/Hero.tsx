@@ -97,7 +97,7 @@ export default function Hero() {
       </div>
 
       {/* ── Content ──────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 md:pt-32 pb-20 w-full">
+      <div className="relative z-10 max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8 pt-20 xs:pt-24 md:pt-32 pb-20 w-full">
         <div className="flex items-center justify-between gap-12 xl:gap-20">
 
           {/* Left: copy ───────────────────────────────────────── */}
@@ -111,8 +111,8 @@ export default function Hero() {
 
             <h1
               ref={headRef}
-              className="reveal font-display text-ivory leading-none mb-6"
-              style={{ fontSize: "clamp(3.2rem, 8vw, 7.5rem)", fontWeight: 300 }}
+              className="reveal fluid-hero font-display text-ivory leading-none mb-6"
+              style={{ fontWeight: 300 }}
             >
               Earn what your{" "}
               <span
@@ -132,7 +132,7 @@ export default function Hero() {
             </h1>
 
             <p
-              className="opacity-0 animate-fade-up font-sans text-ivory/70 text-lg md:text-xl font-light leading-relaxed mb-10 max-w-lg"
+              className="opacity-0 animate-fade-up fluid-body-lg font-sans text-ivory/70 font-light leading-relaxed mb-10 max-w-lg"
               style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}
             >
               Tip a Chef connects you directly with every diner you impress.

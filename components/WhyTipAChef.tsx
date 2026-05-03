@@ -52,12 +52,12 @@ export default function WhyTipAChef() {
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
         style={{ background: "radial-gradient(ellipse 60% 40% at 50% 50%, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-4 xs:px-5 md:px-6">
         <p className="eyebrow mb-4">Why Tip a Chef</p>
         <h2
           ref={headRef}
-          className="reveal font-display text-ivory leading-tight mb-10"
-          style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 300 }}
+          className="reveal fluid-heading font-display text-ivory leading-tight mb-10"
+          style={{ fontWeight: 300 }}
         >
           Built for kitchens.<br />
           <span className="text-ember-gradient italic">Not creators in general.</span>

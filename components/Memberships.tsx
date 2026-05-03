@@ -71,14 +71,14 @@ export default function Memberships() {
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] opacity-[0.04] pointer-events-none"
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
 
           {/* Left */}
           <div className="lg:sticky lg:top-28">
             <p className="eyebrow mb-4">Memberships</p>
-            <h2 ref={headRef} className="reveal font-display text-ivory leading-tight mb-6"
-              style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", fontWeight: 300 }}>
+            <h2 ref={headRef} className="reveal fluid-display font-display text-ivory leading-tight mb-6"
+              style={{ fontWeight: 300 }}>
               Turn fans into{" "}
               <span className="text-ember-gradient italic">monthly patrons.</span>
             </h2>

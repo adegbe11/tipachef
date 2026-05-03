@@ -55,13 +55,13 @@ export default function LiveDemo() {
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{ background: "radial-gradient(ellipse 70% 50% at 30% 50%, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
         {/* Left copy */}
         <div>
           <p className="eyebrow mb-4">What your fans see</p>
-          <h2 ref={headRef} className="reveal font-display text-ivory leading-tight mb-6"
-            style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", fontWeight: 300 }}>
+          <h2 ref={headRef} className="reveal fluid-display font-display text-ivory leading-tight mb-6"
+            style={{ fontWeight: 300 }}>
             Your profile. Their{" "}
             <span className="text-ember-gradient italic">gratitude. Your money.</span>
           </h2>

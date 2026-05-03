@@ -6,6 +6,17 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      xs:      "360px",
+      sm:      "640px",
+      md:      "768px",
+      tablet:  "768px",
+      lg:      "1024px",
+      desktop: "1025px",
+      xl:      "1280px",
+      wide:    "1440px",
+      "2xl":   "1536px",
+    },
     extend: {
       colors: {
         graphite:      "#111111",

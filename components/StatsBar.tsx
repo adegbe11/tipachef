@@ -66,7 +66,7 @@ export default function StatsBar() {
   return (
     <div ref={ref} className="relative border-y border-white/5 bg-charcoal/40">
       <div className="gold-line absolute top-0 left-0 right-0" />
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 md:divide-x md:divide-white/5">
           {STATS.map((s, i) => (
             <StatItem key={s.label} {...s} active={active} index={i} />

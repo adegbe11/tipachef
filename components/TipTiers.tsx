@@ -55,12 +55,12 @@ export default function TipTiers() {
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none"
         style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
         <p className="eyebrow mb-4">Tip tiers</p>
         <h2
           ref={headRef}
-          className="reveal font-display text-ivory leading-tight mb-4"
-          style={{ fontSize: "clamp(2.2rem, 5vw, 3.5rem)", fontWeight: 300 }}
+          className="reveal fluid-heading font-display text-ivory leading-tight mb-4"
+          style={{ fontWeight: 300 }}
         >
           Give diners a reason to{" "}
           <span className="text-ember-gradient italic">tip more.</span>
