@@ -114,7 +114,17 @@ input, textarea, select {
 
 /* ── Fluid section spacing ───────────────────────────────── */
 .section-pad { padding-top: var(--section-py); padding-bottom: var(--section-py); }
-.container-px { padding-left: var(--section-px); padding-right: var(--section-px); }
+
+/* ── Reedsy-style centered content container ────────────── */
+/* Canvas = full-bleed (bg, hero images, nav)               */
+/* Container = 1140px max, centered, never touches edges    */
+.content-container {
+  max-width: 1140px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left:  clamp(1.25rem, 4vw, 1.5rem);
+  padding-right: clamp(1.25rem, 4vw, 1.5rem);
+}
 
 /* ── Glass ──────────────────────────────────────────────── */
 .glass {

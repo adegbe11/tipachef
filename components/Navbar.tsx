@@ -63,7 +63,7 @@ export default function Navbar() {
           scrolled ? "glass-dark border-b border-white/5 py-3" : "bg-transparent py-4"
         }`}
       >
-        <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8 flex items-center gap-6">
+        <div className="content-container flex items-center gap-6">
 
           {/* ── Logo ─────────────────────────────────────────── */}
           <Link href="/" className="flex items-center gap-3 press flex-shrink-0 group">

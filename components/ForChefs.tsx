@@ -33,7 +33,7 @@ export default function ForChefs() {
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
       />
 
-      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
+      <div className="content-container">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
 
           {/* Left */}

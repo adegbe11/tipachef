@@ -44,7 +44,7 @@ export default function HowItWorks() {
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }}
       />
 
-      <div className="max-w-4xl mx-auto px-4 xs:px-5 md:px-6">
+      <div className="content-container">
         <p className="eyebrow mb-4">Get set up in minutes</p>
         <h2
           ref={headRef}

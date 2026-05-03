@@ -41,7 +41,7 @@ export default function WallOfLove() {
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-[0.04] pointer-events-none"
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
+      <div className="content-container">
         <p className="eyebrow mb-4">Wall of love</p>
         <h2
           ref={headRef}

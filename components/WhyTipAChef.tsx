@@ -52,7 +52,7 @@ export default function WhyTipAChef() {
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
         style={{ background: "radial-gradient(ellipse 60% 40% at 50% 50%, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-4xl mx-auto px-4 xs:px-5 md:px-6">
+      <div className="content-container">
         <p className="eyebrow mb-4">Why Tip a Chef</p>
         <h2
           ref={headRef}

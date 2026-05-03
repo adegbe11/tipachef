@@ -55,7 +55,7 @@ export default function LiveDemo() {
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{ background: "radial-gradient(ellipse 70% 50% at 30% 50%, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <div className="content-container grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
         {/* Left copy */}
         <div>

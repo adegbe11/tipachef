@@ -55,7 +55,7 @@ export default function TipTiers() {
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none"
         style={{ background: "radial-gradient(ellipse 70% 50% at 50% 0%, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
+      <div className="content-container">
         <p className="eyebrow mb-4">Tip tiers</p>
         <h2
           ref={headRef}

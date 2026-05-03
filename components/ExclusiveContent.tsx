@@ -106,7 +106,7 @@ export default function ExclusiveContent() {
       <div className="absolute top-0 right-0 w-[400px] h-[400px] opacity-[0.04] pointer-events-none"
         style={{ background: "radial-gradient(circle, #C9A96E 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl wide:max-w-[1400px] mx-auto px-4 xs:px-5 md:px-6 wide:px-8">
+      <div className="content-container">
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <p className="eyebrow mb-4">Exclusive content</p>
