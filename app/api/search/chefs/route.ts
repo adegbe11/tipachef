@@ -18,8 +18,8 @@ export async function GET(req: NextRequest) {
 
   if (error) {
     console.error("Chef search error:", error.message);
-    return NextResponse.json({ chefs: [] });
+    return NextResponse.json({ chefs: [], _debug_error: error.message });
   }
 
-  return NextResponse.json({ chefs: data ?? [] });
+  return NextResponse.json({ chefs: data ?? [], _debug_count: data?.length ?? 0 });
 }
