@@ -162,9 +162,14 @@ export default function Onboarding() {
   const [avatarUrl,       setAvatarUrl]       = useState<string | null>(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
 
-  /* Step 4 — Secret */
-  const [secretType,    setSecretType]    = useState("recipe");
-  const [secretContent, setSecretContent] = useState("");
+  /* Step 4 — Secret: each type has its own content */
+  const [secretType, setSecretType] = useState("recipe");
+  const [secretContents, setSecretContents] = useState<Record<string, string>>({
+    recipe: "", technique: "", note: "", link: "",
+  });
+  const secretContent    = secretContents[secretType] ?? "";
+  const setSecretContent = (val: string) =>
+    setSecretContents(prev => ({ ...prev, [secretType]: val }));
 
   /* Step 5 — QR (reuses chef.slug) */
   const [qrCopied, setQrCopied] = useState(false);
