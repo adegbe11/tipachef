@@ -13,16 +13,26 @@ export async function GET(request: NextRequest) {
 
     if (!error && data.user) {
       if (slug) {
-        // Signup flow: create chef profile and send to onboarding
-        const name = data.user.user_metadata?.full_name ?? data.user.email?.split("@")[0] ?? slug;
-        await supabase.from("chefs").upsert({
-          id:   data.user.id,
-          slug: slug.toLowerCase().replace(/[^a-z0-9-]/g, ""),
-          name,
-        }, { onConflict: "id" });
+        // Signup flow: only create chef profile if one doesn't already exist
+        // (never overwrite name/slug that the user already set up)
+        const { data: existing } = await supabase
+          .from("chefs")
+          .select("id")
+          .eq("id", data.user.id)
+          .maybeSingle();
+
+        if (!existing) {
+          const cleanSlug = slug.toLowerCase().replace(/[^a-z0-9-]/g, "");
+          const name = (data.user.user_metadata?.full_name as string | undefined)
+            ?? data.user.email?.split("@")[0]
+            ?? cleanSlug;
+          await supabase.from("chefs").insert({ id: data.user.id, slug: cleanSlug, name });
+        }
+
         return NextResponse.redirect(`${origin}/onboarding`);
       }
-      // Login flow: go to intended destination
+
+      // Login / password-reset flow: go to intended destination
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

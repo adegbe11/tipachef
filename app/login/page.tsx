@@ -33,7 +33,20 @@ export default function Login() {
     setLoading(true);
     setError("");
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-    if (signInError) { setError(signInError.message); setLoading(false); return; }
+    if (signInError) {
+      const msg = signInError.message.toLowerCase();
+      if (msg.includes("invalid") || msg.includes("credentials") || msg.includes("wrong")) {
+        setError("Incorrect email or password. Please try again.");
+      } else if (msg.includes("not confirmed") || msg.includes("email not confirmed")) {
+        setError("Please confirm your email first. Check your inbox for a verification link.");
+      } else if (msg.includes("too many")) {
+        setError("Too many attempts. Please wait a moment and try again.");
+      } else {
+        setError(signInError.message);
+      }
+      setLoading(false);
+      return;
+    }
     window.location.href = "/dashboard";
   }
 
@@ -130,7 +143,7 @@ export default function Login() {
             </div>
 
             <div className="flex justify-end mb-6">
-              <Link href="#" className="text-xs text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors">Forgot password?</Link>
+              <Link href="/forgot-password" className="text-xs text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors">Forgot password?</Link>
             </div>
 
             <button onClick={signInWithEmail} disabled={loading || !email || !password} className="w-full py-3.5 rounded-2xl font-semibold text-sm transition-all duration-200 mb-8 disabled:opacity-50" style={{ background: email && password ? "#C9A96E" : "#E5E7EB", color: email && password ? "#111111" : "#9CA3AF" }}>
