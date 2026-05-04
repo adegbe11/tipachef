@@ -1,17 +1,16 @@
-import Navbar          from "@/components/Navbar";
-import Hero            from "@/components/Hero";
-import StatsBar        from "@/components/StatsBar";
-import HowItWorks      from "@/components/HowItWorks";
-import LiveDemo        from "@/components/LiveDemo";
-import TipTiers        from "@/components/TipTiers";
-import Memberships     from "@/components/Memberships";
-import ForChefs        from "@/components/ForChefs";
-import ForRestaurants  from "@/components/ForRestaurants";
-import Leaderboard     from "@/components/Leaderboard";
-import ComparisonTable from "@/components/ComparisonTable";
-import Testimonials    from "@/components/Testimonials";
-import FinalCTA        from "@/components/FinalCTA";
-import Footer          from "@/components/Footer";
+import Navbar        from "@/components/Navbar";
+import Hero          from "@/components/Hero";
+import StatsBar      from "@/components/StatsBar";
+import HowItWorks    from "@/components/HowItWorks";
+import LiveDemo      from "@/components/LiveDemo";
+import WhyThisExists from "@/components/WhyThisExists";
+import ChefProfiles  from "@/components/ChefProfiles";
+import SocialProof   from "@/components/SocialProof";
+import ForChefs      from "@/components/ForChefs";
+import ForRestaurants from "@/components/ForRestaurants";
+import TrustSafety   from "@/components/TrustSafety";
+import DownloadCTA   from "@/components/DownloadCTA";
+import Footer        from "@/components/Footer";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -80,23 +79,21 @@ export default function Home() {
         <HowItWorks />
         {/* 5. Profile demo */}
         <LiveDemo />
-        {/* 6. Tip tiers */}
-        <TipTiers />
-        {/* 7. Memberships */}
-        <Memberships />
-        {/* 8. For chefs */}
+        {/* 6. Why this exists */}
+        <WhyThisExists />
+        {/* 7. Chef profiles */}
+        <ChefProfiles />
+        {/* 8. Social proof */}
+        <SocialProof />
+        {/* 9. For chefs */}
         <ForChefs />
-        {/* 9. For restaurants */}
+        {/* 10. For restaurants */}
         <ForRestaurants />
-        {/* 10. Leaderboard */}
-        <Leaderboard />
-        {/* 11. Comparison table */}
-        <ComparisonTable />
-        {/* 12. Testimonials */}
-        <Testimonials />
-        {/* 13. Final CTA */}
-        <FinalCTA />
-        {/* 14. Footer */}
+        {/* 11. Trust & safety */}
+        <TrustSafety />
+        {/* 12. Download / final CTA */}
+        <DownloadCTA />
+        {/* 13. Footer */}
         <Footer />
       </main>
     </>
