@@ -13,10 +13,10 @@ const COLS = [
   {
     head: "Company",
     links: [
-      { label: "About",   href: "/about"                       },
-      { label: "Blog",    href: "/about#story"                  },
-      { label: "Careers", href: "mailto:careers@tipachef.com"  },
-      { label: "Contact", href: "/contact"                      },
+      { label: "About",   href: "/about"                      },
+      { label: "Blog",    href: "/blog"                       },
+      { label: "Careers", href: "mailto:careers@tipachef.com" },
+      { label: "Contact", href: "/contact"                    },
     ],
   },
   {
