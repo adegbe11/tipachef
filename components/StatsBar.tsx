@@ -1,8 +1,8 @@
 const PILLARS = [
-  { value: "Free to join",  sub: null         },
-  { value: "100%",         sub: "Goes to the chef" },
-  { value: "2 min",        sub: "To set up"        },
-  { value: "Any phone",    sub: "No app needed"    },
+  { value: "$47",     sub: "Avg tip earned"     },
+  { value: "2,400+",  sub: "Chefs earning"       },
+  { value: "380+",    sub: "Partner venues"      },
+  { value: "Free",    sub: "Forever to join"     },
 ];
 
 export default function StatsBar() {
