@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabase
     .from("chefs")
-    .select("id, name, slug, role, avatar_url:image_url, restaurant:bio");
+    .select("id, name, slug, role, image_url, bio");
 
   if (q.trim())     query = query.ilike("name", `%${q.trim()}%`);
   if (venue.trim()) query = query.ilike("bio",  `%${venue.trim()}%`);
@@ -21,5 +21,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ chefs: [] });
   }
 
-  return NextResponse.json({ chefs: data ?? [] });
+  // Remap DB columns to match client-side expectations
+  const chefs = (data ?? []).map(c => ({
+    ...c,
+    avatar_url: (c as Record<string,unknown>).image_url ?? null,
+    restaurant: (c as Record<string,unknown>).bio ?? null,
+  }));
+  return NextResponse.json({ chefs });
 }

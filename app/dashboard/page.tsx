@@ -103,24 +103,24 @@ function DashboardInner() {
     if (!user) { router.replace("/login"); return; }
 
     const [chefRes, tipsRes] = await Promise.all([
-      supabase.from("chefs").select(
-        "id, name, slug, role, hook, cover_url, goal_label, goal_target, goal_current, " +
-        "stripe_account_id, tip_reward, instagram_url, tiktok_url, youtube_url, " +
-        "avatar_url:image_url, restaurant:bio"
-      ).eq("id", user.id).single(),
+      supabase.from("chefs").select("*").eq("id", user.id).single(),
       supabase.from("tips").select("*").eq("chef_id", user.id).order("created_at", { ascending: false }).limit(200),
     ]);
 
     if (chefRes.data) {
-      setChef(chefRes.data);
-      setSName(chefRes.data.name ?? "");
-      setSHook(chefRes.data.hook ?? "");
-      setSRestaurant(chefRes.data.restaurant ?? "");
-      setSRole(chefRes.data.role ?? "");
-      setSInstagram(chefRes.data.instagram_url ?? "");
-      setSTiktok(chefRes.data.tiktok_url ?? "");
-      setSYoutube(chefRes.data.youtube_url ?? "");
-      setSReward(chefRes.data.tip_reward ?? "");
+      // Map DB column names: image_url → avatar_url, bio → restaurant
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const raw = chefRes.data as any;
+      const mapped: Chef = { ...raw, avatar_url: raw.image_url ?? null, restaurant: raw.bio ?? null };
+      setChef(mapped);
+      setSName(mapped.name ?? "");
+      setSHook(mapped.hook ?? "");
+      setSRestaurant(mapped.restaurant ?? "");
+      setSRole(mapped.role ?? "");
+      setSInstagram(mapped.instagram_url ?? "");
+      setSTiktok(mapped.tiktok_url ?? "");
+      setSYoutube(mapped.youtube_url ?? "");
+      setSReward(mapped.tip_reward ?? "");
     }
     setTips(tipsRes.data ?? []);
     setLoading(false);

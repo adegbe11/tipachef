@@ -47,19 +47,23 @@ export default async function ChefProfile({ params }: { params: { slug: string }
   const supabase = await createClient();
 
   // Fetch chef by slug
-  const { data: chef, error } = await supabase
+  const { data: chefRaw, error } = await supabase
     .from("chefs")
-    .select(
-      "id, slug, name, role, hook, cover_url, goal_label, goal_target, goal_current, " +
-      "tip_reward, instagram_url, tiktok_url, youtube_url, " +
-      "avatar_url:image_url, restaurant:bio"
-    )
+    .select("*")
     .eq("slug", params.slug.toLowerCase())
     .single();
 
-  if (error || !chef) notFound();
+  if (error || !chefRaw) notFound();
 
-  const chefData = chef as Chef;
+  // Map production DB column names to our interface names
+  // DB uses image_url for avatar, bio for restaurant name
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const raw = chefRaw as any;
+  const chefData: Chef = {
+    ...raw,
+    avatar_url: raw.image_url ?? null,
+    restaurant: raw.bio       ?? null,
+  };
 
   // Fetch recent tips with messages using service role to bypass RLS
   const adminClient = createServerClient();
