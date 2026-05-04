@@ -37,7 +37,13 @@ const SECRET_TYPES = [
   },
 ];
 
-type Step = 0 | 1 | 2 | 3 | 4 | 5;
+const CUISINES = [
+  "Italian", "French", "Japanese", "Mexican", "Nigerian",
+  "Indian", "Lebanese", "Thai", "Spanish", "Greek",
+  "Turkish", "Peruvian", "Korean", "Brazilian", "British",
+];
+
+type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 interface Chef {
   id: string;
@@ -54,7 +60,7 @@ function ProgressBar({ step }: { step: Step }) {
     <div className="flex items-center gap-2">
       <span className="text-base">🔥</span>
       <div className="flex gap-1.5">
-        {[1, 2, 3].map((s) => (
+        {[1, 2, 3, 4].map((s) => (
           <div
             key={s}
             className="h-1.5 rounded-full transition-all duration-500"
@@ -148,16 +154,23 @@ export default function Onboarding() {
   const [restaurant, setRestaurant] = useState("");
   const [showRoles,  setShowRoles]  = useState(false);
 
-  /* Step 2 */
+  /* Step 2 — Cuisine */
+  const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
+
+  /* Step 3 — Photo */
   const [avatarUrl,       setAvatarUrl]       = useState<string | null>(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
 
-  /* Step 3 */
+  /* Step 4 — Secret */
   const [secretType,    setSecretType]    = useState("recipe");
   const [secretContent, setSecretContent] = useState("");
 
-  /* Step 4 */
+  /* Step 5 — QR (reuses chef.slug) */
+  const [qrCopied, setQrCopied] = useState(false);
+
+  /* Step 6 — Moment */
   const [notifVisible, setNotifVisible] = useState(false);
+  /* Step 7 — Launch */
   const [linkCopied,   setLinkCopied]   = useState(false);
 
   /* ── Load chef ────────────────────────────────────────────────── */
@@ -202,11 +215,10 @@ export default function Onboarding() {
     setStep(1);
   }
 
-  /* ── Step 1: always advance, save in background ───────────────── */
+  /* ── Step 1: save name/role/restaurant ───────────────────────── */
   function goStep1() {
     if (!chef || !name.trim()) return;
-    const updated = { ...chef, name: name.trim(), role: role.trim(), restaurant: restaurant.trim() };
-    setChef(updated);
+    setChef({ ...chef, name: name.trim(), role: role.trim(), restaurant: restaurant.trim() });
     setStep(2);
     supabase.from("chefs").update({
       name:       name.trim(),
@@ -215,6 +227,23 @@ export default function Onboarding() {
     }).eq("id", chef.id).then(({ error }) => {
       if (error) console.error("Step1 save:", error.message);
     });
+  }
+
+  /* ── Step 2: cuisine ──────────────────────────────────────────── */
+  function toggleCuisine(c: string) {
+    setSelectedCuisines(prev =>
+      prev.includes(c) ? prev.filter(x => x !== c) : prev.length < 3 ? [...prev, c] : prev
+    );
+  }
+  function goStep2() {
+    setStep(3);
+    // Save cuisine as comma-separated in hook field for now (no separate column needed)
+    if (chef && selectedCuisines.length > 0) {
+      supabase.from("chefs")
+        .update({ hook: selectedCuisines.join(", ") } as never)
+        .eq("id", chef.id)
+        .then(({ error }) => { if (error) console.error("Cuisine save:", error.message); });
+    }
   }
 
   /* ── Step 2: avatar upload with instant local preview ─────────── */
@@ -242,16 +271,21 @@ export default function Onboarding() {
     }
   }
 
-  /* ── Step 3: save secret, always advance ─────────────────────── */
-  function goStep3Done() {
-    setStep(4);
-    setTimeout(() => setNotifVisible(true), 400);
+  /* ── Step 4: save secret ──────────────────────────────────────── */
+  function goStep4Done() {
+    setStep(5); // → QR step
     if (secretContent.trim() && chef) {
       supabase.from("chefs")
         .update({ tip_reward: secretContent.trim() } as never)
         .eq("id", chef.id)
         .then(({ error }) => { if (error) console.error("Secret save:", error.message); });
     }
+  }
+
+  /* ── Step 5 → 6: QR done, go to moment ───────────────────────── */
+  function goStep5Done() {
+    setStep(6);
+    setTimeout(() => setNotifVisible(true), 400);
   }
 
   /* ── Loading ──────────────────────────────────────────────────── */
@@ -392,8 +426,77 @@ export default function Onboarding() {
     );
   }
 
-  /* ══ STEP 4: The Moment ════════════════════════════════════════ */
-  if (step === 4) {
+  /* ══ STEP 5: QR Code ════════════════════════════════════════ */
+  if (step === 5) {
+    const qrUrl = `https://tipachef.com/${chef.slug}`;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background: "#0d0d0d" }}>
+        <div className="relative z-10 w-full max-w-sm text-center">
+          <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 4 of 4</p>
+          <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
+            Your QR code<br />is ready.
+          </h1>
+          <p className="text-sm mb-8" style={{ color: "rgba(255,255,255,0.35)" }}>
+            Display it on tables, share on social, hand it out at events.<br />Diners tap and tip — no app needed on their side.
+          </p>
+
+          {/* QR card */}
+          <div className="rounded-3xl p-6 mb-6 mx-auto max-w-xs" style={{ background: "#15100A", border: "1px solid rgba(201,169,110,0.15)" }}>
+            <div className="bg-white rounded-2xl p-4 flex flex-col items-center mb-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(qrUrl)}&color=111111&bgcolor=ffffff`}
+                alt="QR code"
+                width={160}
+                height={160}
+                className="rounded-lg"
+              />
+            </div>
+            <p className="text-white font-semibold text-sm text-center">{chef.name || chef.slug}</p>
+            <p className="text-xs text-center mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>tipachef.com/{chef.slug}</p>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-3 mb-8">
+            {[
+              { v: "$47",    l: "Avg tip earned" },
+              { v: "2 min",  l: "To set up"      },
+              { v: "100%",   l: "Goes to you"    },
+            ].map(s => (
+              <div key={s.l} className="rounded-2xl p-3 text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <p className="font-semibold text-base mb-0.5" style={{ color: "#C9A96E" }}>{s.v}</p>
+                <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>{s.l}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(qrUrl);
+                setQrCopied(true);
+                setTimeout(() => setQrCopied(false), 2000);
+              }}
+              className="flex-1 py-3.5 rounded-2xl text-sm font-medium border transition-all"
+              style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)" }}
+            >
+              {qrCopied ? "Copied!" : "Copy link"}
+            </button>
+            <button
+              onClick={goStep5Done}
+              className="flex-1 py-3.5 rounded-2xl text-sm font-semibold"
+              style={{ background: "#C9A96E", color: "#111", boxShadow: "0 6px 24px rgba(201,169,110,0.3)" }}
+            >
+              Go live 🔥
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ══ STEP 6: The Moment ════════════════════════════════════════ */
+  if (step === 6) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background: "#080808" }}>
         {/* Notification */}
@@ -433,7 +536,7 @@ export default function Onboarding() {
               Connect Stripe · get paid
             </button>
             <button
-              onClick={() => setStep(5)}
+              onClick={() => setStep(7)}
               className="px-8 py-4 rounded-2xl font-semibold text-sm border"
               style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)" }}
             >
@@ -445,8 +548,8 @@ export default function Onboarding() {
     );
   }
 
-  /* ══ STEP 5: Kitchen Is Open ════════════════════════════════════ */
-  if (step === 5) {
+  /* ══ STEP 7: Kitchen Is Open ════════════════════════════════════ */
+  if (step === 7) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 text-center">
         <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl" style={{ background: "#FEF3E2" }}>
@@ -538,7 +641,7 @@ export default function Onboarding() {
           {/* ── STEP 1 ─────────────────────────────────────────── */}
           {step === 1 && (
             <div className="w-full max-w-sm">
-              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 1 of 3</p>
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 1 of 4</p>
               <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
                 Tell us who you are,<br />Chef.
               </h1>
@@ -619,10 +722,65 @@ export default function Onboarding() {
             </div>
           )}
 
-          {/* ── STEP 2 ─────────────────────────────────────────── */}
+          {/* ── STEP 2: Cuisine ───────────────────────────────── */}
           {step === 2 && (
             <div className="w-full max-w-sm">
-              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 2 of 3</p>
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 2 of 4</p>
+              <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
+                What&apos;s your<br />cuisine?
+              </h1>
+              <p className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>Pick up to 3. Helps diners find you.</p>
+
+              <div className="flex flex-wrap gap-2 mb-8">
+                {CUISINES.map(c => {
+                  const sel = selectedCuisines.includes(c);
+                  return (
+                    <button key={c} onClick={() => toggleCuisine(c)}
+                      className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-150"
+                      style={{
+                        background:  sel ? "#C9A96E"                          : "rgba(255,255,255,0.05)",
+                        color:       sel ? "#111"                              : "rgba(255,255,255,0.55)",
+                        border:      sel ? "1.5px solid #C9A96E"               : "1.5px solid rgba(255,255,255,0.08)",
+                        boxShadow:   sel ? "0 4px 16px rgba(201,169,110,0.25)" : "none",
+                      }}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {selectedCuisines.length > 0 && (
+                <p className="text-xs mb-4" style={{ color: "rgba(255,255,255,0.25)" }}>
+                  {selectedCuisines.length}/3 selected
+                </p>
+              )}
+
+              <div className="flex gap-3">
+                <button onClick={() => setStep(3)}
+                  className="flex-[0.5] py-3.5 rounded-2xl text-sm font-medium border transition-all"
+                  style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.3)" }}
+                >
+                  Skip
+                </button>
+                <button onClick={goStep2}
+                  className="flex-1 py-3.5 rounded-2xl text-sm font-semibold transition-all"
+                  style={{
+                    background: selectedCuisines.length > 0 ? "#C9A96E" : "rgba(255,255,255,0.07)",
+                    color:      selectedCuisines.length > 0 ? "#111"    : "rgba(255,255,255,0.2)",
+                    boxShadow:  selectedCuisines.length > 0 ? "0 6px 24px rgba(201,169,110,0.3)" : "none",
+                  }}
+                >
+                  Continue →
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 3: Photo ──────────────────────────────────── */}
+          {step === 3 && (
+            <div className="w-full max-w-sm">
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 3 of 4</p>
               <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
                 Put a face<br />to the food.
               </h1>
@@ -665,14 +823,14 @@ export default function Onboarding() {
               </label>
 
               <div className="flex gap-3 mt-5">
-                <button onClick={() => setStep(3)}
+                <button onClick={() => setStep(4)}
                   className="flex-1 py-3.5 rounded-2xl text-sm font-medium border transition-all"
                   style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.4)" }}
                 >
                   Skip for now
                 </button>
                 <button
-                  onClick={() => setStep(3)}
+                  onClick={() => setStep(4)}
                   className="flex-1 py-3.5 rounded-2xl text-sm font-semibold transition-all"
                   style={{
                     background: avatarUrl ? "#C9A96E" : "rgba(255,255,255,0.07)",
@@ -688,10 +846,10 @@ export default function Onboarding() {
             </div>
           )}
 
-          {/* ── STEP 3 ─────────────────────────────────────────── */}
-          {step === 3 && (
+          {/* ── STEP 4: Kitchen Secret ─────────────────────────── */}
+          {step === 4 && (
             <div className="w-full max-w-sm">
-              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 3 of 3</p>
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 4 of 4</p>
               <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
                 Every great chef<br />has a secret.
               </h1>
@@ -733,13 +891,13 @@ export default function Onboarding() {
               <p className="text-xs mt-2 mb-5" style={{ color: "rgba(255,255,255,0.2)" }}>Tippers see this after their tip completes. Edit any time in Settings.</p>
 
               <div className="flex gap-3">
-                <button onClick={goStep3Done}
+                <button onClick={goStep4Done}
                   className="flex-[0.55] py-3.5 rounded-2xl text-sm font-medium border transition-all"
                   style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.3)" }}
                 >
                   Skip
                 </button>
-                <button onClick={goStep3Done}
+                <button onClick={goStep4Done}
                   className="flex-1 py-3.5 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2"
                   style={{ background: "#C9A96E", color: "#111", boxShadow: "0 6px 24px rgba(201,169,110,0.3)" }}
                 >
