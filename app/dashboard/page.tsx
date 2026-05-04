@@ -199,19 +199,25 @@ function DashboardInner() {
     const setter = type === "avatar" ? setAvatarUploading : setCoverUploading;
     setter(true);
     setSaveError("");
+
+    // Show local preview instantly
+    const localUrl = URL.createObjectURL(file);
+    const column   = type === "avatar" ? "avatar_url" : "cover_url";
+    setChef({ ...chef, [column]: localUrl });
+
     const ext    = file.name.split(".").pop() ?? "jpg";
     const bucket = type === "avatar" ? "avatars" : "covers";
     const path   = `${chef.id}/${type}.${ext}`;
     const { error: uploadErr } = await supabase.storage
       .from(bucket)
       .upload(path, file, { upsert: true });
+
     if (uploadErr) {
-      setSaveError(`Upload failed: ${uploadErr.message}`);
+      setSaveError(`Upload failed: ${uploadErr.message}. Make sure the "${bucket}" storage bucket exists in Supabase.`);
       setter(false);
       return;
     }
     const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(path);
-    const column = type === "avatar" ? "avatar_url" : "cover_url";
     const { error: updateErr } = await supabase.from("chefs").update({ [column]: publicUrl }).eq("id", chef.id);
     if (updateErr) {
       setSaveError(`Save failed: ${updateErr.message}`);

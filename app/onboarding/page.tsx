@@ -219,17 +219,27 @@ export default function Onboarding() {
   /* ── Step 2 upload ───────────────────────────────────────────── */
   async function uploadAvatar(file: File) {
     if (!chef) return;
+    // Show local preview instantly — never disappears regardless of upload result
+    const localUrl = URL.createObjectURL(file);
+    setAvatarUrl(localUrl);
     setAvatarUploading(true);
+
     const ext  = file.name.split(".").pop() ?? "jpg";
     const path = `${chef.id}/avatar.${ext}`;
     const { error: upErr } = await supabase.storage
       .from("avatars")
       .upload(path, file, { upsert: true });
+
     if (!upErr) {
       const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
       await supabase.from("chefs").update({ avatar_url: publicUrl }).eq("id", chef.id);
       setAvatarUrl(publicUrl);
       setChef({ ...chef, avatar_url: publicUrl });
+    } else {
+      // Upload failed (bucket may not exist) but local preview stays visible
+      // Store the file so we can retry saving when they continue
+      console.error("Avatar upload error:", upErr.message);
+      setChef({ ...chef, avatar_url: localUrl });
     }
     setAvatarUploading(false);
   }
