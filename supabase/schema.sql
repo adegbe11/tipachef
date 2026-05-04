@@ -1,7 +1,9 @@
 -- Run this in your Supabase SQL editor to set up the database
--- If the database already exists, run only the NEW POLICY below:
+-- If the database already exists, run these migrations:
 --   create policy "Tips with messages are publicly readable" on tips
 --     for select using (message is not null);
+--
+--   alter table chefs add column if not exists tip_reward text;
 
 -- ── Chefs ────────────────────────────────────────────────
 create table if not exists chefs (
@@ -20,6 +22,7 @@ create table if not exists chefs (
   instagram_url text,
   tiktok_url    text,
   youtube_url   text,
+  tip_reward    text,
   created_at    timestamptz default now()
 );
 

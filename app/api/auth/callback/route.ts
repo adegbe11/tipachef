@@ -12,15 +12,17 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error && data.user) {
-      // If slug provided (signup flow), create chef profile
       if (slug) {
+        // Signup flow: create chef profile and send to onboarding
         const name = data.user.user_metadata?.full_name ?? data.user.email?.split("@")[0] ?? slug;
         await supabase.from("chefs").upsert({
           id:   data.user.id,
           slug: slug.toLowerCase().replace(/[^a-z0-9-]/g, ""),
           name,
         }, { onConflict: "id" });
+        return NextResponse.redirect(`${origin}/onboarding`);
       }
+      // Login flow: go to intended destination
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

@@ -37,7 +37,7 @@ export default function SignUp() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/api/auth/callback?slug=${slugValue}&next=/dashboard`,
+        redirectTo: `${window.location.origin}/api/auth/callback?slug=${slugValue}&next=/onboarding`,
       },
     });
   }
@@ -47,7 +47,7 @@ export default function SignUp() {
     await supabase.auth.signInWithOAuth({
       provider: "apple",
       options: {
-        redirectTo: `${window.location.origin}/api/auth/callback?slug=${slugValue}&next=/dashboard`,
+        redirectTo: `${window.location.origin}/api/auth/callback?slug=${slugValue}&next=/onboarding`,
       },
     });
   }
@@ -60,7 +60,7 @@ export default function SignUp() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/api/auth/callback?slug=${slugValue}&next=/dashboard`,
+        emailRedirectTo: `${window.location.origin}/api/auth/callback?slug=${slugValue}&next=/onboarding`,
         data: { slug: slugValue },
       },
     });
@@ -75,7 +75,7 @@ export default function SignUp() {
         name: email.split("@")[0],
       }, { onConflict: "id" });
     }
-    window.location.href = "/dashboard";
+    window.location.href = "/onboarding";
   }
 
   const canProceed = slugValue.length >= 2 && slugStatus === "available";

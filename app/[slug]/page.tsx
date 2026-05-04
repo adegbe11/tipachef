@@ -23,6 +23,7 @@ interface Chef {
   instagram_url: string | null;
   tiktok_url: string | null;
   youtube_url: string | null;
+  tip_reward: string | null;
 }
 
 interface Tip {
@@ -106,7 +107,7 @@ export default async function ChefProfile({ params }: { params: { slug: string }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Suspense fallback={null}><TipSuccessToast /></Suspense>
+      <Suspense fallback={null}><TipSuccessToast reward={chefData.tip_reward ?? null} /></Suspense>
 
       {/* Cover + Avatar */}
       <div className="relative h-52 md:h-64 w-full overflow-hidden bg-graphite">

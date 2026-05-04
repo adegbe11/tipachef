@@ -17,6 +17,7 @@ interface Chef {
   avatar_url: string | null;
   cover_url: string | null;
   stripe_account_id: string | null;
+  tip_reward: string | null;
   goal_label: string | null;
   goal_target: number | null;
   goal_current: number;
@@ -90,6 +91,7 @@ function DashboardInner() {
   const [sInstagram,  setSInstagram]  = useState("");
   const [sTiktok,     setSTiktok]     = useState("");
   const [sYoutube,    setSYoutube]    = useState("");
+  const [sReward,     setSReward]     = useState("");
   const [saving,      setSaving]      = useState(false);
   const [saved,       setSaved]       = useState(false);
   const [saveError,   setSaveError]   = useState("");
@@ -126,6 +128,7 @@ function DashboardInner() {
       setSInstagram(chefRes.data.instagram_url ?? "");
       setSTiktok(chefRes.data.tiktok_url ?? "");
       setSYoutube(chefRes.data.youtube_url ?? "");
+      setSReward(chefRes.data.tip_reward ?? "");
     }
     setTips(tipsRes.data ?? []);
     setExtras(extrasRes.data ?? []);
@@ -169,6 +172,7 @@ function DashboardInner() {
       instagram_url: sInstagram.trim() || null,
       tiktok_url:    sTiktok.trim()    || null,
       youtube_url:   sYoutube.trim()   || null,
+      tip_reward:    sReward.trim()    || null,
     }).eq("id", chef.id);
     setSaving(false);
     if (error) {
@@ -183,6 +187,7 @@ function DashboardInner() {
         instagram_url: sInstagram.trim() || null,
         tiktok_url:    sTiktok.trim()    || null,
         youtube_url:   sYoutube.trim()   || null,
+        tip_reward:    sReward.trim()    || null,
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
@@ -856,6 +861,32 @@ function DashboardInner() {
                     {saving ? "Saving..." : saved ? "Saved!" : "Save changes"}
                   </button>
                 </div>
+              </div>
+
+              {/* Kitchen secret / tip reward */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-base">🔒</span>
+                  <p className="text-gray-900 font-semibold text-sm">Kitchen secret</p>
+                </div>
+                <p className="text-gray-400 text-xs mb-4">
+                  Tippers see this the moment their payment completes. A recipe, a technique, a personal message.
+                </p>
+                <textarea
+                  value={sReward}
+                  onChange={(e) => setSReward(e.target.value)}
+                  placeholder="My carbonara secret: use 70% pecorino, 30% parmesan, and add the pasta water off the heat..."
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-900 outline-none focus:border-amber-400 transition-all resize-none placeholder:text-gray-300"
+                />
+                <button
+                  onClick={saveSettings}
+                  disabled={saving}
+                  className="mt-3 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60"
+                  style={{ background: "#C9A96E" }}
+                >
+                  {saving ? "Saving..." : saved ? "Saved!" : "Save changes"}
+                </button>
               </div>
 
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
