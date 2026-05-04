@@ -30,18 +30,18 @@ export const metadata: Metadata = {
   keywords: ["tip a chef", "chef tipping", "restaurant kitchen tips", "Tip a Chef", "direct chef tips"],
   icons: {
     icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicon.ico",        sizes: "any",      type: "image/x-icon" },
+      { url: "/favicon-16x16.png",  sizes: "16x16",    type: "image/png"    },
+      { url: "/favicon-32x32.png",  sizes: "32x32",    type: "image/png"    },
+      { url: "/favicon-48x48.png",  sizes: "48x48",    type: "image/png"    },
+      { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
-    other: [
-      { rel: "android-chrome", url: "/android-chrome-192x192.png", sizes: "192x192" },
-      { rel: "android-chrome", url: "/android-chrome-512x512.png", sizes: "512x512" },
-    ],
+    apple:    { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     shortcut: "/favicon.ico",
+    other: [
+      { rel: "manifest", url: "/site.webmanifest" },
+    ],
   },
   openGraph: {
     title: "Tip a Chef — The chef who made your meal deserves to know.",
