@@ -14,14 +14,21 @@ const TOPICS = [
 ];
 
 export default function ContactPage() {
-  const [topic, setTopic] = useState("");
-  const [sent, setSent] = useState(false);
+  const [topic,   setTopic]   = useState("");
+  const [name,    setName]    = useState("");
+  const [email,   setEmail]   = useState("");
+  const [message, setMessage] = useState("");
+  const [sent,    setSent]    = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 900));
+    const subject = encodeURIComponent(`[Tip a Chef] ${topic || "Contact form"}`);
+    const body    = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`
+    );
+    window.open(`mailto:hello@tipachef.com?subject=${subject}&body=${body}`);
     setLoading(false);
     setSent(true);
   }
@@ -124,6 +131,8 @@ export default function ContactPage() {
                         <input
                           type="text"
                           required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
                           placeholder="Alex Chen"
                           className="w-full rounded-xl px-4 py-3 font-sans text-graphite text-sm outline-none transition-colors"
                           style={{
@@ -144,6 +153,8 @@ export default function ContactPage() {
                         <input
                           type="email"
                           required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                           placeholder="you@example.com"
                           className="w-full rounded-xl px-4 py-3 font-sans text-graphite text-sm outline-none transition-colors"
                           style={{
@@ -193,6 +204,8 @@ export default function ContactPage() {
                       <textarea
                         required
                         rows={5}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         placeholder="Tell us what's on your mind…"
                         className="w-full rounded-xl px-4 py-3 font-sans text-graphite text-sm outline-none resize-none transition-colors"
                         style={{

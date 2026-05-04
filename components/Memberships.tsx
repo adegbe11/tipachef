@@ -170,13 +170,16 @@ export default function Memberships() {
                     ))}
                   </ul>
 
-                  <button className={`press w-full py-2.5 rounded-xl text-xs font-sans font-semibold tracking-wide transition-all duration-200 ${
-                    plan.highlight
-                      ? "bg-ember text-graphite shadow-lg shadow-ember/20 hover:bg-ember-light"
-                      : "glass text-ivory/70 hover:text-ivory hover:border-ember/20"
-                  }`}>
-                    Subscribe as {plan.name}
-                  </button>
+                  <a
+                    href="/signup"
+                    className={`press w-full py-2.5 rounded-xl text-xs font-sans font-semibold tracking-wide transition-all duration-200 flex items-center justify-center gap-1.5 ${
+                      plan.highlight
+                        ? "bg-ember text-graphite shadow-lg shadow-ember/20 hover:bg-ember-light"
+                        : "glass text-ivory/70 hover:text-ivory hover:border-ember/20"
+                    }`}
+                  >
+                    Join waitlist · {plan.name}
+                  </a>
                 </div>
               );
             })}

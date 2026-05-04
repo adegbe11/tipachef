@@ -27,7 +27,7 @@ const CATEGORIES = [
     title: "Getting Started",
     desc: "What is Tip a Chef, how it works, and how to set up your first profile.",
     count: 8,
-    href: "/help/getting-started",
+    href: "/contact",
   },
   {
     icon: (
@@ -38,7 +38,7 @@ const CATEGORIES = [
     title: "Your Chef Profile",
     desc: "Setting up your page, adding photos, writing your story, and sharing your QR code.",
     count: 10,
-    href: "/help/chef-profile",
+    href: "/contact",
   },
   {
     icon: (
@@ -49,7 +49,7 @@ const CATEGORIES = [
     title: "Receiving Tips",
     desc: "How tips are sent to you, tip amounts, messages from supporters, and notifications.",
     count: 7,
-    href: "/help/receiving-tips",
+    href: "/contact",
   },
   {
     icon: (
@@ -60,7 +60,7 @@ const CATEGORIES = [
     title: "Payouts & Banking",
     desc: "Connecting your bank account, payout schedules, minimum amounts, and Stripe setup.",
     count: 12,
-    href: "/help/payouts",
+    href: "/contact",
   },
   {
     icon: (
@@ -71,7 +71,7 @@ const CATEGORIES = [
     title: "For Supporters",
     desc: "How to find a chef, send a tip, leave a message, and what happens after you tip.",
     count: 6,
-    href: "/help/for-supporters",
+    href: "/contact",
   },
   {
     icon: (
@@ -82,7 +82,7 @@ const CATEGORIES = [
     title: "Account & Security",
     desc: "Changing your email or password, two-factor authentication, and account deletion.",
     count: 8,
-    href: "/help/account-security",
+    href: "/contact",
   },
   {
     icon: (
@@ -93,7 +93,7 @@ const CATEGORIES = [
     title: "QR Codes & Sharing",
     desc: "Downloading your QR code, printing it, placing it at your station, and sharing your link.",
     count: 5,
-    href: "/help/qr-codes",
+    href: "/contact",
   },
   {
     icon: (
@@ -104,17 +104,17 @@ const CATEGORIES = [
     title: "Troubleshooting",
     desc: "Payment issues, profile not loading, QR code not scanning, and other common problems.",
     count: 9,
-    href: "/help/troubleshooting",
+    href: "/contact",
   },
 ];
 
 const POPULAR = [
-  { q: "How do I create my chef profile?",          href: "/help/chef-profile" },
-  { q: "When do I get paid?",                        href: "/help/payouts" },
-  { q: "How does a supporter send a tip?",           href: "/help/for-supporters" },
-  { q: "How do I download my QR code?",             href: "/help/qr-codes" },
-  { q: "Is Tip a Chef free for chefs?",              href: "/help/getting-started" },
-  { q: "What percentage does Tip a Chef take?",      href: "/help/payouts" },
+  { q: "How do I create my chef profile?",          href: "/contact" },
+  { q: "When do I get paid?",                        href: "/contact" },
+  { q: "How does a supporter send a tip?",           href: "/contact" },
+  { q: "How do I download my QR code?",             href: "/contact" },
+  { q: "Is Tip a Chef free for chefs?",              href: "/contact" },
+  { q: "What percentage does Tip a Chef take?",      href: "/contact" },
 ];
 
 export default function HelpPage() {

@@ -13,18 +13,18 @@ const COLS = [
   {
     head: "Company",
     links: [
-      { label: "About",   href: "/about"   },
-      { label: "Blog",    href: "/blog"    },
-      { label: "Careers", href: "/careers" },
-      { label: "Contact", href: "/contact" },
+      { label: "About",   href: "/about"                       },
+      { label: "Blog",    href: "/about#story"                  },
+      { label: "Careers", href: "mailto:careers@tipachef.com"  },
+      { label: "Contact", href: "/contact"                      },
     ],
   },
   {
     head: "Legal",
     links: [
-      { label: "Privacy", href: "/privacy" },
-      { label: "Terms",   href: "/terms"   },
-      { label: "Cookies", href: "/cookies" },
+      { label: "Privacy", href: "/privacy"         },
+      { label: "Terms",   href: "/terms"           },
+      { label: "Cookies", href: "/privacy#cookies" },
     ],
   },
 ];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,12 +21,20 @@ const SEARCH_SUGGESTIONS = [
 ];
 
 export default function Navbar() {
+  const router     = useRouter();
   const [scrolled,   setScrolled]   = useState(false);
   const [menuOpen,   setMenuOpen]   = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query,      setQuery]      = useState("");
   const searchRef  = useRef<HTMLDivElement>(null);
   const inputRef   = useRef<HTMLInputElement>(null);
+
+  function goSearch(q: string) {
+    if (!q.trim()) return;
+    router.push(`/search?q=${encodeURIComponent(q.trim())}`);
+    setSearchOpen(false);
+    setQuery("");
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -129,6 +138,10 @@ export default function Navbar() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setSearchOpen(true)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") goSearch(query);
+                  if (e.key === "Escape") { setSearchOpen(false); setQuery(""); }
+                }}
                 placeholder="Search chefs & restaurants..."
                 className="flex-1 bg-transparent text-sm font-sans text-ivory placeholder:text-ivory/30 outline-none min-w-0"
               />
@@ -158,7 +171,7 @@ export default function Navbar() {
                       <li key={s.name}>
                         <button
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors text-left group"
-                          onClick={() => { setSearchOpen(false); setQuery(""); }}
+                          onClick={() => goSearch(s.name)}
                         >
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                             s.type === "chef" ? "bg-ember/15 border border-ember/25" : "bg-white/5 border border-white/10"
@@ -248,6 +261,9 @@ export default function Navbar() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") goSearch(query);
+                }}
                 placeholder="Search chefs & restaurants..."
                 className="flex-1 bg-transparent text-sm font-sans text-ivory placeholder:text-ivory/30 outline-none"
               />

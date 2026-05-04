@@ -111,7 +111,7 @@ export default function ChefProfiles() {
                 </p>
 
                 <Link
-                  href={`/tip/${chef.slug}`}
+                  href={`/${chef.slug}`}
                   className="press w-full py-3 rounded-xl bg-ember text-graphite font-sans font-semibold text-sm text-center hover:bg-ember-light transition-colors duration-200"
                 >
                   Tip {chef.name.split(" ")[0]}

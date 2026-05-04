@@ -2,14 +2,32 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const CHEFS = [
-  { rank: 1,  name: "Marco Esposito",  emoji: "🇮🇹", cuisine: "Italian",           venue: "Osteria del Fuoco, Rome",       earned: "$4,210", members: 168, badge: "🏆" },
-  { rank: 2,  name: "Nikos Stavridis", emoji: "🇬🇷", cuisine: "Modern Greek",      venue: "Kuzina, Athens",                earned: "$3,840", members: 154, badge: "🥈" },
-  { rank: 3,  name: "Pierre Leclerc",  emoji: "🇫🇷", cuisine: "French Bistro",     venue: "Le Comptoir, Paris",            earned: "$3,190", members: 127, badge: "🥉" },
-  { rank: 4,  name: "Mehmet Yilmaz",   emoji: "🇹🇷", cuisine: "Turkish Modern",    venue: "Mikla, Istanbul",               earned: "$2,780", members: 111, badge: null  },
-  { rank: 5,  name: "Sofia Ricci",     emoji: "🇮🇹", cuisine: "Sicilian",          venue: "Trattoria Ricci, London",       earned: "$2,410", members: 97,  badge: null  },
-  { rank: 6,  name: "Carlos Ibáñez",   emoji: "🇪🇸", cuisine: "Modern Spanish",    venue: "Sal y Pimienta, Barcelona",     earned: "$2,190", members: 88,  badge: null  },
-];
+const DATA: Record<number, { rank: number; name: string; emoji: string; cuisine: string; venue: string; earned: string; members: number; badge: string | null }[]> = {
+  0: [
+    { rank: 1, name: "Marco Esposito",  emoji: "🇮🇹", cuisine: "Italian",        venue: "Osteria del Fuoco, Rome",   earned: "$4,210", members: 168, badge: "🏆" },
+    { rank: 2, name: "Nikos Stavridis", emoji: "🇬🇷", cuisine: "Modern Greek",   venue: "Kuzina, Athens",            earned: "$3,840", members: 154, badge: "🥈" },
+    { rank: 3, name: "Pierre Leclerc",  emoji: "🇫🇷", cuisine: "French Bistro",  venue: "Le Comptoir, Paris",        earned: "$3,190", members: 127, badge: "🥉" },
+    { rank: 4, name: "Mehmet Yilmaz",   emoji: "🇹🇷", cuisine: "Turkish Modern", venue: "Mikla, Istanbul",           earned: "$2,780", members: 111, badge: null  },
+    { rank: 5, name: "Sofia Ricci",     emoji: "🇮🇹", cuisine: "Sicilian",       venue: "Trattoria Ricci, London",   earned: "$2,410", members: 97,  badge: null  },
+    { rank: 6, name: "Carlos Ibáñez",   emoji: "🇪🇸", cuisine: "Modern Spanish", venue: "Sal y Pimienta, Barcelona", earned: "$2,190", members: 88,  badge: null  },
+  ],
+  1: [
+    { rank: 1, name: "Pierre Leclerc",  emoji: "🇫🇷", cuisine: "French Bistro",  venue: "Le Comptoir, Paris",        earned: "$51,200", members: 412, badge: "🏆" },
+    { rank: 2, name: "Marco Esposito",  emoji: "🇮🇹", cuisine: "Italian",        venue: "Osteria del Fuoco, Rome",   earned: "$48,600", members: 387, badge: "🥈" },
+    { rank: 3, name: "Sofia Ricci",     emoji: "🇮🇹", cuisine: "Sicilian",       venue: "Trattoria Ricci, London",   earned: "$39,100", members: 305, badge: "🥉" },
+    { rank: 4, name: "Nikos Stavridis", emoji: "🇬🇷", cuisine: "Modern Greek",   venue: "Kuzina, Athens",            earned: "$34,800", members: 278, badge: null  },
+    { rank: 5, name: "Carlos Ibáñez",   emoji: "🇪🇸", cuisine: "Modern Spanish", venue: "Sal y Pimienta, Barcelona", earned: "$29,400", members: 231, badge: null  },
+    { rank: 6, name: "Mehmet Yilmaz",   emoji: "🇹🇷", cuisine: "Turkish Modern", venue: "Mikla, Istanbul",           earned: "$24,900", members: 196, badge: null  },
+  ],
+  2: [
+    { rank: 1, name: "Lena Fischer",    emoji: "🇩🇪", cuisine: "New Nordic",     venue: "Facil, Berlin",             earned: "$1,840", members: 73,  badge: "🔥" },
+    { rank: 2, name: "Carlos Ibáñez",   emoji: "🇪🇸", cuisine: "Modern Spanish", venue: "Sal y Pimienta, Barcelona", earned: "$1,620", members: 68,  badge: "🔥" },
+    { rank: 3, name: "Yuki Tanaka",     emoji: "🇯🇵", cuisine: "Kaiseki",        venue: "Kuro, Tokyo",               earned: "$1,410", members: 59,  badge: "🔥" },
+    { rank: 4, name: "Aisha Okonkwo",   emoji: "🇳🇬", cuisine: "West African",   venue: "Àṣà, Lagos",                earned: "$1,190", members: 48,  badge: null  },
+    { rank: 5, name: "Sofia Ricci",     emoji: "🇮🇹", cuisine: "Sicilian",       venue: "Trattoria Ricci, London",   earned: "$980",  members: 41,  badge: null  },
+    { rank: 6, name: "Marco Esposito",  emoji: "🇮🇹", cuisine: "Italian",        venue: "Osteria del Fuoco, Rome",   earned: "$870",  members: 36,  badge: null  },
+  ],
+};
 
 const FILTERS = ["This month", "All time", "Rising stars"];
 
@@ -30,6 +48,7 @@ export default function Leaderboard() {
   const headRef = useRef<HTMLHeadingElement>(null);
   useReveal(headRef as React.RefObject<HTMLElement>);
   const [filter, setFilter] = useState(0);
+  const CHEFS = DATA[filter] ?? DATA[0];
 
   return (
     <section className="py-28 md:py-36 bg-charcoal/30 relative overflow-hidden">

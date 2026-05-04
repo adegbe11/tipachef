@@ -42,7 +42,7 @@ const BENEFITS = [
 
 export default function ForRestaurants() {
   return (
-    <section id="for-supporters" className="py-24 md:py-36 bg-charcoal/30">
+    <section id="restaurants" className="py-24 md:py-36 bg-charcoal/30">
       <div className="content-container">
 
         {/* Header */}
