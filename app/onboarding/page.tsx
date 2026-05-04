@@ -182,7 +182,7 @@ export default function Onboarding() {
 
         const { data, error } = await supabase
           .from("chefs")
-          .select("id, slug, name, role, restaurant, avatar_url")
+          .select("id, slug, name, role, restaurant:bio, avatar_url:image_url")
           .eq("id", user.id)
           .single();
 
@@ -223,7 +223,7 @@ export default function Onboarding() {
     supabase.from("chefs").update({
       name:       name.trim(),
       role:       role.trim() || null,
-      restaurant: restaurant.trim() || null,
+      bio:        restaurant.trim() || null,
     }).eq("id", chef.id).then(({ error }) => {
       if (error) console.error("Step1 save:", error.message);
     });
@@ -258,7 +258,7 @@ export default function Onboarding() {
       const { error: upErr } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
       if (!upErr) {
         const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
-        await supabase.from("chefs").update({ avatar_url: publicUrl }).eq("id", chef.id);
+        await supabase.from("chefs").update({ image_url: publicUrl }).eq("id", chef.id);
         setAvatarUrl(publicUrl);
         setChef(c => c ? { ...c, avatar_url: publicUrl } : c);
       } else {

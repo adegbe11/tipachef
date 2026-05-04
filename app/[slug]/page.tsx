@@ -49,7 +49,11 @@ export default async function ChefProfile({ params }: { params: { slug: string }
   // Fetch chef by slug
   const { data: chef, error } = await supabase
     .from("chefs")
-    .select("*")
+    .select(
+      "id, slug, name, role, hook, cover_url, goal_label, goal_target, goal_current, " +
+      "tip_reward, instagram_url, tiktok_url, youtube_url, " +
+      "avatar_url:image_url, restaurant:bio"
+    )
     .eq("slug", params.slug.toLowerCase())
     .single();
 

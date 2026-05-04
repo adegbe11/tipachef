@@ -9,17 +9,17 @@ export async function GET(req: NextRequest) {
 
   let query = supabase
     .from("chefs")
-    .select("id, name, slug, role, restaurant, avatar_url");
+    .select("id, name, slug, role, avatar_url:image_url, restaurant:bio");
 
-  if (q.trim())     query = query.ilike("name",       `%${q.trim()}%`);
-  if (venue.trim()) query = query.ilike("restaurant", `%${venue.trim()}%`);
+  if (q.trim())     query = query.ilike("name", `%${q.trim()}%`);
+  if (venue.trim()) query = query.ilike("bio",  `%${venue.trim()}%`);
 
   const { data, error } = await query.limit(24);
 
   if (error) {
     console.error("Chef search error:", error.message);
-    return NextResponse.json({ chefs: [], _debug_error: error.message });
+    return NextResponse.json({ chefs: [] });
   }
 
-  return NextResponse.json({ chefs: data ?? [], _debug_count: data?.length ?? 0 });
+  return NextResponse.json({ chefs: data ?? [] });
 }

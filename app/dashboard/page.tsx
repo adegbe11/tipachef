@@ -103,7 +103,11 @@ function DashboardInner() {
     if (!user) { router.replace("/login"); return; }
 
     const [chefRes, tipsRes] = await Promise.all([
-      supabase.from("chefs").select("*").eq("id", user.id).single(),
+      supabase.from("chefs").select(
+        "id, name, slug, role, hook, cover_url, goal_label, goal_target, goal_current, " +
+        "stripe_account_id, tip_reward, instagram_url, tiktok_url, youtube_url, " +
+        "avatar_url:image_url, restaurant:bio"
+      ).eq("id", user.id).single(),
       supabase.from("tips").select("*").eq("chef_id", user.id).order("created_at", { ascending: false }).limit(200),
     ]);
 
@@ -152,7 +156,7 @@ function DashboardInner() {
     const { error } = await supabase.from("chefs").update({
       name:          sName.trim(),
       hook:          sHook.trim(),
-      restaurant:    sRestaurant.trim(),
+      bio:           sRestaurant.trim(),
       role:          sRole.trim(),
       instagram_url: sInstagram.trim() || null,
       tiktok_url:    sTiktok.trim()    || null,
@@ -172,16 +176,17 @@ function DashboardInner() {
     const setUploading = type === "avatar" ? setAvatarUploading : setCoverUploading;
     setUploading(true); setSaveError("");
     const localUrl = URL.createObjectURL(file);
-    const col = type === "avatar" ? "avatar_url" : "cover_url";
-    setChef({ ...chef, [col]: localUrl });
+    const stateCol = type === "avatar" ? "avatar_url" : "cover_url"; // Chef interface key
+    const dbCol    = type === "avatar" ? "image_url"  : "cover_url"; // actual DB column
+    setChef({ ...chef, [stateCol]: localUrl });
     const ext = file.name.split(".").pop() ?? "jpg";
     const bucket = type === "avatar" ? "avatars" : "covers";
     const path   = `${chef.id}/${type}.${ext}`;
     const { error: upErr } = await supabase.storage.from(bucket).upload(path, file, { upsert: true });
     if (upErr) { setSaveError(`Upload failed: ${upErr.message}. Make sure the "${bucket}" storage bucket exists in Supabase.`); setUploading(false); return; }
     const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(path);
-    await supabase.from("chefs").update({ [col]: publicUrl }).eq("id", chef.id);
-    setChef({ ...chef, [col]: publicUrl });
+    await supabase.from("chefs").update({ [dbCol]: publicUrl }).eq("id", chef.id);
+    setChef({ ...chef, [stateCol]: publicUrl });
     setUploading(false);
   }
 
