@@ -717,7 +717,7 @@ export default function Onboarding() {
                   boxShadow:  name.trim() ? "0 6px 24px rgba(201,169,110,0.3)" : "none",
                 }}
               >
-                Next: Add your photo →
+                Next: Your cuisine →
               </button>
             </div>
           )}
@@ -918,12 +918,12 @@ export default function Onboarding() {
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 60%, rgba(201,169,110,0.08), transparent 70%)" }} />
         <div className="relative z-10 flex flex-col items-center">
           <p className="text-xs tracking-widest uppercase mb-8" style={{ color: "rgba(255,255,255,0.2)" }}>
-            {step === 3 ? "What tippers unlock" : "Live preview"}
+            {step === 4 ? "What tippers unlock" : "Live preview"}
           </p>
-          {step <= 2 && (
+          {step <= 3 && (
             <ProfilePreview name={name} role={role} restaurant={restaurant} avatarUrl={avatarUrl} slug={chef.slug} />
           )}
-          {step === 3 && (
+          {step === 4 && (
             <SecretPreview secretType={secretType} secretContent={secretContent} firstName={firstName} />
           )}
           <p className="text-xs mt-8" style={{ color: "rgba(255,255,255,0.1)" }}>tipachef.com/{chef.slug}</p>
