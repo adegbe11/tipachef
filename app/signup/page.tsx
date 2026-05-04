@@ -7,12 +7,13 @@ import { QRCodeSVG } from "qrcode.react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignUp() {
-  const [slug,      setSlug]      = useState("");
-  const [showAuth,  setShowAuth]  = useState(false);
-  const [email,     setEmail]     = useState("");
-  const [password,  setPassword]  = useState("");
-  const [loading,   setLoading]   = useState(false);
-  const [error,     setError]     = useState("");
+  const [slug,       setSlug]       = useState("");
+  const [showAuth,   setShowAuth]   = useState(false);
+  const [email,      setEmail]      = useState("");
+  const [password,   setPassword]   = useState("");
+  const [loading,    setLoading]    = useState(false);
+  const [error,      setError]      = useState("");
+  const [checkEmail, setCheckEmail] = useState(false);
   const [slugStatus, setSlugStatus] = useState<"idle"|"checking"|"taken"|"available">("idle");
 
   const slugValue  = slug.toLowerCase().replace(/[^a-z0-9-]/g, "");
@@ -56,7 +57,8 @@ export default function SignUp() {
     if (!email || !password) return;
     setLoading(true);
     setError("");
-    const { error: signUpError } = await supabase.auth.signUp({
+
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -64,18 +66,44 @@ export default function SignUp() {
         data: { slug: slugValue },
       },
     });
-    if (signUpError) { setError(signUpError.message); setLoading(false); return; }
 
-    // Create chef profile immediately
-    const { data: { user } } = await supabase.auth.getUser();
+    if (signUpError) {
+      // Translate cryptic Supabase errors into plain English
+      const msg = signUpError.message.toLowerCase();
+      if (msg.includes("already registered") || msg.includes("already exists") || msg.includes("email already")) {
+        setError("An account with this email already exists. Please sign in instead.");
+      } else if (msg.includes("password")) {
+        setError("Password must be at least 6 characters.");
+      } else {
+        setError(signUpError.message);
+      }
+      setLoading(false);
+      return;
+    }
+
+    const user = signUpData?.user;
+
     if (user) {
+      // Create chef profile using the user from signUp response
       await supabase.from("chefs").upsert({
         id:   user.id,
         slug: slugValue,
         name: email.split("@")[0],
       }, { onConflict: "id" });
+
+      if (signUpData?.session) {
+        // Session created immediately (email confirmation disabled) -- go to onboarding
+        window.location.href = "/onboarding";
+      } else {
+        // Email confirmation required -- show "check your email" screen
+        setLoading(false);
+        setCheckEmail(true);
+      }
+    } else {
+      // Supabase returned no user and no error -- treat as "check your email"
+      setLoading(false);
+      setCheckEmail(true);
     }
-    window.location.href = "/onboarding";
   }
 
   const canProceed = slugValue.length >= 2 && slugStatus === "available";
@@ -192,8 +220,24 @@ export default function SignUp() {
             </div>
           )}
 
+          {/* ── Check your email screen ── */}
+          {checkEmail && (
+            <div className="w-full max-w-sm text-center">
+              <div className="w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6 text-3xl" style={{ background: "#FEF3E2" }}>📬</div>
+              <h1 className="text-gray-900 font-semibold mb-2" style={{ fontSize: "1.8rem", letterSpacing: "-0.025em" }}>Check your email</h1>
+              <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+                We sent a confirmation link to <strong className="text-gray-700">{email}</strong>.<br />
+                Click the link to activate your account and continue setting up your chef page.
+              </p>
+              <p className="text-xs text-gray-400">
+                Already have an account?{" "}
+                <Link href="/login" className="text-amber-600 font-medium underline underline-offset-2">Sign in</Link>
+              </p>
+            </div>
+          )}
+
           {/* ── Step 2: auth ── */}
-          {showAuth && (
+          {showAuth && !checkEmail && (
             <div className="w-full max-w-sm">
               <h1 className="text-gray-900 font-semibold mb-2" style={{ fontSize: "2rem", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
                 Welcome, {slugValue}
@@ -201,7 +245,12 @@ export default function SignUp() {
               <p className="text-gray-400 text-sm mb-8">Choose how you want to sign up.</p>
 
               {error && (
-                <div className="mb-4 px-4 py-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm">{error}</div>
+                <div className="mb-4 px-4 py-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm">
+                  {error}
+                  {error.includes("already exists") && (
+                    <span> <Link href="/login" className="underline font-semibold">Sign in here</Link></span>
+                  )}
+                </div>
               )}
 
               <div className="space-y-3 mb-6">

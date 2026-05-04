@@ -180,22 +180,52 @@ export default function Onboarding() {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) { router.replace("/login"); return; }
 
-        const { data, error } = await supabase
+        const getResult = await supabase
           .from("chefs")
-          .select("id, slug, name, role, restaurant:bio, avatar_url:image_url")
+          .select("*")
           .eq("id", user.id)
           .single();
 
-        if (error || !data) {
-          router.replace("/dashboard");
-          return;
-        }
+        // If no profile exists yet, create one from the user's auth metadata
+        const chefRow = await (async () => {
+          if (!getResult.error && getResult.data) return getResult.data;
 
-        setChef(data);
-        setName(data.name ?? "");
-        setRole(data.role ?? "");
-        setRestaurant(data.restaurant ?? "");
-        setAvatarUrl(data.avatar_url ?? null);
+          const rawSlug = (user.user_metadata?.slug as string | undefined)
+            ?? user.email?.split("@")[0]
+            ?? user.id.slice(0, 8);
+          const slug = rawSlug.toLowerCase().replace(/[^a-z0-9-]/g, "");
+          const name = (user.user_metadata?.full_name as string | undefined)
+            ?? user.email?.split("@")[0]
+            ?? "";
+
+          const createResult = await supabase
+            .from("chefs")
+            .upsert({ id: user.id, slug, name }, { onConflict: "id" })
+            .select("*")
+            .single();
+
+          if (createResult.error || !createResult.data) {
+            console.error("Failed to create chef profile:", createResult.error?.message);
+            return null;
+          }
+          return createResult.data;
+        })();
+
+        if (!chefRow) { router.replace("/login"); return; }
+
+        // Map production DB columns (image_url -> avatar_url, bio -> restaurant)
+        const raw = chefRow as unknown as Record<string, unknown>;
+        const mapped: Chef = {
+          ...(raw as object),
+          avatar_url: (raw.image_url as string | null) ?? null,
+          restaurant: (raw.bio      as string | null) ?? null,
+        } as Chef;
+
+        setChef(mapped);
+        setName(mapped.name ?? "");
+        setRole(mapped.role ?? "");
+        setRestaurant(mapped.restaurant ?? "");
+        setAvatarUrl(mapped.avatar_url ?? null);
       } catch (e) {
         console.error("Onboarding load error:", e);
       } finally {
