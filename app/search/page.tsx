@@ -17,10 +17,8 @@ interface Chef {
   name: string;
   slug: string;
   role: string;
-  venue: string;
-  cuisine: string;
+  restaurant: string | null;
   avatar_url: string | null;
-  rating: number | null;
 }
 
 function Initials({ name }: { name: string }) {
@@ -54,18 +52,14 @@ function ChefCard({ chef }: { chef: Chef }) {
         <p className="font-sans text-ivory font-medium text-sm truncate group-hover:text-ember transition-colors duration-200">
           {chef.name}
         </p>
-        <p className="font-sans text-ivory/40 text-xs truncate">{chef.role} · {chef.venue}</p>
-        {chef.cuisine && (
-          <p className="font-sans text-ember text-xs mt-0.5">{chef.cuisine}</p>
-        )}
+        <p className="font-sans text-ivory/40 text-xs truncate">
+          {[chef.role, chef.restaurant].filter(Boolean).join(" · ")}
+        </p>
       </div>
 
       <div className="flex flex-col items-end gap-2 flex-shrink-0">
-        {chef.rating && (
-          <span className="text-xs font-sans text-ivory/35">{chef.rating.toFixed(1)} ★</span>
-        )}
         <Link
-          href={`/tip/${chef.slug}`}
+          href={`/${chef.slug}`}
           className="press text-xs font-sans font-semibold px-4 py-2 rounded-full bg-ember text-graphite hover:bg-ember-light transition-all duration-200 shadow-md shadow-ember/20 whitespace-nowrap"
         >
           Tip {chef.name.split(" ")[0]}

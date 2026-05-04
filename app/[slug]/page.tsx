@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { createServerClient } from "@/lib/supabase-server";
 import TipCard from "@/components/TipCard";
 import ChefShare from "@/components/ChefShare";
+import TipSuccessToast from "@/components/TipSuccessToast";
 
 interface Chef {
   id: string;
@@ -53,8 +56,9 @@ export default async function ChefProfile({ params }: { params: { slug: string }
 
   const chefData = chef as Chef;
 
-  // Fetch recent tips (public messages only)
-  const { data: tips } = await supabase
+  // Fetch recent tips with messages using service role to bypass RLS
+  const adminClient = createServerClient();
+  const { data: tips } = await adminClient
     .from("tips")
     .select("id, amount_cents, message, tipper_name, created_at")
     .eq("chef_id", chefData.id)
@@ -102,6 +106,7 @@ export default async function ChefProfile({ params }: { params: { slug: string }
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Suspense fallback={null}><TipSuccessToast /></Suspense>
 
       {/* Cover + Avatar */}
       <div className="relative h-52 md:h-64 w-full overflow-hidden bg-graphite">

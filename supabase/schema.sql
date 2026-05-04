@@ -1,4 +1,7 @@
 -- Run this in your Supabase SQL editor to set up the database
+-- If the database already exists, run only the NEW POLICY below:
+--   create policy "Tips with messages are publicly readable" on tips
+--     for select using (message is not null);
 
 -- ── Chefs ────────────────────────────────────────────────
 create table if not exists chefs (
@@ -47,6 +50,12 @@ alter table tips enable row level security;
 create policy "Tips are readable by chef" on tips
   for select using (
     auth.uid() = chef_id
+  );
+
+-- Allow public read of tips that have a message (Wall of Love on public profiles)
+create policy "Tips with messages are publicly readable" on tips
+  for select using (
+    message is not null
   );
 
 create policy "Anyone can insert a tip" on tips

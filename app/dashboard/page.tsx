@@ -15,10 +15,14 @@ interface Chef {
   restaurant: string | null;
   hook: string | null;
   avatar_url: string | null;
+  cover_url: string | null;
   stripe_account_id: string | null;
   goal_label: string | null;
   goal_target: number | null;
   goal_current: number;
+  instagram_url: string | null;
+  tiktok_url: string | null;
+  youtube_url: string | null;
 }
 
 interface Tip {
@@ -83,8 +87,14 @@ function DashboardInner() {
   const [sHook,       setSHook]       = useState("");
   const [sRestaurant, setSRestaurant] = useState("");
   const [sRole,       setSRole]       = useState("");
+  const [sInstagram,  setSInstagram]  = useState("");
+  const [sTiktok,     setSTiktok]     = useState("");
+  const [sYoutube,    setSYoutube]    = useState("");
   const [saving,      setSaving]      = useState(false);
   const [saved,       setSaved]       = useState(false);
+  const [saveError,   setSaveError]   = useState("");
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [coverUploading,  setCoverUploading]  = useState(false);
 
   // Add extra form
   const [showAddExtra,  setShowAddExtra]  = useState(false);
@@ -113,6 +123,9 @@ function DashboardInner() {
       setSHook(chefRes.data.hook ?? "");
       setSRestaurant(chefRes.data.restaurant ?? "");
       setSRole(chefRes.data.role ?? "");
+      setSInstagram(chefRes.data.instagram_url ?? "");
+      setSTiktok(chefRes.data.tiktok_url ?? "");
+      setSYoutube(chefRes.data.youtube_url ?? "");
     }
     setTips(tipsRes.data ?? []);
     setExtras(extrasRes.data ?? []);
@@ -147,16 +160,60 @@ function DashboardInner() {
   async function saveSettings() {
     if (!chef) return;
     setSaving(true);
-    await supabase.from("chefs").update({
-      name:       sName,
-      hook:       sHook,
-      restaurant: sRestaurant,
-      role:       sRole,
+    setSaveError("");
+    const { error } = await supabase.from("chefs").update({
+      name:          sName.trim(),
+      hook:          sHook.trim(),
+      restaurant:    sRestaurant.trim(),
+      role:          sRole.trim(),
+      instagram_url: sInstagram.trim() || null,
+      tiktok_url:    sTiktok.trim()    || null,
+      youtube_url:   sYoutube.trim()   || null,
     }).eq("id", chef.id);
-    setChef({ ...chef, name: sName, hook: sHook, restaurant: sRestaurant, role: sRole });
     setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+    if (error) {
+      setSaveError(error.message);
+    } else {
+      setChef({
+        ...chef,
+        name:          sName.trim(),
+        hook:          sHook.trim(),
+        restaurant:    sRestaurant.trim(),
+        role:          sRole.trim(),
+        instagram_url: sInstagram.trim() || null,
+        tiktok_url:    sTiktok.trim()    || null,
+        youtube_url:   sYoutube.trim()   || null,
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    }
+  }
+
+  async function uploadPhoto(file: File, type: "avatar" | "cover") {
+    if (!chef) return;
+    const setter = type === "avatar" ? setAvatarUploading : setCoverUploading;
+    setter(true);
+    setSaveError("");
+    const ext    = file.name.split(".").pop() ?? "jpg";
+    const bucket = type === "avatar" ? "avatars" : "covers";
+    const path   = `${chef.id}/${type}.${ext}`;
+    const { error: uploadErr } = await supabase.storage
+      .from(bucket)
+      .upload(path, file, { upsert: true });
+    if (uploadErr) {
+      setSaveError(`Upload failed: ${uploadErr.message}`);
+      setter(false);
+      return;
+    }
+    const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(path);
+    const column = type === "avatar" ? "avatar_url" : "cover_url";
+    const { error: updateErr } = await supabase.from("chefs").update({ [column]: publicUrl }).eq("id", chef.id);
+    if (updateErr) {
+      setSaveError(`Save failed: ${updateErr.message}`);
+    } else {
+      setChef({ ...chef, [column]: publicUrl });
+    }
+    setter(false);
   }
 
   async function toggleExtra(id: string, current: boolean) {
@@ -649,6 +706,62 @@ function DashboardInner() {
                 </div>
               )}
 
+              {/* Photo uploads */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <p className="text-gray-900 font-semibold text-sm mb-4">Photos</p>
+                <div className="space-y-4">
+                  {/* Avatar */}
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden bg-amber-50 border border-amber-100 flex-shrink-0 flex items-center justify-center">
+                      {chef.avatar_url
+                        ? <Image src={chef.avatar_url} alt="" width={64} height={64} className="object-cover w-full h-full" />
+                        : <span className="text-amber-700 font-bold text-xl">{(chef.name ?? chef.slug)[0]?.toUpperCase()}</span>
+                      }
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-gray-900 text-sm font-medium mb-1">Profile photo</p>
+                      <p className="text-gray-400 text-xs mb-2">Shown on your public tip page and in search.</p>
+                      <label className="inline-flex items-center gap-1.5 cursor-pointer px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-600 hover:border-amber-300 transition-all">
+                        {avatarUploading ? "Uploading..." : "Choose photo"}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          disabled={avatarUploading}
+                          onChange={(e) => {
+                            const f = e.target.files?.[0];
+                            if (f) uploadPhoto(f, "avatar");
+                          }}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  {/* Cover */}
+                  <div>
+                    <p className="text-gray-900 text-sm font-medium mb-1">Cover photo</p>
+                    <p className="text-gray-400 text-xs mb-2">Banner at the top of your profile. Best at 1200×400px.</p>
+                    {chef.cover_url && (
+                      <div className="w-full h-20 rounded-xl overflow-hidden mb-2 bg-gray-100">
+                        <Image src={chef.cover_url} alt="Cover" width={480} height={80} className="object-cover w-full h-full" />
+                      </div>
+                    )}
+                    <label className="inline-flex items-center gap-1.5 cursor-pointer px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-600 hover:border-amber-300 transition-all">
+                      {coverUploading ? "Uploading..." : chef.cover_url ? "Change cover" : "Upload cover"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={coverUploading}
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) uploadPhoto(f, "cover");
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
                 <p className="text-gray-900 font-semibold text-sm mb-4">Profile</p>
                 <div className="space-y-3">
@@ -686,6 +799,52 @@ function DashboardInner() {
                       placeholder="One line that tells diners who you are..."
                       rows={2}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-900 outline-none focus:border-amber-400 transition-all resize-none placeholder:text-gray-300"
+                    />
+                  </div>
+                  {saveError && (
+                    <p className="text-red-500 text-xs">{saveError}</p>
+                  )}
+                  <button
+                    onClick={saveSettings}
+                    disabled={saving}
+                    className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60"
+                    style={{ background: "#C9A96E" }}
+                  >
+                    {saving ? "Saving..." : saved ? "Saved!" : "Save changes"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Social handles */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <p className="text-gray-900 font-semibold text-sm mb-1">Social links</p>
+                <p className="text-gray-400 text-xs mb-4">Shown as icon links on your public profile.</p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Instagram URL</label>
+                    <input
+                      value={sInstagram}
+                      onChange={(e) => setSInstagram(e.target.value)}
+                      placeholder="https://instagram.com/yourhandle"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-900 outline-none focus:border-amber-400 transition-all placeholder:text-gray-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">TikTok URL</label>
+                    <input
+                      value={sTiktok}
+                      onChange={(e) => setSTiktok(e.target.value)}
+                      placeholder="https://tiktok.com/@yourhandle"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-900 outline-none focus:border-amber-400 transition-all placeholder:text-gray-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">YouTube URL</label>
+                    <input
+                      value={sYoutube}
+                      onChange={(e) => setSYoutube(e.target.value)}
+                      placeholder="https://youtube.com/@yourchannel"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-900 outline-none focus:border-amber-400 transition-all placeholder:text-gray-300"
                     />
                   </div>
                   <button
