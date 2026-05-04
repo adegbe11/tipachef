@@ -203,17 +203,17 @@ export default function Onboarding() {
   /* ── Step 1 save ─────────────────────────────────────────────── */
   async function saveStep1() {
     if (!chef || !name.trim()) return;
-    setSaving(true);
-    const { error } = await supabase.from("chefs").update({
+    // Advance immediately, save in background
+    const updated = { ...chef, name: name.trim(), role: role.trim(), restaurant: restaurant.trim() };
+    setChef(updated);
+    setStep(2);
+    supabase.from("chefs").update({
       name:       name.trim(),
       role:       role.trim(),
       restaurant: restaurant.trim(),
-    }).eq("id", chef.id);
-    setSaving(false);
-    if (!error) {
-      setChef({ ...chef, name: name.trim(), role: role.trim(), restaurant: restaurant.trim() });
-      setStep(2);
-    }
+    }).eq("id", chef.id).then(({ error }) => {
+      if (error) console.error("Step 1 save error:", error.message);
+    });
   }
 
   /* ── Step 2 upload ───────────────────────────────────────────── */
@@ -237,12 +237,14 @@ export default function Onboarding() {
   /* ── Step 3 save ─────────────────────────────────────────────── */
   async function saveSecret() {
     if (!chef) return;
-    setSaving(true);
-    if (secretContent.trim()) {
-      await supabase.from("chefs").update({ tip_reward: secretContent.trim() }).eq("id", chef.id);
-    }
-    setSaving(false);
+    // Advance immediately, save in background
     goToStep4();
+    if (secretContent.trim()) {
+      supabase.from("chefs").update({ tip_reward: secretContent.trim() }).eq("id", chef.id)
+        .then(({ error }) => {
+          if (error) console.error("Secret save error:", error.message);
+        });
+    }
   }
 
   function goToStep4() {
@@ -547,7 +549,7 @@ export default function Onboarding() {
 
               <button
                 onClick={saveStep1}
-                disabled={!name.trim() || saving}
+                disabled={!name.trim()}
                 className="w-full mt-6 py-4 rounded-2xl font-semibold text-sm transition-all duration-200 disabled:cursor-not-allowed"
                 style={{
                   background: name.trim() ? "#C9A96E" : "#E5E7EB",
@@ -555,7 +557,7 @@ export default function Onboarding() {
                   boxShadow:  name.trim() ? "0 6px 24px rgba(201,169,110,0.3)" : "none",
                 }}
               >
-                {saving ? "Saving..." : "Next: Add your photo →"}
+                Next: Add your photo →
               </button>
             </div>
           )}
@@ -704,11 +706,10 @@ export default function Onboarding() {
                 </button>
                 <button
                   onClick={saveSecret}
-                  disabled={saving}
-                  className="flex-1 py-3.5 rounded-2xl text-sm font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="flex-1 py-3.5 rounded-2xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
                   style={{ background: "#C9A96E", color: "#111", boxShadow: "0 6px 24px rgba(201,169,110,0.3)" }}
                 >
-                  {saving ? "Saving..." : <>Fire it up <span>🔥</span></>}
+                  Fire it up 🔥
                 </button>
               </div>
             </div>
