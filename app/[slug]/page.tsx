@@ -2,11 +2,54 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { createServerClient } from "@/lib/supabase-server";
 import TipCard from "@/components/TipCard";
 import ChefShare from "@/components/ChefShare";
 import TipSuccessToast from "@/components/TipSuccessToast";
+
+export async function generateMetadata(
+  { params }: { params: { slug: string } }
+): Promise<Metadata> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("chefs")
+    .select("name, bio, role, image_url")
+    .eq("slug", params.slug.toLowerCase())
+    .single();
+
+  if (!data) {
+    return { title: "Chef Not Found — Tip a Chef" };
+  }
+
+  const name       = data.name || params.slug;
+  const role       = data.role || "Chef";
+  const restaurant = data.bio  || "";
+  const venue      = restaurant ? ` at ${restaurant}` : "";
+  const title       = `Tip ${name} — ${role}${venue} | Tip a Chef`;
+  const description = `Send a direct tip to ${name}, ${role}${venue}. No app needed — tip in seconds and leave a personal note on Tip a Chef.`;
+  const image       = data.image_url || "/og";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://tipachef.com/${params.slug}`,
+      images: [{ url: image, width: 400, height: 400, alt: `${name} — Tip a Chef` }],
+      type: "profile",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: [image],
+    },
+    alternates: { canonical: `https://tipachef.com/${params.slug}` },
+  };
+}
 
 interface Chef {
   id: string;
@@ -113,8 +156,30 @@ export default async function ChefProfile({ params }: { params: { slug: string }
     },
   ].filter(Boolean);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: displayName,
+    jobTitle: chefData.role || "Chef",
+    worksFor: chefData.restaurant
+      ? { "@type": "FoodEstablishment", name: chefData.restaurant }
+      : undefined,
+    image: chefData.avatar_url || undefined,
+    url: `https://tipachef.com/${params.slug}`,
+    sameAs: [
+      chefData.instagram_url,
+      chefData.tiktok_url,
+      chefData.youtube_url,
+    ].filter(Boolean),
+    description: chefData.hook || undefined,
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Suspense fallback={null}><TipSuccessToast reward={chefData.tip_reward ?? null} /></Suspense>
 
       {/* Cover + Avatar */}

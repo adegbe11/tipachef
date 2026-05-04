@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Disallow: /dashboard
+Disallow: /onboarding
+Disallow: /api/
+Disallow: /reset-password
+Disallow: /forgot-password
+
+Sitemap: https://tipachef.com/sitemap.xml
