@@ -16,6 +16,10 @@ alter table chefs add column if not exists tiktok_url    text;
 alter table chefs add column if not exists youtube_url   text;
 alter table chefs add column if not exists tip_reward    text;
 
+-- Tips: add columns used by webhook and Wall of Love
+alter table tips add column if not exists tipper_name       text;
+alter table tips add column if not exists stripe_payment_id text;
+
 -- Tips: ensure public Wall-of-Love policy exists (skip if already there)
 do $$
 begin

@@ -65,10 +65,11 @@ export default async function ChefProfile({ params }: { params: { slug: string }
   } as Chef;
 
   // Fetch recent tips with messages using service role to bypass RLS
+  // Use select("*") to be resilient against missing columns (e.g. tipper_name)
   const adminClient = createServerClient();
   const { data: tips } = await adminClient
     .from("tips")
-    .select("id, amount_cents, message, tipper_name, created_at")
+    .select("*")
     .eq("chef_id", chefData.id)
     .not("message", "is", null)
     .order("created_at", { ascending: false })
