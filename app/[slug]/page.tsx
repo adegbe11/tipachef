@@ -57,13 +57,13 @@ export default async function ChefProfile({ params }: { params: { slug: string }
 
   // Map production DB column names to our interface names
   // DB uses image_url for avatar, bio for restaurant name
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const raw = chefRaw as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
+  const raw = chefRaw as unknown as Record<string, unknown>;
   const chefData: Chef = {
-    ...raw,
-    avatar_url: raw.image_url ?? null,
-    restaurant: raw.bio       ?? null,
-  };
+    ...(raw as object),
+    avatar_url: (raw.image_url as string | null) ?? null,
+    restaurant: (raw.bio       as string | null) ?? null,
+  } as Chef;
 
   // Fetch recent tips with messages using service role to bypass RLS
   const adminClient = createServerClient();

@@ -109,9 +109,8 @@ function DashboardInner() {
 
     if (chefRes.data) {
       // Map DB column names: image_url → avatar_url, bio → restaurant
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const raw = chefRes.data as any;
-      const mapped: Chef = { ...raw, avatar_url: raw.image_url ?? null, restaurant: raw.bio ?? null };
+      const raw = chefRes.data as unknown as Record<string, unknown>;
+      const mapped: Chef = { ...(raw as object), avatar_url: (raw.image_url as string | null) ?? null, restaurant: (raw.bio as string | null) ?? null } as Chef;
       setChef(mapped);
       setSName(mapped.name ?? "");
       setSHook(mapped.hook ?? "");

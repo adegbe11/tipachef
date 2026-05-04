@@ -22,10 +22,9 @@ export async function GET(req: NextRequest) {
   }
 
   // Remap DB columns to match client-side expectations
-  const chefs = (data ?? []).map(c => ({
-    ...c,
-    avatar_url: (c as Record<string,unknown>).image_url ?? null,
-    restaurant: (c as Record<string,unknown>).bio ?? null,
-  }));
+  const chefs = (data ?? []).map(c => {
+    const r = c as unknown as Record<string, unknown>;
+    return { ...c, avatar_url: r.image_url ?? null, restaurant: r.bio ?? null };
+  });
   return NextResponse.json({ chefs });
 }
