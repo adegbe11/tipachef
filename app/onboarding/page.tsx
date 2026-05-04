@@ -52,6 +52,7 @@ interface Chef {
   role: string | null;
   restaurant: string | null;
   avatar_url: string | null;
+  stripe_account_id: string | null;
 }
 
 /* ── Flame progress dots ──────────────────────────────────────────── */
@@ -169,7 +170,8 @@ export default function Onboarding() {
   const [qrCopied, setQrCopied] = useState(false);
 
   /* Step 6 — Moment */
-  const [notifVisible, setNotifVisible] = useState(false);
+  const [notifVisible,    setNotifVisible]    = useState(false);
+  const [connectingStripe, setConnectingStripe] = useState(false);
   /* Step 7 — Launch */
   const [linkCopied,   setLinkCopied]   = useState(false);
 
@@ -217,8 +219,9 @@ export default function Onboarding() {
         const raw = chefRow as unknown as Record<string, unknown>;
         const mapped: Chef = {
           ...(raw as object),
-          avatar_url: (raw.image_url as string | null) ?? null,
-          restaurant: (raw.bio      as string | null) ?? null,
+          avatar_url:        (raw.image_url         as string | null) ?? null,
+          restaurant:        (raw.bio               as string | null) ?? null,
+          stripe_account_id: (raw.stripe_account_id as string | null) ?? null,
         } as Chef;
 
         setChef(mapped);
@@ -316,6 +319,23 @@ export default function Onboarding() {
   function goStep5Done() {
     setStep(6);
     setTimeout(() => setNotifVisible(true), 400);
+  }
+
+  /* ── Step 6: Connect Stripe ────────────────────────────────────── */
+  async function connectStripe() {
+    setConnectingStripe(true);
+    try {
+      const res  = await fetch("/api/stripe/connect", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        // Stripe not configured in this environment, go to dashboard
+        router.push("/dashboard");
+      }
+    } catch {
+      router.push("/dashboard");
+    }
   }
 
   /* ── Loading ──────────────────────────────────────────────────── */
@@ -462,7 +482,7 @@ export default function Onboarding() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background: "#0d0d0d" }}>
         <div className="relative z-10 w-full max-w-sm text-center">
-          <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 4 of 4</p>
+          <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Almost there 🔥</p>
           <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
             Your QR code<br />is ready.
           </h1>
@@ -559,18 +579,23 @@ export default function Onboarding() {
           </h1>
           <div className="flex flex-col sm:flex-row items-center gap-3 justify-center">
             <button
-              onClick={() => router.push("/dashboard")}
-              className="px-8 py-4 rounded-2xl font-semibold text-sm flex items-center gap-2"
+              onClick={connectStripe}
+              disabled={connectingStripe}
+              className="px-8 py-4 rounded-2xl font-semibold text-sm flex items-center gap-2 disabled:opacity-60 transition-all"
               style={{ background: "#C9A96E", color: "#111", boxShadow: "0 8px 30px rgba(201,169,110,0.35)" }}
             >
-              Connect Stripe · get paid
+              {connectingStripe
+                ? <><span className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />Connecting...</>
+                : "Connect Stripe · get paid"
+              }
             </button>
             <button
               onClick={() => setStep(7)}
-              className="px-8 py-4 rounded-2xl font-semibold text-sm border"
+              disabled={connectingStripe}
+              className="px-8 py-4 rounded-2xl font-semibold text-sm border disabled:opacity-40 transition-all"
               style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)" }}
             >
-              Share my page first →
+              Do it later →
             </button>
           </div>
         </div>
@@ -615,11 +640,12 @@ export default function Onboarding() {
         <div className="w-full max-w-sm bg-white rounded-3xl border border-gray-100 p-5 mb-6 text-left">
           <p className="text-gray-900 font-semibold text-sm mb-4">Mise en place</p>
           {[
-            { done: true,               label: "Profile created" },
-            { done: !!avatarUrl,        label: "Profile photo added" },
-            { done: !!secretContent,    label: "Kitchen secret added" },
-            { done: false,              label: "Print your QR table card" },
-            { done: false,              label: "Receive your first tip" },
+            { done: true,                           label: "Profile created" },
+            { done: !!avatarUrl,                    label: "Profile photo added" },
+            { done: !!secretContent,                label: "Kitchen secret added" },
+            { done: !!chef.stripe_account_id,       label: "Stripe connected" },
+            { done: false,                          label: "Print your QR table card" },
+            { done: false,                          label: "Receive your first tip" },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0">
               <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
@@ -632,6 +658,16 @@ export default function Onboarding() {
           ))}
         </div>
 
+        {!chef.stripe_account_id && (
+          <button
+            onClick={connectStripe}
+            disabled={connectingStripe}
+            className="mb-4 px-6 py-3 rounded-2xl font-semibold text-sm disabled:opacity-60 transition-all"
+            style={{ background: "#C9A96E", color: "#111", boxShadow: "0 6px 20px rgba(201,169,110,0.3)" }}
+          >
+            {connectingStripe ? "Connecting..." : "Connect Stripe to receive payouts"}
+          </button>
+        )}
         <button onClick={() => router.push("/dashboard")} className="text-gray-400 text-sm hover:text-gray-700 transition-colors">
           Go to dashboard →
         </button>
