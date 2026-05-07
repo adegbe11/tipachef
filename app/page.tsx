@@ -5,7 +5,6 @@ import LiveDemo      from "@/components/LiveDemo";
 import QRSection       from "@/components/QRSection";
 import EarningsSection from "@/components/EarningsSection";
 import ChefProfiles    from "@/components/ChefProfiles";
-import ForRestaurants from "@/components/ForRestaurants";
 import DownloadCTA   from "@/components/DownloadCTA";
 import ClaimPage     from "@/components/ClaimPage";
 import Footer        from "@/components/Footer";
@@ -81,8 +80,6 @@ export default function Home() {
         <EarningsSection />
         {/* 7. Chef profiles */}
         <ChefProfiles />
-        {/* 10. For restaurants */}
-        <ForRestaurants />
         {/* 12. Download / final CTA */}
         <DownloadCTA />
         {/* 13. Claim your page */}
