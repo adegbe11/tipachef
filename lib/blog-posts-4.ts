@@ -229,8 +229,8 @@ export const BLOG_POSTS_4: BlogPost[] = [
   // ─── Our Story ───────────────────────────────────────────────────────────
   {
     slug: "our-story",
-    seoTitle: "The Story Behind Tip a Chef | Why We Built This",
-    title: "The Story Behind Tip a Chef",
+    seoTitle: "I'm Collins, I Started Tip a Chef. This Is the Story So Far.",
+    title: "I'm Collins. I Started Tip a Chef. This Is the Story So Far.",
     description: "A pay slip, a Friday night service, and a question nobody in the food industry was asking. This is how Tip a Chef started.",
     keywords: [
       "tip a chef story",
@@ -247,18 +247,22 @@ export const BLOG_POSTS_4: BlogPost[] = [
       url: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
       alt: "A professional kitchen during evening service",
     },
-    intro: "My friend Danny has been cooking professionally since he was nineteen. He is thirty-one now. In twelve years he has worked in four countries, trained under two Michelin-starred chefs, and survived the kind of kitchen hours that would end most careers before they properly started. He is also, by any honest measure, not particularly well paid for any of it. This is the story of how that fact eventually became a company.",
+    intro: "Tip a Chef lets diners send a direct tip and a personal message to the chef who cooked their meal. No app. No restaurant middleman. Just a QR code, a phone, and thirty seconds. The chefs using it have now received hundreds of thousands in tips they would never have seen otherwise. I built it because of one Thursday evening, one pay slip, and a question I could not let go of.",
     sections: [
       {
-        h2: "The Pay Slip",
+        h2: "A Thursday evening and a pay slip",
         blocks: [
           {
             type: "p",
-            text: "It was a Thursday evening in November 2022. Danny and I were having drinks at a pub near his restaurant in south London. He had just finished a double shift and looked like it. He pulled out his phone and showed me a screenshot of his latest payslip. I had known him for years, and I knew roughly what he earned, but seeing the number next to the hours on a single screen made something click in my head in a way it had not before.",
+            text: "My friend Danny has been cooking professionally since he was nineteen. He is thirty-one now. In twelve years he has worked in four countries, trained under two Michelin-starred chefs, and survived the kind of kitchen hours that end most careers before they properly start. He is also, by any honest measure, not particularly well paid for any of it.",
           },
           {
             type: "p",
-            text: "Then he told me about the Friday before. The restaurant had been packed all night. A birthday party of fourteen. A table of eight doing the full tasting menu. The pass was moving fast and the food was exceptional, even by Danny's standards. He described a dish, slow-roasted short rib with bone marrow butter and pickled walnut, that he had been quietly perfecting for three months. Table four had sent back a message through the server saying it was the best thing they had eaten all year.",
+            text: "It was November 2022. Danny and I were having drinks at a pub near his restaurant in south London. He had just come off a double shift. He pulled out his phone and showed me a screenshot of his latest pay slip. I had known him for years. I knew roughly what he earned. But seeing the number next to the hours on one screen made something land differently than it ever had before.",
+          },
+          {
+            type: "p",
+            text: "Then he told me about the Friday before. The restaurant had been packed. A birthday party of fourteen. A table of eight on the full tasting menu. The pass was moving fast and Danny was cooking exceptionally, even by his standards. He had spent three months quietly perfecting a dish: slow-roasted short rib, bone marrow butter, pickled walnut. Table four sent back a message through the server. Best thing they had eaten all year.",
           },
           {
             type: "p",
@@ -266,11 +270,11 @@ export const BLOG_POSTS_4: BlogPost[] = [
           },
           {
             type: "blockquote",
-            text: "He did not say it bitterly. He said it the way you state a fact you have made peace with. That was the thing that got under my skin. Not the injustice of it, but how completely accepted it was.",
+            text: "He did not say it bitterly. He said it the way you state a fact you have made peace with. That was the thing that got under my skin. Not the injustice itself, but how completely it had been accepted.",
           },
           {
             type: "p",
-            text: "The front of house team do real, important work. I am not making this an argument against servers. But on that specific Friday night, the person who made table four's meal worth a sixty-pound thank you was standing at the pass in the kitchen and received nothing. That was just how it worked. That had always been how it worked. And nobody was particularly angry about it because everyone had simply agreed to look away.",
+            text: "The front of house team do real, important work. This is not a complaint about servers. But on that specific Friday night, the person who made table four's meal worth a sixty-pound thank you was standing at the pass and received nothing. That was just how it worked. That had always been how it worked. And nobody was particularly angry about it because the whole industry had simply agreed, quietly, to look away.",
           },
         ],
       },
