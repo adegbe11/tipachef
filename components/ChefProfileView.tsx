@@ -16,6 +16,7 @@ export interface WallTip {
   amount: number;
   message: string;
   time: string;
+  avatar?: string;
 }
 
 export interface ChefViewData {
@@ -364,7 +365,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
               lineHeight: 1.7,
               margin: 0,
             }}>
-              &ldquo;{chef.hook}&rdquo;
+              {chef.hook}
             </p>
           </div>
         )}
@@ -734,10 +735,16 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
                       width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0,
                       background: "linear-gradient(135deg,rgba(201,169,110,0.22),rgba(201,169,110,0.08))",
                       border: "1px solid rgba(201,169,110,0.22)",
+                      overflow: "hidden",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, color: "#C9A96E",
                     }}>
-                      {t.name[0].toUpperCase()}
+                      {t.avatar ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={t.avatar} alt={t.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+                      ) : (
+                        t.name[0].toUpperCase()
+                      )}
                     </div>
                     <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12.5px", fontWeight: 600, color: "rgba(250,248,244,0.75)", margin: 0, flex: 1 }}>
                       {t.name}
@@ -758,7 +765,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
                       margin: 0,
                       lineHeight: 1.6,
                     }}>
-                      &ldquo;{t.message}&rdquo;
+                      {t.message}
                     </p>
                   )}
                 </div>
