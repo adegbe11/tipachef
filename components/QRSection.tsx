@@ -209,8 +209,7 @@ export default function QRSection() {
           </h2>
           <p className="font-sans text-ivory/45 text-sm leading-relaxed font-light mb-10 max-w-sm">
             We generate your QR code instantly. Your restaurant prints it on the
-            menu. Diners scan and tip in seconds. No app, no signup on their end.
-            Nothing.
+            menu. Diners scan and tip in seconds.
           </p>
 
           {/* Feature bullets */}
