@@ -52,7 +52,7 @@ const jsonLd = {
       url: "https://tipachef.com",
       name: "Tip a Chef | Make money as a chef",
       description:
-        "Tip a Chef lets chefs earn direct tips from the people who love their food. Create your free page, share your link, and get paid instantly for every dish you serve.",
+        "Join thousands of chefs worldwide on Tip a Chef. Make money as a chef with every dish you serve. Create your page, get your link and QR code, get tipped instantly.",
       isPartOf: { "@id": "https://tipachef.com/#website" },
       about: { "@id": "https://tipachef.com/#organization" },
     },

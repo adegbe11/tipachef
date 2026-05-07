@@ -26,7 +26,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Tip a Chef | Make money as a chef",
   description:
-    "Tip a Chef lets chefs earn direct tips from the people who love their food. Create your free page, share your link, and get paid instantly for every dish you serve.",
+    "Join thousands of chefs worldwide on Tip a Chef. Make money as a chef with every dish you serve. Create your page, get your link and QR code, get tipped instantly.",
   keywords: ["tip a chef", "chef tipping", "make money as a chef", "restaurant kitchen tips", "direct chef tips", "earn tips cooking"],
   icons: {
     icon: [
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Tip a Chef | Make money as a chef",
-    description: "Create your free chef page and start earning direct tips from the people who love your food. No app. No middleman. Paid instantly.",
+    description: "Join thousands of chefs worldwide on Tip a Chef. Make money as a chef with every dish you serve. Create your page, get your link and QR code, get tipped instantly.",
     url: "https://tipachef.com",
     siteName: "Tip a Chef",
     images: [{ url: "/og", width: 1200, height: 630, alt: "Tip a Chef — Make money doing what you cook" }],
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Tip a Chef | Make money as a chef",
-    description: "Create your free chef page and start earning direct tips from the people who love your food. No app. No middleman. Paid instantly.",
+    description: "Join thousands of chefs worldwide on Tip a Chef. Make money as a chef with every dish you serve. Create your page, get your link and QR code, get tipped instantly.",
     images: ["/og"],
   },
   metadataBase: new URL("https://tipachef.com"),
