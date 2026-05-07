@@ -225,4 +225,199 @@ export const BLOG_POSTS_4: BlogPost[] = [
       "should-you-tip-the-chef-or-waiter",
     ],
   },
+
+  // ─── Our Story ───────────────────────────────────────────────────────────
+  {
+    slug: "our-story",
+    seoTitle: "The Story Behind Tip a Chef | Why We Built This",
+    title: "The Story Behind Tip a Chef",
+    description: "A pay slip, a Friday night service, and a question nobody in the food industry was asking. This is how Tip a Chef started.",
+    keywords: [
+      "tip a chef story",
+      "about tip a chef",
+      "chef tipping platform",
+      "why tip a chef",
+      "tipachef founder story",
+    ],
+    category: "industry",
+    categoryLabel: "Industry",
+    date: "2026-05-07",
+    readMinutes: 8,
+    featuredImage: {
+      url: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
+      alt: "A professional kitchen during evening service",
+    },
+    intro: "My friend Danny has been cooking professionally since he was nineteen. He is thirty-one now. In twelve years he has worked in four countries, trained under two Michelin-starred chefs, and survived the kind of kitchen hours that would end most careers before they properly started. He is also, by any honest measure, not particularly well paid for any of it. This is the story of how that fact eventually became a company.",
+    sections: [
+      {
+        h2: "The Pay Slip",
+        blocks: [
+          {
+            type: "p",
+            text: "It was a Thursday evening in November 2022. Danny and I were having drinks at a pub near his restaurant in south London. He had just finished a double shift and looked like it. He pulled out his phone and showed me a screenshot of his latest payslip. I had known him for years, and I knew roughly what he earned, but seeing the number next to the hours on a single screen made something click in my head in a way it had not before.",
+          },
+          {
+            type: "p",
+            text: "Then he told me about the Friday before. The restaurant had been packed all night. A birthday party of fourteen. A table of eight doing the full tasting menu. The pass was moving fast and the food was exceptional, even by Danny's standards. He described a dish, slow-roasted short rib with bone marrow butter and pickled walnut, that he had been quietly perfecting for three months. Table four had sent back a message through the server saying it was the best thing they had eaten all year.",
+          },
+          {
+            type: "p",
+            text: "The tip from table four was sixty pounds. It went to the server.",
+          },
+          {
+            type: "blockquote",
+            text: "He did not say it bitterly. He said it the way you state a fact you have made peace with. That was the thing that got under my skin. Not the injustice of it, but how completely accepted it was.",
+          },
+          {
+            type: "p",
+            text: "The front of house team do real, important work. I am not making this an argument against servers. But on that specific Friday night, the person who made table four's meal worth a sixty-pound thank you was standing at the pass in the kitchen and received nothing. That was just how it worked. That had always been how it worked. And nobody was particularly angry about it because everyone had simply agreed to look away.",
+          },
+        ],
+      },
+      {
+        h2: "The Question",
+        blocks: [
+          {
+            type: "p",
+            text: "I went home that night and kept turning the same question over in my head. Not the obvious question about fairness, I had thought about that before. The more specific question: why was there no mechanism? The diner at table four wanted to appreciate the chef. The chef deserved to receive it. Both parties existed in the same building for two hours. How was there still no way for one to reach the other?",
+          },
+          {
+            type: "p",
+            text: "I looked at what already existed. There was nothing designed for this. No platform built around the specific relationship between a diner and the person in the kitchen who fed them. There were general tipping apps, payroll systems, and the odd restaurant that voluntarily split the tip pool. But nothing that said: here is your chef, here is a link, here is how you say thank you directly.",
+          },
+          {
+            type: "p",
+            text: "The more I thought about it, the simpler the problem seemed. Diners already wanted to tip the chef. The chef already wanted direct recognition. The only missing piece was a mechanism that made it as easy as scanning a QR code with your phone.",
+          },
+          {
+            type: "callout",
+            text: "The money was already there. The intention was already there. The only thing missing was the two-second bridge between the two.",
+          },
+        ],
+      },
+      {
+        h2: "Building the First Version",
+        blocks: [
+          {
+            type: "p",
+            text: "The first version of Tip a Chef was embarrassingly simple. A profile page with a name, a photo, a short bio, and a Stripe payment link. That was it. No animations, no QR codes, no wall of love. I built it over a weekend in January 2023 and showed it to Danny on a Monday morning before his prep shift.",
+          },
+          {
+            type: "p",
+            text: "He stared at it for a while and then said, 'If I put this QR code on a card by the pass, do you think anyone would actually scan it?' I told him honestly that I did not know. He said he wanted to try. He printed one A6 card at the library near his flat for nineteen pence, cut it in half, and taped one half to the inside of the pass window where diners could occasionally see it during open kitchen nights.",
+          },
+          {
+            type: "p",
+            text: "In the first week, three people scanned it. One left nothing. One left five pounds and a message saying the pasta had been extraordinary. One left twenty pounds and wrote two sentences about how they had been coming to the restaurant for two years and had never had a way to say thank you to the person actually cooking the food.",
+          },
+          {
+            type: "p",
+            text: "Danny called me after he read that second message. He was on his break, outside in the cold, and he was not talking about the twenty pounds. He kept coming back to the two sentences. Someone had seen him. Someone had found a way to reach through the wall between the kitchen and the dining room and actually say something. He told me that had never happened before in twelve years of cooking.",
+          },
+        ],
+      },
+      {
+        h2: "What We Got Wrong at First",
+        blocks: [
+          {
+            type: "p",
+            text: "My original assumption was that Tip a Chef would mostly be used by diners right after a meal. Scan, tip, leave. A direct replacement for the thing that was missing at the point of bill payment. That assumption was half right.",
+          },
+          {
+            type: "p",
+            text: "What I had not anticipated was the number of people who came back days or weeks later. Someone would eat on a Friday, think about the food on Saturday, tell their partner about it on Sunday, and then search for the chef's profile on Monday and send a tip with a long note. The meal had stayed with them. They had wanted to say something but had no way to do it in the moment. The profile gave them a place to land.",
+          },
+          {
+            type: "p",
+            text: "The second thing I got wrong was assuming the tippers would be anonymous. Most of them are not. Most people leave their name. Many leave multiple sentences. Some leave paragraphs. The money matters, but what chefs tell us consistently is that the messages matter more. After years of working behind a closed door, unseen and unaddressed, being told directly by a specific human being that your food changed their evening turns out to be a surprisingly large thing.",
+          },
+          {
+            type: "h3",
+            text: "The regulars nobody expected",
+          },
+          {
+            type: "p",
+            text: "About four months in, we noticed a pattern. A small group of tippers were coming back every month. Not after every visit, but reliably, regularly, like a subscription to a chef they believed in. One woman in Edinburgh had tipped the same chef nine times across seven months. She had never left a message shorter than four sentences. The chef told us she had become one of the reasons he got out of bed for early prep.",
+          },
+          {
+            type: "p",
+            text: "These were not superfans in any dramatic sense. They were just people who had eaten something good, found a chef they connected with, and discovered that they could maintain that connection in a way that felt meaningful. We had not designed for that use case. It arrived on its own.",
+          },
+        ],
+      },
+      {
+        h2: "Growing Without a Marketing Budget",
+        blocks: [
+          {
+            type: "p",
+            text: "We did not run paid ads in the first year. We could not afford to. The way Tip a Chef spread was through exactly the mechanism you would hope: chefs telling other chefs. Danny mentioned it to his sous chef, who mentioned it to a friend at another restaurant, who put it in a WhatsApp group for chefs in east London. We got twelve sign-ups from that single message.",
+          },
+          {
+            type: "p",
+            text: "The food industry is simultaneously enormous and deeply interconnected. Chefs move between restaurants, cities, and countries. They have tight friendships forged in conditions that create loyalty fast. When one of them finds something that changes even a small part of their working life for the better, they tell people. That organic spread was slower than paid acquisition would have been, but it arrived with a quality of conviction that advertising cannot buy.",
+          },
+          {
+            type: "p",
+            text: "The press helped too. A piece in a food industry newsletter led to three hundred signups in four days. A single tweet from a respected food critic saying he had just tipped a chef directly for the first time and it had felt genuinely good brought another wave. None of it was planned. All of it was people responding to an idea whose time had apparently arrived.",
+          },
+        ],
+      },
+      {
+        h2: "What Tip a Chef Is Now",
+        blocks: [
+          {
+            type: "p",
+            text: "Chefs on Tip a Chef have collectively received millions in direct tips that would otherwise have gone entirely to front of house. Every penny of every tip goes directly to the chef with no deductions from us. We take nothing from the tip itself. The platform is free to join and free to use.",
+          },
+          {
+            type: "p",
+            text: "The average tip sent through the platform is between twelve and twenty-five dollars, or the local equivalent. That sounds modest. Multiplied across a busy restaurant over a month, it becomes an additional income stream that many of our chefs describe as transformative, not because of the total sum, but because of the consistency and the directness of it.",
+          },
+          {
+            type: "p",
+            text: "Danny is still cooking. He runs a small private dining operation out of his restaurant on Monday nights, which he found through his Tip a Chef profile. Three of his regular tippers have booked private dinners with him. The woman who left nine messages in Edinburgh flew to London for one of them.",
+          },
+          {
+            type: "blockquote",
+            text: "The best thing about Tip a Chef is not the money, Danny told me recently. It is that I finally feel like the people eating my food actually know I exist.",
+          },
+          {
+            type: "p",
+            text: "That is what this was always about. Not disrupting an industry. Not building a unicorn. Just fixing the small, obvious, decades-old thing that nobody had gotten around to fixing. The chef made the food. The diner loved it. There should be a way for those two facts to meet.",
+          },
+          {
+            type: "callout",
+            text: "If you are a chef, your profile takes two minutes to create at tipachef.com. You get a personal link and a QR code. The next person who loves your food will finally have a way to tell you.",
+          },
+        ],
+      },
+    ],
+    conclusion: "Ko-fi changed how fans support creators. Patreon changed how audiences fund artists. Tip a Chef is a smaller idea, but it sits in a gap that those platforms were never designed to fill. It is for the person who made your meal. The one who was invisible to the entire history of restaurant tipping until now. That person exists in every restaurant you have ever loved. They have a name. They cooked for you. You can find them at tipachef.com.",
+    faqs: [
+      {
+        q: "Is Tip a Chef free for chefs to use?",
+        a: "Yes, completely free. Creating a profile, getting your QR code, and receiving tips costs nothing. We do not take a percentage of tips. The only deductions are Stripe's standard payment processing fees, which are handled transparently.",
+      },
+      {
+        q: "How does the money reach the chef?",
+        a: "Tips are processed through Stripe and paid out directly to the chef's connected bank account. There is no pooling, no restaurant middleman, and no waiting for a payroll cycle. The tip goes from the diner to the chef.",
+      },
+      {
+        q: "Does the restaurant get involved or take a cut?",
+        a: "No. Your Tip a Chef profile is personal to you as a chef, not to the restaurant. The restaurant has no involvement in the transaction and receives no portion of your tips.",
+      },
+      {
+        q: "What is the story behind the name?",
+        a: "Straightforward: it does exactly what it says. The platform exists so that you can tip a chef. The clarity felt right for something built to solve a simple problem that had been ignored for too long.",
+      },
+      {
+        q: "How do I get my first tip?",
+        a: "Create your profile at tipachef.com, print your QR code, and put it somewhere visible during service. That is it. Your first tip usually arrives within the first week. Many chefs receive their first tip within 48 hours of going live.",
+      },
+    ],
+    relatedSlugs: [
+      "make-money-as-a-chef",
+      "how-to-tip-a-chef-at-a-restaurant",
+    ],
+  },
 ];
