@@ -2,8 +2,9 @@ import Navbar        from "@/components/Navbar";
 import Hero          from "@/components/Hero";
 import WhyThisExists from "@/components/WhyThisExists";
 import LiveDemo      from "@/components/LiveDemo";
-import QRSection     from "@/components/QRSection";
-import ChefProfiles  from "@/components/ChefProfiles";
+import QRSection       from "@/components/QRSection";
+import EarningsSection from "@/components/EarningsSection";
+import ChefProfiles    from "@/components/ChefProfiles";
 import SocialProof   from "@/components/SocialProof";
 import ForChefs      from "@/components/ForChefs";
 import ForRestaurants from "@/components/ForRestaurants";
@@ -78,6 +79,8 @@ export default function Home() {
         <LiveDemo />
         {/* 5. QR code section */}
         <QRSection />
+        {/* 6. Earnings section */}
+        <EarningsSection />
         {/* 7. Chef profiles */}
         <ChefProfiles />
         {/* 8. Social proof */}
