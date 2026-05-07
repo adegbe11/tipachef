@@ -59,10 +59,6 @@ export default function ClaimPage() {
           </span>
         </h2>
 
-        <p className="font-sans text-ivory/40 text-sm leading-relaxed font-light mb-10 mx-auto" style={{ maxWidth: "380px" }}>
-          Claim your free page. No card needed. Live in 2 minutes.
-        </p>
-
         {/* URL claim input */}
         <form
           onSubmit={handleClaim}
@@ -130,10 +126,6 @@ export default function ClaimPage() {
           </button>
         </form>
 
-        {/* Trust note */}
-        <p className="font-sans text-ivory/20 text-xs mt-5 tracking-wide">
-          Free forever · No credit card · Payouts via Stripe
-        </p>
 
       </div>
     </section>
