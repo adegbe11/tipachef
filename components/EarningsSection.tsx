@@ -53,13 +53,15 @@ export default function EarningsSection() {
               width: "100%",
               maxWidth: "360px",
               borderRadius: "22px",
-              background:
-                "linear-gradient(160deg,#1c1a15 0%,#161410 55%,#1a1813 100%)",
-              border: "1px solid rgba(255,255,255,0.07)",
+              background: "rgba(18,16,12,0.75)",
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              border: "2px solid rgba(201,169,110,0.22)",
               boxShadow:
-                "0 0 0 0.5px rgba(255,255,255,0.04), " +
-                "0 40px 80px rgba(0,0,0,0.55), " +
-                "0 16px 40px rgba(0,0,0,0.35)",
+                "6px 6px 0 rgba(201,169,110,0.1), " +
+                "0 40px 80px rgba(0,0,0,0.6), " +
+                "0 16px 40px rgba(0,0,0,0.4), " +
+                "inset 0 1px 0 rgba(255,255,255,0.07)",
               overflow: "hidden",
             }}
           >

@@ -128,7 +128,7 @@ export default function Hero() {
         >
           <a
             href="/signup"
-            className="press inline-flex items-center gap-2 px-9 py-4 rounded-full bg-ember text-graphite font-sans font-semibold text-sm tracking-wide hover:bg-ember-light transition-all duration-300 shadow-lg shadow-ember/25"
+            className="brutal-btn press inline-flex items-center gap-2 px-9 py-4 rounded-full bg-ember text-graphite font-sans font-bold text-sm tracking-wide hover:bg-ember-light transition-colors duration-200"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -138,7 +138,8 @@ export default function Hero() {
           </a>
           <a
             href="/search"
-            className="press inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/15 text-ivory font-sans font-medium text-sm tracking-wide hover:bg-white/[0.08] transition-all duration-300"
+            className="press inline-flex items-center gap-2 px-8 py-4 rounded-full text-ivory font-sans font-medium text-sm tracking-wide transition-all duration-300"
+            style={{ background:"rgba(255,255,255,0.06)", backdropFilter:"blur(16px)", border:"1.5px solid rgba(255,255,255,0.18)" }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>

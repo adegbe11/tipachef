@@ -41,8 +41,8 @@ export default function ClaimPage() {
         <h2
           className="font-display text-ivory leading-tight mb-4 mx-auto"
           style={{
-            fontSize: "clamp(2.4rem, 5.5vw, 4.4rem)",
-            fontWeight: 300,
+            fontSize: "clamp(2.4rem, 5.5vw, 4.6rem)",
+            fontWeight: 400,
             maxWidth: "680px",
           }}
         >
@@ -64,16 +64,17 @@ export default function ClaimPage() {
           onSubmit={handleClaim}
           className="mx-auto flex items-center"
           style={{
-            maxWidth: "480px",
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.12)",
+            maxWidth: "500px",
+            background: "rgba(255,255,255,0.04)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            border: "2px solid rgba(201,169,110,0.25)",
             borderRadius: "100px",
             padding: "6px 6px 6px 22px",
             boxShadow:
-              "0 0 0 1px rgba(0,0,0,0.4), " +
-              "0 8px 32px rgba(0,0,0,0.35), " +
-              "inset 0 1px 0 rgba(255,255,255,0.07)",
-            backdropFilter: "blur(12px)",
+              "5px 5px 0 rgba(201,169,110,0.1), " +
+              "0 16px 48px rgba(0,0,0,0.45), " +
+              "inset 0 1px 0 rgba(255,255,255,0.08)",
           }}
         >
           {/* Prefix label */}

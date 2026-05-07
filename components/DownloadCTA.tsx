@@ -2,22 +2,22 @@ import Link from "next/link";
 
 export default function DownloadCTA() {
   return (
-    <section className="py-24 md:py-36 bg-charcoal/30">
+    <section className="py-24 md:py-36" style={{ background:"linear-gradient(180deg,#0f0e0b 0%,#0a0908 100%)" }}>
       <div className="content-container">
 
-        {/* Section label */}
-        <p className="eyebrow text-center mb-12">Get started</p>
+        <p className="eyebrow text-center mb-14">Get started</p>
 
-        {/* Two tiles */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-5">
 
           {/* Tile 1 — Supporters */}
-          <div className="flex flex-col justify-between rounded-2xl bg-charcoal border border-white/[0.07] p-10 min-h-[280px] hover:border-white/[0.14] transition-colors duration-300">
+          <div
+            className="neo-glass flex flex-col justify-between rounded-2xl p-10 min-h-[300px]"
+          >
             <div>
-              <p className="font-sans text-ivory/35 text-xs font-medium tracking-widest uppercase mb-5">For supporters</p>
+              <p className="font-sans text-ivory/35 text-xs font-semibold tracking-widest uppercase mb-5">For supporters</p>
               <h3
                 className="font-display text-ivory leading-tight mb-4"
-                style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", fontWeight: 300 }}
+                style={{ fontSize:"clamp(1.7rem, 2.5vw, 2.3rem)", fontWeight:400 }}
               >
                 Start supporting<br />
                 <span className="text-ember-gradient italic">chefs today.</span>
@@ -28,7 +28,7 @@ export default function DownloadCTA() {
             </div>
             <Link
               href="/search"
-              className="press mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-ember text-graphite font-sans font-semibold text-sm tracking-wide hover:bg-ember-light transition-all duration-200 shadow-lg shadow-ember/20 self-start"
+              className="brutal-btn press mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-ember text-graphite font-sans font-bold text-sm tracking-wide hover:bg-ember-light transition-colors duration-200 self-start"
             >
               Find a chef
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -37,13 +37,22 @@ export default function DownloadCTA() {
             </Link>
           </div>
 
-          {/* Tile 2 — Chefs */}
-          <div className="flex flex-col justify-between rounded-2xl border border-ember/25 bg-ember/[0.04] p-10 min-h-[280px] hover:border-ember/40 hover:bg-ember/[0.07] transition-all duration-300">
+          {/* Tile 2 — Chefs (stronger ember treatment) */}
+          <div
+            className="brutal-card flex flex-col justify-between rounded-2xl p-10 min-h-[300px]"
+            style={{
+              background:"linear-gradient(145deg,rgba(201,169,110,0.08) 0%,rgba(201,169,110,0.03) 100%)",
+              backdropFilter:"blur(24px)",
+              WebkitBackdropFilter:"blur(24px)",
+            }}
+          >
+            {/* Ember glow top-right */}
+            <div style={{ position:"absolute", top:"-20px", right:"-20px", width:"140px", height:"140px", background:"radial-gradient(circle,rgba(201,169,110,0.15) 0%,transparent 70%)", filter:"blur(30px)", pointerEvents:"none" }} />
             <div>
-              <p className="font-sans text-ember/60 text-xs font-medium tracking-widest uppercase mb-5">For chefs</p>
+              <p className="font-sans text-ember/70 text-xs font-semibold tracking-widest uppercase mb-5">For chefs</p>
               <h3
                 className="font-display text-ivory leading-tight mb-4"
-                style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", fontWeight: 300 }}
+                style={{ fontSize:"clamp(1.7rem, 2.5vw, 2.3rem)", fontWeight:400 }}
               >
                 Create your chef<br />
                 <span className="text-ember-gradient italic">profile in minutes.</span>
@@ -55,7 +64,7 @@ export default function DownloadCTA() {
             <div className="mt-8 flex flex-col gap-3 items-start">
               <Link
                 href="/signup"
-                className="press inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-ember text-graphite font-sans font-semibold text-sm tracking-wide hover:bg-ember-light transition-all duration-200 shadow-lg shadow-ember/25"
+                className="brutal-btn press inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-ember text-graphite font-sans font-bold text-sm tracking-wide hover:bg-ember-light transition-colors duration-200"
               >
                 Create your profile
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -72,7 +81,6 @@ export default function DownloadCTA() {
           </div>
 
         </div>
-
       </div>
     </section>
   );

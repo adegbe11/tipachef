@@ -33,19 +33,21 @@ export default function QRSection() {
               }}
             />
 
-            {/* Menu card */}
+            {/* Menu card — neo-glass brutal */}
             <div
               style={{
                 position: "relative",
                 width: "280px",
                 borderRadius: "24px",
-                background:
-                  "linear-gradient(160deg,#1e1c17 0%,#161410 55%,#1a1813 100%)",
-                border: "1px solid rgba(255,255,255,0.07)",
+                background: "rgba(20,18,14,0.75)",
+                backdropFilter: "blur(28px)",
+                WebkitBackdropFilter: "blur(28px)",
+                border: "2px solid rgba(201,169,110,0.22)",
                 boxShadow:
-                  "0 0 0 0.5px rgba(255,255,255,0.05), " +
-                  "0 40px 80px rgba(0,0,0,0.6), " +
-                  "0 16px 40px rgba(0,0,0,0.4)",
+                  "6px 6px 0 rgba(201,169,110,0.1), " +
+                  "0 40px 80px rgba(0,0,0,0.65), " +
+                  "0 16px 40px rgba(0,0,0,0.45), " +
+                  "inset 0 1px 0 rgba(255,255,255,0.07)",
                 padding: "28px 24px 22px",
                 transform: "perspective(1000px) rotateY(5deg) rotateX(-1deg)",
               }}
