@@ -24,10 +24,10 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Tip a Chef — Tip Your Favourite Chef in Seconds",
+  title: "Tip a Chef | Make money doing what you cook",
   description:
-    "Great food deserves more than applause. Tip a Chef lets your fans tip you in seconds, leave a note, and support the chef behind every dish they love.",
-  keywords: ["tip a chef", "chef tipping", "restaurant kitchen tips", "Tip a Chef", "direct chef tips"],
+    "Tip a Chef lets chefs earn direct tips from the people who love their food. Create your free page, share your link, and get paid instantly for every dish you serve.",
+  keywords: ["tip a chef", "chef tipping", "make money as a chef", "restaurant kitchen tips", "direct chef tips", "earn tips cooking"],
   icons: {
     icon: [
       { url: "/favicon.ico",        sizes: "any",      type: "image/x-icon" },
@@ -44,17 +44,17 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Tip a Chef — The chef who made your meal deserves to know.",
-    description: "Send a direct tip to the chef behind your favourite meal. No app needed. Free to join.",
+    title: "Tip a Chef | Make money doing what you cook",
+    description: "Create your free chef page and start earning direct tips from the people who love your food. No app. No middleman. Paid instantly.",
     url: "https://tipachef.com",
     siteName: "Tip a Chef",
-    images: [{ url: "/og", width: 1200, height: 630, alt: "Tip a Chef — Honour the craft" }],
+    images: [{ url: "/og", width: 1200, height: 630, alt: "Tip a Chef — Make money doing what you cook" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tip a Chef — The chef who made your meal deserves to know.",
-    description: "Send a direct tip to the chef behind your favourite meal. No app needed. Free to join.",
+    title: "Tip a Chef | Make money doing what you cook",
+    description: "Create your free chef page and start earning direct tips from the people who love your food. No app. No middleman. Paid instantly.",
     images: ["/og"],
   },
   metadataBase: new URL("https://tipachef.com"),

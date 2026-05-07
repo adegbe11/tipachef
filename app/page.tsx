@@ -50,9 +50,9 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": "https://tipachef.com/#webpage",
       url: "https://tipachef.com",
-      name: "Tip a Chef — Tip Your Favourite Chef in Seconds",
+      name: "Tip a Chef | Make money doing what you cook",
       description:
-        "Great food deserves more than applause. Tip a Chef lets your fans tip you in seconds, leave a note, and support the chef behind every dish they love.",
+        "Tip a Chef lets chefs earn direct tips from the people who love their food. Create your free page, share your link, and get paid instantly for every dish you serve.",
       isPartOf: { "@id": "https://tipachef.com/#website" },
       about: { "@id": "https://tipachef.com/#organization" },
     },
