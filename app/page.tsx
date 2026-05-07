@@ -1,6 +1,5 @@
 import Navbar        from "@/components/Navbar";
 import Hero          from "@/components/Hero";
-import StatsBar      from "@/components/StatsBar";
 import HowItWorks    from "@/components/HowItWorks";
 import LiveDemo      from "@/components/LiveDemo";
 import WhyThisExists from "@/components/WhyThisExists";
@@ -73,9 +72,7 @@ export default function Home() {
         <Navbar />
         {/* 2. Hero */}
         <Hero />
-        {/* 3. Stats bar */}
-        <StatsBar />
-        {/* 4. How it works */}
+        {/* 3. How it works */}
         <HowItWorks />
         {/* 5. Profile demo */}
         <LiveDemo />
