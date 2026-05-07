@@ -8,7 +8,6 @@ import ChefProfiles    from "@/components/ChefProfiles";
 import SocialProof   from "@/components/SocialProof";
 import ForChefs      from "@/components/ForChefs";
 import ForRestaurants from "@/components/ForRestaurants";
-import TrustSafety   from "@/components/TrustSafety";
 import DownloadCTA   from "@/components/DownloadCTA";
 import ClaimPage     from "@/components/ClaimPage";
 import Footer        from "@/components/Footer";
@@ -90,8 +89,6 @@ export default function Home() {
         <ForChefs />
         {/* 10. For restaurants */}
         <ForRestaurants />
-        {/* 11. Trust & safety */}
-        <TrustSafety />
         {/* 12. Download / final CTA */}
         <DownloadCTA />
         {/* 13. Claim your page */}
