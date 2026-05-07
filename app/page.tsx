@@ -1,8 +1,7 @@
 import Navbar        from "@/components/Navbar";
 import Hero          from "@/components/Hero";
-import HowItWorks    from "@/components/HowItWorks";
-import LiveDemo      from "@/components/LiveDemo";
 import WhyThisExists from "@/components/WhyThisExists";
+import LiveDemo      from "@/components/LiveDemo";
 import ChefProfiles  from "@/components/ChefProfiles";
 import SocialProof   from "@/components/SocialProof";
 import ForChefs      from "@/components/ForChefs";
@@ -72,12 +71,10 @@ export default function Home() {
         <Navbar />
         {/* 2. Hero */}
         <Hero />
-        {/* 3. How it works */}
-        <HowItWorks />
-        {/* 5. Profile demo */}
-        <LiveDemo />
-        {/* 6. Why this exists */}
+        {/* 3. Manifesto */}
         <WhyThisExists />
+        {/* 4. Profile demo */}
+        <LiveDemo />
         {/* 7. Chef profiles */}
         <ChefProfiles />
         {/* 8. Social proof */}
