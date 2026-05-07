@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link  from "next/link";
+import Link from "next/link";
 import { useRef, useEffect } from "react";
 
 const TOP_CHEFS = [
@@ -213,14 +213,6 @@ export default function ChefProfiles() {
             </Link>
           ))}
         </div>
-
-        {/* Footer CTA */}
-        <p className="text-center font-sans text-ivory/25 text-sm mt-12">
-          Hundreds more chefs waiting.{" "}
-          <Link href="/search" className="text-ivory/45 hover:text-ember transition-colors underline underline-offset-2">
-            Browse all profiles →
-          </Link>
-        </p>
 
       </div>
     </section>
