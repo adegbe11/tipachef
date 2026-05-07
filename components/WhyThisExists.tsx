@@ -1,4 +1,28 @@
+"use client";
+import { useEffect, useRef } from "react";
+
 export default function WhyThisExists() {
+  const linesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = linesRef.current;
+    if (!container) return;
+    const lines = Array.from(container.children) as HTMLElement[];
+    lines.forEach((l, i) => {
+      l.style.opacity = "0";
+      l.style.transform = "translateY(24px)";
+      l.style.transition = `opacity 0.7s ease ${i * 0.18}s, transform 0.7s ease ${i * 0.18}s`;
+    });
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        lines.forEach((l) => { l.style.opacity = "1"; l.style.transform = "translateY(0)"; });
+        obs.unobserve(container);
+      }
+    }, { threshold: 0.3 });
+    obs.observe(container);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <section className="py-28 md:py-44 relative overflow-hidden" style={{ background:"#0a0908" }}>
 
@@ -28,7 +52,7 @@ export default function WhyThisExists() {
           }}
         />
 
-        <div className="space-y-1 mb-10 relative">
+        <div ref={linesRef} className="space-y-1 mb-10 relative">
           <p
             className="font-display text-ivory leading-tight"
             style={{ fontSize:"clamp(2.4rem, 5.5vw, 4.6rem)", fontWeight:400 }}

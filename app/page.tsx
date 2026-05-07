@@ -7,6 +7,7 @@ import EarningsSection from "@/components/EarningsSection";
 import ChefProfiles    from "@/components/ChefProfiles";
 import DownloadCTA   from "@/components/DownloadCTA";
 import ClaimPage     from "@/components/ClaimPage";
+import LiveTipFeed   from "@/components/LiveTipFeed";
 import Footer        from "@/components/Footer";
 
 const jsonLd = {
@@ -86,6 +87,8 @@ export default function Home() {
         <ClaimPage />
         {/* 14. Footer */}
         <Footer />
+        {/* Live tip notifications — fixed bottom-right */}
+        <LiveTipFeed />
       </main>
     </>
   );

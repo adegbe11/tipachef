@@ -1,12 +1,41 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+
+/* Animated counter for a number value */
+function AnimCounter({ end, prefix = "", suffix = "", duration = 1600 }: { end: number; prefix?: string; suffix?: string; duration?: number }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      obs.unobserve(el);
+      let start = 0;
+      const step = (ts: number) => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        setCount(Math.round(end * eased));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.6 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [end, duration]);
+
+  return <span ref={ref}>{prefix}{count.toLocaleString()}{suffix}</span>;
+}
 
 const STATS = [
-  { value: "$247",   label: "Tips received" },
-  { value: "14",     label: "Supporters"    },
-  { value: "$1,840", label: "This month"    },
-  { value: "100%",   label: "Goes to you"   },
+  { display: <AnimCounter end={247} prefix="$" />, label: "Tips received" },
+  { display: <AnimCounter end={14} />,              label: "Supporters"    },
+  { display: <AnimCounter end={1840} prefix="$" />, label: "This month"    },
+  { display: <AnimCounter end={100} suffix="%" />,  label: "Goes to you"   },
 ];
 
 const TIPS = [
@@ -133,7 +162,7 @@ export default function EarningsSection() {
                       letterSpacing: "-0.5px",
                     }}
                   >
-                    {s.value}
+                    {s.display}
                   </p>
                   <p
                     style={{
