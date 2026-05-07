@@ -1,100 +1,46 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
+import Link  from "next/link";
 import { useRef, useEffect } from "react";
 
-const CHEFS = [
-  { slug:"marco-esposito",  emoji:"🇮🇹", name:"Marco Esposito",  role:"Head Chef",      venue:"Osteria del Fuoco · Rome",   story:"Every pasta I make is a love letter to my grandmother." },
-  { slug:"nikos-stavridis", emoji:"🇬🇷", name:"Nikos Stavridis", role:"Pastry Chef",    venue:"Kuzina · Athens",            story:"I put the Aegean sea into every dessert I create." },
-  { slug:"sofia-reyes",     emoji:"🇲🇽", name:"Sofia Reyes",     role:"Executive Chef", venue:"Casa Humo · Mexico City",    story:"Spice is the language I grew up speaking at home." },
-  { slug:"dimitri-kostas",  emoji:"🇬🇷", name:"Dimitri Kostas",  role:"Head Chef",      venue:"Kuzina · Athens",            story:"Every dish I make carries a piece of the Aegean." },
-  { slug:"mehmet-yilmaz",   emoji:"🇹🇷", name:"Mehmet Yilmaz",   role:"Head Chef",      venue:"Mikla · Istanbul",           story:"My kitchen carries the smell of my mother's home." },
-  { slug:"lena-fischer",    emoji:"🇩🇪", name:"Lena Fischer",    role:"Sous Chef",      venue:"Facil · Berlin",             story:"Precision is just another word for care on the plate." },
+const TOP_CHEFS = [
+  {
+    slug:     "marco-esposito",
+    name:     "Marco Esposito",
+    role:     "Head Chef",
+    venue:    "Osteria del Fuoco",
+    location: "Rome, Italy",
+    flag:     "🇮🇹",
+    tips:     "312",
+    photo:    "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=600&auto=format&q=85",
+  },
+  {
+    slug:     "dimitri-kostas",
+    name:     "Dimitri Kostas",
+    role:     "Head Chef",
+    venue:    "Kuzina",
+    location: "Athens, Greece",
+    flag:     "🇬🇷",
+    tips:     "247",
+    photo:    "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=600&auto=format&q=85",
+  },
+  {
+    slug:     "pierre-laurent",
+    name:     "Pierre Laurent",
+    role:     "Executive Chef",
+    venue:    "Le Comptoir",
+    location: "Paris, France",
+    flag:     "🇫🇷",
+    tips:     "189",
+    photo:    "https://images.unsplash.com/photo-1583394293214-0bc3b882c2ad?w=600&auto=format&q=85",
+  },
 ];
-
-function TiltCard({ chef, delay }: { chef: typeof CHEFS[0]; delay: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  function onMove(e: React.MouseEvent<HTMLDivElement>) {
-    const el = cardRef.current;
-    if (!el) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    const x = ((e.clientX - left) / width  - 0.5) * 14;
-    const y = ((e.clientY - top)  / height - 0.5) * -14;
-    el.style.transform = `perspective(700px) rotateX(${y}deg) rotateY(${x}deg) scale(1.02)`;
-  }
-
-  function onLeave() {
-    const el = cardRef.current;
-    if (!el) return;
-    el.style.transform = "perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)";
-  }
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      style={{
-        transition: "transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94)",
-        transformStyle: "preserve-3d",
-        animationDelay: `${delay}ms`,
-        willChange: "transform",
-      }}
-      className="neo-glass group flex flex-col rounded-2xl overflow-hidden cursor-pointer"
-    >
-      {/* Flag + glow top block */}
-      <div
-        className="flex items-center justify-center pt-10 pb-7 relative overflow-hidden"
-        style={{ background:"linear-gradient(160deg,rgba(201,169,110,0.06) 0%,transparent 70%)" }}
-      >
-        <div style={{ position:"absolute", width:"80px", height:"80px", borderRadius:"50%", background:"radial-gradient(circle,rgba(201,169,110,0.2) 0%,transparent 70%)", filter:"blur(20px)" }} />
-        <div
-          style={{
-            width:"64px", height:"64px", borderRadius:"50%",
-            background:"rgba(255,255,255,0.05)", backdropFilter:"blur(12px)",
-            border:"1.5px solid rgba(201,169,110,0.2)",
-            display:"flex", alignItems:"center", justifyContent:"center",
-            fontSize:"2rem", lineHeight:1,
-            boxShadow:"0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
-            position:"relative",
-            transition:"transform 0.3s ease, box-shadow 0.3s ease",
-          }}
-          className="group-hover:scale-110"
-        >
-          {chef.emoji}
-        </div>
-      </div>
-
-      <div style={{ height:"1px", background:"linear-gradient(90deg,transparent,rgba(201,169,110,0.25) 50%,transparent)", margin:"0 1.5rem" }} />
-
-      <div className="flex flex-col flex-1 p-6 gap-4">
-        <div>
-          <p className="font-sans text-ivory font-semibold text-sm tracking-wide">{chef.name}</p>
-          <p className="font-sans text-ivory/35 text-xs mt-1">{chef.role} · {chef.venue}</p>
-        </div>
-
-        <p className="font-display text-ivory/55 italic leading-snug flex-1" style={{ fontSize:"clamp(0.95rem,1.2vw,1.05rem)", fontWeight:300 }}>
-          &ldquo;{chef.story}&rdquo;
-        </p>
-
-        <Link
-          href={`/${chef.slug}`}
-          className="brutal-btn press w-full py-3 rounded-xl bg-ember text-graphite font-sans font-bold text-sm text-center hover:bg-ember-light transition-colors duration-200"
-          onClick={(e) => e.stopPropagation()}
-        >
-          Tip {chef.name.split(" ")[0]}
-        </Link>
-      </div>
-    </div>
-  );
-}
 
 export default function ChefProfiles() {
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef   = useRef<HTMLDivElement>(null);
 
-  /* Scroll reveal for header */
   useEffect(() => {
     const el = headerRef.current;
     if (!el) return;
@@ -112,19 +58,21 @@ export default function ChefProfiles() {
     return () => obs.disconnect();
   }, []);
 
-  /* Stagger reveal for grid cards */
   useEffect(() => {
     const container = gridRef.current;
     if (!container) return;
     const cards = Array.from(container.children) as HTMLElement[];
     cards.forEach((c, i) => {
       c.style.opacity = "0";
-      c.style.transform = "translateY(36px)";
-      c.style.transition = `opacity 0.6s ease ${i * 0.09}s, transform 0.6s ease ${i * 0.09}s`;
+      c.style.transform = "translateY(40px) scale(0.97)";
+      c.style.transition = `opacity 0.65s ease ${i * 0.12}s, transform 0.65s ease ${i * 0.12}s`;
     });
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        cards.forEach((c) => { c.style.opacity = "1"; c.style.transform = "translateY(0)"; });
+        cards.forEach((c) => {
+          c.style.opacity = "1";
+          c.style.transform = "translateY(0) scale(1)";
+        });
         obs.unobserve(container);
       }
     }, { threshold: 0.1 });
@@ -136,28 +84,142 @@ export default function ChefProfiles() {
     <section className="py-24 md:py-36" style={{ background:"linear-gradient(180deg,#0d0c0a 0%,#0f0e0b 100%)" }}>
       <div className="content-container">
 
-        <div ref={headerRef} className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-14">
-          <div>
-            <p className="eyebrow mb-3">Chef profiles</p>
-            <h2 className="font-display text-ivory leading-tight" style={{ fontSize:"clamp(1.9rem,3.5vw,2.8rem)", fontWeight:400 }}>
-              Real chefs.{" "}<span className="text-ember-gradient italic">Real gratitude.</span>
-            </h2>
-          </div>
-          <Link href="/search" className="press inline-flex items-center gap-2 text-sm font-sans font-medium text-ivory/40 hover:text-ember transition-colors duration-200 flex-shrink-0 mb-1">
-            Browse all chefs
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </Link>
+        {/* Header */}
+        <div ref={headerRef} className="text-center mb-14">
+          <p className="eyebrow mb-4">Check out our top chef profiles</p>
+          <h2
+            className="font-display text-ivory leading-tight"
+            style={{ fontSize:"clamp(2rem, 3.8vw, 3rem)", fontWeight:400 }}
+          >
+            Real chefs.{" "}
+            <span className="text-ember-gradient italic">Real gratitude.</span>
+          </h2>
         </div>
 
-        <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {CHEFS.map((chef, i) => (
-            <TiltCard key={chef.slug} chef={chef} delay={i * 90} />
+        {/* 3-card grid */}
+        <div ref={gridRef} className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          {TOP_CHEFS.map((chef) => (
+            <Link
+              key={chef.slug}
+              href={`/${chef.slug}`}
+              className="group block"
+              style={{ textDecoration:"none" }}
+            >
+              {/* Photo card */}
+              <div
+                style={{
+                  position: "relative",
+                  borderRadius: "28px",
+                  overflow: "hidden",
+                  aspectRatio: "3/4",
+                  boxShadow:
+                    "0 24px 60px rgba(0,0,0,0.6), " +
+                    "0 8px 24px rgba(0,0,0,0.4), " +
+                    "0 0 0 1.5px rgba(255,255,255,0.07)",
+                  transition: "transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s ease",
+                }}
+                className="group-hover:scale-[1.02] group-hover:shadow-2xl"
+              >
+                {/* Chef photo */}
+                <Image
+                  src={chef.photo}
+                  alt={chef.name}
+                  fill
+                  style={{ objectFit:"cover", objectPosition:"center top", transition:"transform 0.6s ease" }}
+                  className="group-hover:scale-105"
+                  unoptimized
+                />
+
+                {/* Gradient overlay */}
+                <div
+                  style={{
+                    position:"absolute", inset:0,
+                    background:"linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%)",
+                  }}
+                />
+
+                {/* Flag + location top-left */}
+                <div
+                  style={{
+                    position:"absolute", top:"14px", left:"14px",
+                    display:"flex", alignItems:"center", gap:"6px",
+                    background:"rgba(0,0,0,0.5)",
+                    backdropFilter:"blur(12px)",
+                    WebkitBackdropFilter:"blur(12px)",
+                    border:"1px solid rgba(255,255,255,0.12)",
+                    borderRadius:"20px",
+                    padding:"4px 10px 4px 6px",
+                  }}
+                >
+                  <span style={{ fontSize:"14px" }}>{chef.flag}</span>
+                  <span style={{ fontFamily:"-apple-system,system-ui", fontSize:"10px", color:"rgba(255,255,255,0.75)", fontWeight:600, letterSpacing:"0.02em" }}>
+                    {chef.location}
+                  </span>
+                </div>
+
+                {/* Name + role over bottom gradient */}
+                <div style={{ position:"absolute", bottom:"14px", left:"14px", right:"14px" }}>
+                  <p style={{ fontFamily:"Georgia,'Times New Roman',serif", fontStyle:"italic", fontSize:"18px", fontWeight:500, color:"#C9A96E", margin:"0 0 2px", letterSpacing:"0.01em" }}>
+                    {chef.name}
+                  </p>
+                  <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"11px", color:"rgba(255,255,255,0.5)", margin:0 }}>
+                    {chef.role} · {chef.venue}
+                  </p>
+                </div>
+              </div>
+
+              {/* Stats pill below photo — Ko-fi style */}
+              <div
+                style={{
+                  marginTop:"12px",
+                  display:"flex",
+                  alignItems:"center",
+                  justifyContent:"space-between",
+                  background:"rgba(255,255,255,0.04)",
+                  backdropFilter:"blur(16px)",
+                  WebkitBackdropFilter:"blur(16px)",
+                  border:"1.5px solid rgba(201,169,110,0.18)",
+                  borderRadius:"40px",
+                  padding:"10px 16px",
+                  boxShadow:"3px 3px 0 rgba(201,169,110,0.07)",
+                  transition:"border-color 0.2s, background 0.2s",
+                }}
+                className="group-hover:border-ember/40 group-hover:bg-white/[0.07]"
+              >
+                <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
+                  {/* Heart */}
+                  <div style={{ width:"26px", height:"26px", borderRadius:"50%", background:"linear-gradient(135deg,#C9A96E,#D4B878)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, boxShadow:"0 2px 8px rgba(201,169,110,0.35)" }}>
+                    <svg width="12" height="11" viewBox="0 0 14 12" fill="#1a1208">
+                      <path d="M7 11C7 11 0.5 7 0.5 3.5C0.5 1.8 1.8 0.5 3.5 0.5C5 0.5 6.2 1.4 7 2.5C7.8 1.4 9 0.5 10.5 0.5C12.2 0.5 13.5 1.8 13.5 3.5C13.5 7 7 11 7 11Z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"13px", fontWeight:700, color:"rgba(250,248,244,0.88)", margin:0 }}>
+                      {chef.tips}+ tips
+                    </p>
+                    <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"10px", color:"rgba(250,248,244,0.3)", margin:0 }}>received</p>
+                  </div>
+                </div>
+
+                <span
+                  style={{
+                    fontFamily:"-apple-system,system-ui", fontSize:"11px", fontWeight:600,
+                    color:"#C9A96E", letterSpacing:"0.02em",
+                  }}
+                >
+                  Tip now →
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
 
+        {/* Footer CTA */}
         <p className="text-center font-sans text-ivory/25 text-sm mt-12">
-          Hundreds of chefs. One tap away.{" "}
-          <Link href="/search" className="text-ivory/40 hover:text-ember transition-colors underline underline-offset-2">Find one near you →</Link>
+          Hundreds more chefs waiting.{" "}
+          <Link href="/search" className="text-ivory/45 hover:text-ember transition-colors underline underline-offset-2">
+            Browse all profiles →
+          </Link>
         </p>
 
       </div>
