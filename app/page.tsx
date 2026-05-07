@@ -5,7 +5,6 @@ import LiveDemo      from "@/components/LiveDemo";
 import QRSection       from "@/components/QRSection";
 import EarningsSection from "@/components/EarningsSection";
 import ChefProfiles    from "@/components/ChefProfiles";
-import SocialProof   from "@/components/SocialProof";
 import ForChefs      from "@/components/ForChefs";
 import ForRestaurants from "@/components/ForRestaurants";
 import DownloadCTA   from "@/components/DownloadCTA";
@@ -83,8 +82,6 @@ export default function Home() {
         <EarningsSection />
         {/* 7. Chef profiles */}
         <ChefProfiles />
-        {/* 8. Social proof */}
-        <SocialProof />
         {/* 9. For chefs */}
         <ForChefs />
         {/* 10. For restaurants */}
