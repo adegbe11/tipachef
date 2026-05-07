@@ -247,7 +247,7 @@ export const BLOG_POSTS_4: BlogPost[] = [
       url: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
       alt: "A professional kitchen during evening service",
     },
-    intro: "Tip a Chef lets diners send a direct tip and a personal message to the chef who cooked their meal. No app. No restaurant middleman. Just a QR code, a phone, and thirty seconds. The chefs using it have now received hundreds of thousands in tips they would never have seen otherwise. I built it because of one Thursday evening, one pay slip, and a question I could not let go of.",
+    intro: "TipAChef.com lets diners send a direct tip and a personal message to the chef who cooked their meal. All it takes is a QR code, a phone, and thirty seconds. My dream by 2028 is to help 1,000,000 chefs around the world receive direct tips from the people who love their food. I built it because of one summer experience. I'm Collins. I started TipAChef.com and this is the story so far.",
     sections: [
       {
         h2: "A Thursday evening and a pay slip",
