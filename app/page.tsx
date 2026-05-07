@@ -10,6 +10,7 @@ import ForChefs      from "@/components/ForChefs";
 import ForRestaurants from "@/components/ForRestaurants";
 import TrustSafety   from "@/components/TrustSafety";
 import DownloadCTA   from "@/components/DownloadCTA";
+import ClaimPage     from "@/components/ClaimPage";
 import Footer        from "@/components/Footer";
 
 const jsonLd = {
@@ -93,7 +94,9 @@ export default function Home() {
         <TrustSafety />
         {/* 12. Download / final CTA */}
         <DownloadCTA />
-        {/* 13. Footer */}
+        {/* 13. Claim your page */}
+        <ClaimPage />
+        {/* 14. Footer */}
         <Footer />
       </main>
     </>
