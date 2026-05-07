@@ -61,7 +61,7 @@ const DEMO_CHEFS: Record<string, ChefViewData> = {
     location:    "Paris, France",
     flag:        "🇫🇷",
     hook:        "Cooking is the only art form where you must destroy the work to truly appreciate it. I find that beautiful.",
-    photo:       "https://images.unsplash.com/photo-1583394293214-0bc3b882c2ad?w=600&auto=format&q=85",
+    photo:       "https://images.unsplash.com/photo-1566554273541-37a9ca77b91f?w=600&auto=format&q=85",
     cover:       "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&auto=format&q=80",
     tips:        4_970,
     supporters:  189,

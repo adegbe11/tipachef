@@ -33,7 +33,7 @@ const TOP_CHEFS = [
     location: "Paris, France",
     flag:     "🇫🇷",
     tips:     "189",
-    photo:    "https://images.unsplash.com/photo-1583394293214-0bc3b882c2ad?w=600&auto=format&q=85",
+    photo:    "https://images.unsplash.com/photo-1566554273541-37a9ca77b91f?w=600&auto=format&q=85",
   },
 ];
 
