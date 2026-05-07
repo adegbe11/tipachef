@@ -41,19 +41,11 @@ export default function WhyThisExists() {
         </div>
 
         {/* Thin rule */}
-        <div className="flex items-center gap-4 justify-center mb-10">
+        <div className="flex items-center gap-4 justify-center">
           <div className="h-px flex-1 max-w-[60px] bg-ember/20" />
           <div className="w-1.5 h-1.5 rounded-full bg-ember/50" />
           <div className="h-px flex-1 max-w-[60px] bg-ember/20" />
         </div>
-
-        <p
-          className="font-sans text-ivory/40 leading-relaxed font-light max-w-sm mx-auto"
-          style={{ fontSize: "clamp(0.9rem, 1.2vw, 1rem)" }}
-        >
-          Direct tips. No middleman. The chef who cooked your meal
-          finally gets to hear thank you.
-        </p>
 
       </div>
     </section>
