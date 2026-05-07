@@ -231,6 +231,12 @@ input, textarea, select {
   opacity: 0.85;
 }
 
+/* ── Keyframes ──────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* ── Ticker marquee ─────────────────────────────────────── */
 @keyframes tickerLeft {
   from { transform: translateX(0); }

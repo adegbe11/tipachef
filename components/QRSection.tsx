@@ -2,13 +2,35 @@
 
 import Image from "next/image";
 import Link  from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const QR_URL =
   "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Ftipachef.com%2Fmarco&bgcolor=F5EDD8&color=1a1208&margin=10&qzone=1";
 
 export default function QRSection() {
   const [tipped, setTipped] = useState(false);
+  const leftRef  = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    [
+      { el: leftRef.current,  dir: "translateX(-40px)" },
+      { el: rightRef.current, dir: "translateX(40px)"  },
+    ].forEach(({ el, dir }) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      el.style.transform = dir;
+      el.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          el.style.opacity = "1";
+          el.style.transform = "translate(0)";
+          obs.unobserve(el);
+        }
+      }, { threshold: 0.2 });
+      obs.observe(el);
+    });
+  }, []);
 
   return (
     <section
@@ -18,7 +40,7 @@ export default function QRSection() {
       <div className="content-container grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
 
         {/* ── Left: physical menu card mockup ── */}
-        <div className="flex justify-center lg:justify-start">
+        <div ref={leftRef} className="flex justify-center lg:justify-start">
           <div className="relative" style={{ perspective: "1000px" }}>
 
             {/* Soft amber glow */}
@@ -199,7 +221,7 @@ export default function QRSection() {
         </div>
 
         {/* ── Right: copy ── */}
-        <div>
+        <div ref={rightRef}>
           <p className="eyebrow mb-5">Your QR code</p>
           <h2
             className="font-display text-ivory leading-tight mb-6"

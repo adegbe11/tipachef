@@ -83,6 +83,62 @@ export default function Hero() {
         />
       </div>
 
+      {/* ── Floating tip chips ───────────────────────────────── */}
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+        {/* Chip 1 — bottom left */}
+        <div
+          className="animate-float"
+          style={{
+            position:"absolute", bottom:"22%", left:"6%",
+            animationDelay:"0s", animationDuration:"6s",
+            opacity:0,
+            animation:"fadeIn 0.6s ease 1.8s forwards, float 6s ease-in-out 2.4s infinite",
+          }}
+        >
+          <div style={{ display:"flex", alignItems:"center", gap:"9px", background:"rgba(12,10,7,0.75)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:"1.5px solid rgba(201,169,110,0.25)", borderRadius:"40px", padding:"9px 14px 9px 10px", boxShadow:"4px 4px 0 rgba(201,169,110,0.08),0 8px 30px rgba(0,0,0,0.5)" }}>
+            <div style={{ width:"30px", height:"30px", borderRadius:"50%", background:"linear-gradient(135deg,#C9A96E,#D4B878)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"14px", flexShrink:0 }}>🇮🇹</div>
+            <div>
+              <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"11px", fontWeight:700, color:"rgba(250,248,244,0.9)", margin:0, whiteSpace:"nowrap" }}>Marco E. · +$25</p>
+              <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"9.5px", color:"rgba(250,248,244,0.35)", margin:0, whiteSpace:"nowrap" }}>Table 7 · just now</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Chip 2 — top right */}
+        <div
+          style={{
+            position:"absolute", top:"28%", right:"6%",
+            opacity:0,
+            animation:"fadeIn 0.6s ease 2.6s forwards, float 7s ease-in-out 3.2s infinite",
+          }}
+        >
+          <div style={{ display:"flex", alignItems:"center", gap:"9px", background:"rgba(12,10,7,0.75)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:"1.5px solid rgba(201,169,110,0.22)", borderRadius:"40px", padding:"9px 14px 9px 10px", boxShadow:"4px 4px 0 rgba(201,169,110,0.07),0 8px 30px rgba(0,0,0,0.5)" }}>
+            <div style={{ width:"30px", height:"30px", borderRadius:"50%", background:"linear-gradient(135deg,#C9A96E,#D4B878)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"14px", flexShrink:0 }}>🇬🇷</div>
+            <div>
+              <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"11px", fontWeight:700, color:"rgba(250,248,244,0.9)", margin:0, whiteSpace:"nowrap" }}>Dimitri K. · +$15</p>
+              <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"9.5px", color:"rgba(250,248,244,0.35)", margin:0, whiteSpace:"nowrap" }}>Athens · 2 min ago</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Chip 3 — mid right */}
+        <div
+          style={{
+            position:"absolute", bottom:"35%", right:"5%",
+            opacity:0,
+            animation:"fadeIn 0.6s ease 3.4s forwards, float 8s ease-in-out 4s infinite",
+          }}
+        >
+          <div style={{ display:"flex", alignItems:"center", gap:"9px", background:"rgba(12,10,7,0.75)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:"1.5px solid rgba(201,169,110,0.2)", borderRadius:"40px", padding:"9px 14px 9px 10px", boxShadow:"4px 4px 0 rgba(201,169,110,0.06),0 8px 30px rgba(0,0,0,0.5)" }}>
+            <div style={{ width:"30px", height:"30px", borderRadius:"50%", background:"linear-gradient(135deg,#C9A96E,#D4B878)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"14px", flexShrink:0 }}>🇫🇷</div>
+            <div>
+              <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"11px", fontWeight:700, color:"rgba(250,248,244,0.9)", margin:0, whiteSpace:"nowrap" }}>Pierre L. · +$35</p>
+              <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"9.5px", color:"rgba(250,248,244,0.35)", margin:0, whiteSpace:"nowrap" }}>Paris · 5 min ago</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ── Middle: headline + subtitle + CTAs ────────────────── */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto py-10">
         <h1

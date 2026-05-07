@@ -1,11 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export default function ClaimPage() {
   const [handle, setHandle] = useState("");
-  const router = useRouter();
+  const router   = useRouter();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    el.style.opacity = "0";
+    el.style.transform = "translateY(36px)";
+    el.style.transition = "opacity 0.9s ease, transform 0.9s ease";
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+        obs.unobserve(el);
+      }
+    }, { threshold: 0.25 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   function handleClaim(e: React.FormEvent) {
     e.preventDefault();
@@ -35,7 +53,7 @@ export default function ClaimPage() {
         }}
       />
 
-      <div className="content-container relative text-center">
+      <div ref={sectionRef} className="content-container relative text-center">
 
         {/* Heading */}
         <h2

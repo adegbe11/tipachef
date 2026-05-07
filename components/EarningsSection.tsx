@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 /* Animated counter for a number value */
 function AnimCounter({ end, prefix = "", suffix = "", duration = 1600 }: { end: number; prefix?: string; suffix?: string; duration?: number }) {
@@ -45,6 +45,29 @@ const TIPS = [
 ];
 
 export default function EarningsSection() {
+  const leftRef  = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    [
+      { el: leftRef.current,  x: "-40px" },
+      { el: rightRef.current, x:  "40px" },
+    ].forEach(({ el, x }) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      el.style.transform = `translateX(${x})`;
+      el.style.transition = "opacity 0.85s ease, transform 0.85s ease";
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          el.style.opacity = "1";
+          el.style.transform = "translateX(0)";
+          obs.unobserve(el);
+        }
+      }, { threshold: 0.18 });
+      obs.observe(el);
+    });
+  }, []);
+
   return (
     <section
       className="py-28 md:py-40"
@@ -53,7 +76,7 @@ export default function EarningsSection() {
       <div className="content-container grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
 
         {/* ── Left copy ── */}
-        <div>
+        <div ref={leftRef}>
           <p className="eyebrow mb-5">Your earnings</p>
           <h2
             className="font-display text-ivory leading-tight mb-6"
@@ -76,7 +99,7 @@ export default function EarningsSection() {
         </div>
 
         {/* ── Right: earnings dashboard card ── */}
-        <div className="flex justify-center lg:justify-end">
+        <div ref={rightRef} className="flex justify-center lg:justify-end">
           <div
             style={{
               width: "100%",
