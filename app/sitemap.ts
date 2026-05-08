@@ -88,8 +88,46 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  // Programmatic birthday pages (~160 cities)
+  const birthdayChefPages: MetadataRoute.Sitemap = WORLD_CITIES.map((city) => ({
+    url: `${base}/private-chef-for-birthday/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  // Programmatic dinner party pages (~160 cities)
+  const dinnerPartyPages: MetadataRoute.Sitemap = WORLD_CITIES.map((city) => ({
+    url: `${base}/private-chef-for-dinner-party/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  // Programmatic personal-chef pages (~160 cities)
+  const personalChefPages: MetadataRoute.Sitemap = WORLD_CITIES.map((city) => ({
+    url: `${base}/personal-chef/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  // Programmatic private-chef-for-two pages (~160 cities)
+  const chefForTwoPages: MetadataRoute.Sitemap = WORLD_CITIES.map((city) => ({
+    url: `${base}/private-chef-for-two/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  // For-chefs recruitment page
+  const forChefsPage: MetadataRoute.Sitemap = [
+    { url: `${base}/for-chefs`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.9 },
+  ];
+
   return [
     ...staticPages,
+    ...forChefsPage,
     ...blogPages,
     ...chefPages,
     ...cityPages,
@@ -97,5 +135,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...tipGuidePages,
     ...privateChefPages,
     ...cheapChefPages,
+    ...birthdayChefPages,
+    ...dinnerPartyPages,
+    ...personalChefPages,
+    ...chefForTwoPages,
   ];
 }
