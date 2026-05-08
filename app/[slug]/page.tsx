@@ -170,6 +170,25 @@ function timeAgo(dateStr: string) {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
+/* ─── Person schema helper ───────────────────────────────────────────────── */
+function buildPersonSchema(chef: ChefViewData) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: chef.name,
+    jobTitle: chef.role,
+    url: `https://tipachef.com/${chef.slug}`,
+    image: chef.photo,
+    ...(chef.restaurant ? {
+      worksFor: {
+        "@type": "FoodEstablishment",
+        name: chef.restaurant,
+        ...(chef.location ? { address: { "@type": "PostalAddress", addressLocality: chef.location } } : {}),
+      },
+    } : {}),
+  };
+}
+
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 export default async function ChefProfile({ params }: { params: { slug: string } }) {
 
@@ -178,6 +197,7 @@ export default async function ChefProfile({ params }: { params: { slug: string }
   if (demo) {
     return (
       <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonSchema(demo)) }} />
         <Suspense fallback={null}><TipSuccessToast reward={null} /></Suspense>
         <ChefProfileView chef={demo} />
       </>
@@ -237,6 +257,7 @@ export default async function ChefProfile({ params }: { params: { slug: string }
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonSchema(viewData)) }} />
       <Suspense fallback={null}><TipSuccessToast reward={row.tip_reward ?? null} /></Suspense>
       <ChefProfileView chef={viewData} />
     </>

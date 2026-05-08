@@ -1,20 +1,46 @@
 import { MetadataRoute } from "next";
 import { createServerClient } from "@/lib/supabase-server";
 import { ALL_POSTS } from "@/lib/blog-index";
+import { CITIES, CUISINES, TIP_GUIDES } from "@/lib/pseo-data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://tipachef.com";
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    { url: base,              lastModified: new Date(), changeFrequency: "weekly",  priority: 1.0 },
-    { url: `${base}/about`,   lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/search`,  lastModified: new Date(), changeFrequency: "daily",   priority: 0.9 },
-    { url: `${base}/blog`,    lastModified: new Date(), changeFrequency: "weekly",  priority: 0.9 },
-    { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/help`,    lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "yearly",  priority: 0.3 },
+    { url: base,                lastModified: new Date(), changeFrequency: "weekly",  priority: 1.0 },
+    { url: `${base}/about`,     lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/search`,    lastModified: new Date(), changeFrequency: "daily",   priority: 0.9 },
+    { url: `${base}/blog`,      lastModified: new Date(), changeFrequency: "weekly",  priority: 0.9 },
+    { url: `${base}/chefs`,     lastModified: new Date(), changeFrequency: "weekly",  priority: 0.9 },
+    { url: `${base}/contact`,   lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/help`,      lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/privacy`,   lastModified: new Date(), changeFrequency: "yearly",  priority: 0.3 },
   ];
+
+  // Programmatic city pages
+  const cityPages: MetadataRoute.Sitemap = Object.values(CITIES).map((city) => ({
+    url: `${base}/chefs/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
+  }));
+
+  // Programmatic cuisine pages
+  const cuisinePages: MetadataRoute.Sitemap = Object.values(CUISINES).map((cuisine) => ({
+    url: `${base}/cuisine/${cuisine.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  // Programmatic tip guide pages
+  const tipGuidePages: MetadataRoute.Sitemap = Object.values(TIP_GUIDES).map((guide) => ({
+    url: `${base}/tip-guide/${guide.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
 
   // Blog post pages
   const blogPages: MetadataRoute.Sitemap = ALL_POSTS.map((post) => ({
@@ -45,5 +71,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // If DB is unavailable during build, just skip chef pages
   }
 
-  return [...staticPages, ...blogPages, ...chefPages];
+  return [...staticPages, ...blogPages, ...chefPages, ...cityPages, ...cuisinePages, ...tipGuidePages];
 }
