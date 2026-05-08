@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { createServerClient } from "@/lib/supabase-server";
 import { ALL_POSTS } from "@/lib/blog-index";
 import { CITIES, CUISINES, TIP_GUIDES } from "@/lib/pseo-data";
+import { WORLD_CITIES } from "@/lib/world-cities";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://tipachef.com";
@@ -71,5 +72,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // If DB is unavailable during build, just skip chef pages
   }
 
-  return [...staticPages, ...blogPages, ...chefPages, ...cityPages, ...cuisinePages, ...tipGuidePages];
+  // Programmatic private-chef city pages (~160 cities)
+  const privateChefPages: MetadataRoute.Sitemap = WORLD_CITIES.map((city) => ({
+    url: `${base}/private-chef/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  }));
+
+  // Programmatic cheap-private-chef city pages (~160 cities)
+  const cheapChefPages: MetadataRoute.Sitemap = WORLD_CITIES.map((city) => ({
+    url: `${base}/cheap-private-chef/${city.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  return [
+    ...staticPages,
+    ...blogPages,
+    ...chefPages,
+    ...cityPages,
+    ...cuisinePages,
+    ...tipGuidePages,
+    ...privateChefPages,
+    ...cheapChefPages,
+  ];
 }
