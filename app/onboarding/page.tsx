@@ -153,6 +153,7 @@ export default function Onboarding() {
   const [name,       setName]       = useState("");
   const [role,       setRole]       = useState("");
   const [restaurant, setRestaurant] = useState("");
+  const [city,       setCity]       = useState("");
   const [showRoles,  setShowRoles]  = useState(false);
 
   /* Step 2 — Cuisine */
@@ -256,13 +257,16 @@ export default function Onboarding() {
   /* ── Step 1: save name/role/restaurant ───────────────────────── */
   function goStep1() {
     if (!chef || !name.trim()) return;
+    const citySlug = city.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || null;
     setChef({ ...chef, name: name.trim(), role: role.trim(), restaurant: restaurant.trim() });
     setStep(2);
     supabase.from("chefs").update({
       name:       name.trim(),
       role:       role.trim() || null,
       bio:        restaurant.trim() || null,
-    }).eq("id", chef.id).then(({ error }) => {
+      city:       citySlug,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any).eq("id", chef.id).then(({ error }) => {
       if (error) console.error("Step1 save:", error.message);
     });
   }
@@ -775,6 +779,21 @@ export default function Onboarding() {
                     onFocus={e => { e.currentTarget.style.borderColor = "#C9A96E"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(201,169,110,0.12)"; }}
                     onBlur={e  => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.boxShadow = "none"; }}
                   />
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium mb-1.5 block" style={{ color: "rgba(255,255,255,0.4)" }}>Your city</label>
+                  <input
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && goStep1()}
+                    placeholder="London, New York, Lagos..."
+                    className="w-full px-4 py-3.5 rounded-2xl text-sm outline-none transition-all placeholder:text-white/15"
+                    style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "white" }}
+                    onFocus={e => { e.currentTarget.style.borderColor = "#C9A96E"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(201,169,110,0.12)"; }}
+                    onBlur={e  => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.boxShadow = "none"; }}
+                  />
+                  <p className="text-xs mt-1.5" style={{ color: "rgba(255,255,255,0.2)" }}>Creates a public page for chefs in your city</p>
                 </div>
               </div>
 

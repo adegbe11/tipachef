@@ -15,6 +15,11 @@ alter table chefs add column if not exists instagram_url text;
 alter table chefs add column if not exists tiktok_url    text;
 alter table chefs add column if not exists youtube_url   text;
 alter table chefs add column if not exists tip_reward    text;
+alter table chefs add column if not exists city          text;
+alter table chefs add column if not exists updated_at    timestamptz default now();
+
+-- Index for fast city lookups (powers /chefs/[city] pages)
+create index if not exists chefs_city_idx on chefs (city);
 
 -- Tips: add columns used by webhook and Wall of Love
 alter table tips add column if not exists tipper_name       text;
