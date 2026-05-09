@@ -272,6 +272,8 @@ export default function Onboarding() {
   }
 
   /* ── Step 2: cuisine ──────────────────────────────────────────── */
+  // DB migration required (run once in Supabase SQL editor):
+  // ALTER TABLE chefs ADD COLUMN IF NOT EXISTS cuisines TEXT;
   function toggleCuisine(c: string) {
     setSelectedCuisines(prev =>
       prev.includes(c) ? prev.filter(x => x !== c) : prev.length < 3 ? [...prev, c] : prev
@@ -279,10 +281,10 @@ export default function Onboarding() {
   }
   function goStep2() {
     setStep(3);
-    // Save cuisine as comma-separated in hook field for now (no separate column needed)
     if (chef && selectedCuisines.length > 0) {
       supabase.from("chefs")
-        .update({ hook: selectedCuisines.join(", ") } as never)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .update({ cuisines: selectedCuisines.join(", ") } as any)
         .eq("id", chef.id)
         .then(({ error }) => { if (error) console.error("Cuisine save:", error.message); });
     }

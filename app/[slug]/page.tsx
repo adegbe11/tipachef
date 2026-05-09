@@ -192,7 +192,68 @@ function buildPersonSchema(chef: ChefViewData) {
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 export default async function ChefProfile({ params }: { params: { slug: string } }) {
 
-  /* ── Demo chef shortcut ── */
+  /* ── Real chef from Supabase — always checked first so real chefs take
+        precedence over demo slugs. Demo is fallback only. ── */
+  const supabase    = await createClient();
+  const adminClient = createServerClient();
+
+  const { data: raw } = await supabase
+    .from("chefs")
+    .select("*")
+    .eq("slug", params.slug.toLowerCase())
+    .single();
+
+  /* ── Real chef found — render them (takes precedence over demo slugs) ── */
+  if (raw) {
+    const row = raw as unknown as ChefRow;
+
+    const { data: tips } = await adminClient
+      .from("tips")
+      .select("*")
+      .eq("chef_id", row.id)
+      .not("message", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+    const wall: ChefViewData["wall"] = ((tips ?? []) as TipRow[]).map((t) => ({
+      name:    t.tipper_name ?? "Anonymous",
+      amount:  Math.round(t.amount_cents / 100),
+      message: t.message ?? "",
+      time:    timeAgo(t.created_at),
+    }));
+
+    const viewData: ChefViewData = {
+      name:        row.name        ?? row.slug,
+      slug:        row.slug,
+      role:        row.role        ?? "Chef",
+      restaurant:  row.bio         ?? "",
+      location:    "",
+      flag:        "🍴",
+      hook:        row.hook        ?? "",
+      photo:       row.image_url   ?? "",
+      cover:       row.cover_url   ?? "",
+      tips:        row.goal_current ?? 0,
+      supporters:  0,
+      years:       0,
+      specialties: [],
+      wall,
+      isDemo:      false,
+      goalLabel:   row.goal_label,
+      goalTarget:  row.goal_target,
+      goalCurrent: row.goal_current,
+      tipReward:   row.tip_reward,
+    };
+
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonSchema(viewData)) }} />
+        <Suspense fallback={null}><TipSuccessToast reward={row.tip_reward ?? null} /></Suspense>
+        <ChefProfileView chef={viewData} />
+      </>
+    );
+  }
+
+  /* ── Fall back to demo chef (only if no real chef has this slug) ── */
   const demo = DEMO_CHEFS[params.slug];
   if (demo) {
     return (
@@ -204,62 +265,6 @@ export default async function ChefProfile({ params }: { params: { slug: string }
     );
   }
 
-  /* ── Real chef from Supabase ── */
-  const supabase    = await createClient();
-  const adminClient = createServerClient();
-
-  const { data: raw, error } = await supabase
-    .from("chefs")
-    .select("*")
-    .eq("slug", params.slug.toLowerCase())
-    .single();
-
-  if (error || !raw) notFound();
-
-  const row = raw as unknown as ChefRow;
-
-  const { data: tips } = await adminClient
-    .from("tips")
-    .select("*")
-    .eq("chef_id", row.id)
-    .not("message", "is", null)
-    .order("created_at", { ascending: false })
-    .limit(10);
-
-  const wall: ChefViewData["wall"] = ((tips ?? []) as TipRow[]).map((t) => ({
-    name:    t.tipper_name ?? "Anonymous",
-    amount:  Math.round(t.amount_cents / 100),
-    message: t.message ?? "",
-    time:    timeAgo(t.created_at),
-  }));
-
-  const viewData: ChefViewData = {
-    name:        row.name       ?? row.slug,
-    slug:        row.slug,
-    role:        row.role       ?? "Chef",
-    restaurant:  row.bio        ?? "",
-    location:    "",
-    flag:        "🍴",
-    hook:        row.hook       ?? "",
-    photo:       row.image_url  ?? "",
-    cover:       row.cover_url  ?? "",
-    tips:        row.goal_current ?? 0,
-    supporters:  0,
-    years:       0,
-    specialties: [],
-    wall,
-    isDemo:      false,
-    goalLabel:   row.goal_label,
-    goalTarget:  row.goal_target,
-    goalCurrent: row.goal_current,
-    tipReward:   row.tip_reward,
-  };
-
-  return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonSchema(viewData)) }} />
-      <Suspense fallback={null}><TipSuccessToast reward={row.tip_reward ?? null} /></Suspense>
-      <ChefProfileView chef={viewData} />
-    </>
-  );
+  /* ── Nothing found ── */
+  notFound();
 }

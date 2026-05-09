@@ -75,6 +75,7 @@ export default function SearchPage() {
   const [places,      setPlaces]      = useState<PlaceSuggestion[]>([]);
   const [chefs,       setChefs]       = useState<Chef[]>([]);
   const [loading,     setLoading]     = useState(false);
+  const [searchError, setSearchError] = useState("");
   const [showDropdown,setShowDropdown]= useState(false);
   const [selectedVenue, setSelectedVenue] = useState<PlaceSuggestion | null>(null);
   const [searched,    setSearched]    = useState(false);
@@ -106,21 +107,25 @@ export default function SearchPage() {
       }
 
       setLoading(true);
+      setSearchError("");
       try {
         if (mode === "restaurant") {
           const res  = await fetch(`/api/search/places?q=${encodeURIComponent(value)}`);
+          if (!res.ok) throw new Error("Search unavailable");
           const data = await res.json();
           setPlaces(data.suggestions ?? []);
           setShowDropdown(true);
         } else {
           const res  = await fetch(`/api/search/chefs?q=${encodeURIComponent(value)}`);
+          if (!res.ok) throw new Error("Search unavailable");
           const data = await res.json();
           setChefs(data.chefs ?? []);
           setSearched(true);
           setShowDropdown(false);
         }
       } catch {
-        // silent fail
+        setSearchError("Search is unavailable right now. Please try again.");
+        setSearched(false);
       } finally {
         setLoading(false);
       }
@@ -158,6 +163,7 @@ export default function SearchPage() {
     setSearched(false);
     setSelectedVenue(null);
     setShowDropdown(false);
+    setSearchError("");
     setTimeout(() => inputRef.current?.focus(), 50);
   }
 
@@ -296,6 +302,15 @@ export default function SearchPage() {
           )}
         </div>
       </div>
+
+      {/* Search error */}
+      {searchError && (
+        <div className="content-container pt-2 pb-4">
+          <div className="max-w-xl mx-auto px-4 py-3 rounded-xl bg-red-900/20 border border-red-500/20 text-center">
+            <p className="text-sm font-sans text-red-400">{searchError}</p>
+          </div>
+        </div>
+      )}
 
       {/* Results */}
       <div className="content-container pb-24">

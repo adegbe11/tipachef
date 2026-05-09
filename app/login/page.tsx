@@ -157,9 +157,10 @@ export default function Login() {
             </div>
 
             <div className="flex justify-end mb-6">
-              <button onClick={sendPasswordReset} disabled={loading} className="text-xs text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors disabled:opacity-50">
-                {resetSent ? "Reset email sent!" : "Forgot password?"}
-              </button>
+              {resetSent
+                ? <span className="text-xs text-green-600 font-medium">Reset email sent!</span>
+                : <button onClick={sendPasswordReset} disabled={loading} className="text-xs text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors disabled:opacity-50">Forgot password?</button>
+              }
             </div>
 
             <button onClick={signInWithEmail} disabled={loading || !email || !password} className="w-full py-3.5 rounded-2xl font-semibold text-sm transition-all duration-200 mb-8 disabled:opacity-50" style={{ background: email && password ? "#C9A96E" : "#E5E7EB", color: email && password ? "#111111" : "#9CA3AF" }}>

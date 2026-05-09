@@ -91,7 +91,7 @@ export default function EarningsSection() {
             shared pool. Yours. Cash out any time. No minimum. No waiting.
           </p>
           <Link
-            href="/for-chefs"
+            href="/for-chefs#how-it-works"
             className="font-sans text-ember text-sm hover:text-ember-light transition-colors"
           >
             See how payouts work →

@@ -13,8 +13,6 @@
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.105.1",
     "clsx": "^2.1.0",
-    "framer-motion": "^11.0.0",
-    "lucide-react": "^0.363.0",
     "next": "14.2.35",
     "qrcode.react": "^4.2.0",
     "react": "^18",

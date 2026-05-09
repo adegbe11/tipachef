@@ -206,13 +206,6 @@ input, textarea, select {
   background: linear-gradient(90deg, transparent, var(--ember) 40%, transparent);
 }
 
-.text-ember-gradient {
-  background: linear-gradient(135deg, var(--ember-light) 0%, var(--ember) 50%, var(--ember-dark) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .reveal {
   opacity: 0;
   transform: translateY(32px);
