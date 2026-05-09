@@ -158,15 +158,6 @@ export default function GetOnBoard() {
           </button>
         </form>
 
-        {/* fine print */}
-        <p style={{
-          fontFamily: "-apple-system,system-ui",
-          fontSize: "12px",
-          color: "rgba(250,248,244,0.2)",
-          marginBottom: "2.5rem",
-        }}>
-          Free forever · No credit card · Profile live in 5 minutes
-        </p>
 
         {/* QR card — always visible, updates as you type */}
         <div style={{ display: "flex", justifyContent: "center" }}>
