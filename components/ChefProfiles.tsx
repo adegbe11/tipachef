@@ -81,7 +81,7 @@ export default function ChefProfiles() {
   }, []);
 
   return (
-    <section className="py-24 md:py-36" style={{ background:"linear-gradient(180deg,#0d0c0a 0%,#0f0e0b 100%)" }}>
+    <section className="py-14 md:py-20" style={{ background:"linear-gradient(180deg,#0d0c0a 0%,#0f0e0b 100%)" }}>
       <div className="content-container">
 
         {/* Header */}

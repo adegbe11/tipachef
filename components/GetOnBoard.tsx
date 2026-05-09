@@ -40,8 +40,8 @@ export default function GetOnBoard() {
   return (
     <section style={{
       background: "#0d0c0a",
-      paddingTop: "5.5rem",
-      paddingBottom: "6rem",
+      paddingTop: "3rem",
+      paddingBottom: "3.5rem",
       borderTop: "1px solid rgba(255,255,255,0.05)",
       position: "relative",
       overflow: "hidden",
@@ -60,14 +60,14 @@ export default function GetOnBoard() {
       <div className="content-container relative" style={{ textAlign: "center" }}>
 
         {/* eyebrow */}
-        <p className="eyebrow mb-5">For chefs</p>
+        <p className="eyebrow mb-3">For chefs</p>
 
         {/* headline */}
         <h2 className="font-display text-ivory" style={{
           fontSize: "clamp(2.8rem, 5.5vw, 4.6rem)",
           fontWeight: 400,
           lineHeight: 1.08,
-          marginBottom: "0.5rem",
+          marginBottom: "0.3rem",
         }}>
           Get on board.
         </h2>
@@ -78,7 +78,7 @@ export default function GetOnBoard() {
           fontWeight: 400,
           fontStyle: "italic",
           color: "rgba(201,169,110,0.65)",
-          marginBottom: "2rem",
+          marginBottom: "1.25rem",
           lineHeight: 1.5,
         }}>
           Create your page and start receiving direct tips.

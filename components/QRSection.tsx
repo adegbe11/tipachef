@@ -34,7 +34,7 @@ export default function QRSection() {
 
   return (
     <section
-      className="py-28 md:py-40"
+      className="py-14 md:py-20"
       style={{ background: "linear-gradient(180deg,#0d0c0a 0%,#100f0c 100%)" }}
     >
       <div className="content-container grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">

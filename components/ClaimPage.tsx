@@ -54,7 +54,7 @@ export default function ClaimPage() {
 
   return (
     <section
-      style={{ background: "#0a0908", paddingTop: "6rem", paddingBottom: "7rem", position: "relative", overflow: "hidden" }}
+      style={{ background: "#0a0908", paddingTop: "3rem", paddingBottom: "3.5rem", position: "relative", overflow: "hidden" }}
     >
       {/* ambient glow */}
       <div aria-hidden style={{

@@ -50,7 +50,7 @@ const StarFilled = () => (
 
 export default function LiveDemo() {
   return (
-    <section className="py-28 md:py-40" style={{ background: "#0d0c0a" }}>
+    <section className="py-14 md:py-20" style={{ background: "#0d0c0a" }}>
       <div className="content-container grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
         {/* ── Left copy ── */}

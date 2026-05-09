@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function DownloadCTA() {
   return (
-    <section className="py-24 md:py-36" style={{ background:"linear-gradient(180deg,#0f0e0b 0%,#0a0908 100%)" }}>
+    <section className="py-14 md:py-20" style={{ background:"linear-gradient(180deg,#0f0e0b 0%,#0a0908 100%)" }}>
       <div className="content-container">
 
         <p className="eyebrow text-center mb-14">Get started</p>
