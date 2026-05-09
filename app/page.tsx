@@ -1,6 +1,5 @@
 import Navbar        from "@/components/Navbar";
 import Hero          from "@/components/Hero";
-import GetOnBoard    from "@/components/GetOnBoard";
 import WhyThisExists from "@/components/WhyThisExists";
 import LiveDemo      from "@/components/LiveDemo";
 import QRSection       from "@/components/QRSection";
@@ -72,9 +71,7 @@ export default function Home() {
         <Navbar />
         {/* 2. Hero */}
         <Hero />
-        {/* 3. Get on board — URL claim + live QR */}
-        <GetOnBoard />
-        {/* 4. Manifesto */}
+        {/* 3. Manifesto */}
         <WhyThisExists />
         {/* 4. Profile demo */}
         <LiveDemo />
