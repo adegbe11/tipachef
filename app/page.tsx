@@ -1,14 +1,14 @@
-import Navbar        from "@/components/Navbar";
-import Hero          from "@/components/Hero";
-import WhyThisExists from "@/components/WhyThisExists";
-import LiveDemo      from "@/components/LiveDemo";
-import QRSection       from "@/components/QRSection";
-import EarningsSection from "@/components/EarningsSection";
-import ChefProfiles    from "@/components/ChefProfiles";
-import DownloadCTA   from "@/components/DownloadCTA";
-import ClaimPage     from "@/components/ClaimPage";
-import LiveTipFeed   from "@/components/LiveTipFeed";
-import Footer        from "@/components/Footer";
+import Navbar             from "@/components/Navbar";
+import Hero               from "@/components/Hero";
+import ProfileQRShowcase  from "@/components/ProfileQRShowcase";
+import WhyThisExists      from "@/components/WhyThisExists";
+import LiveDemo           from "@/components/LiveDemo";
+import QRSection          from "@/components/QRSection";
+import EarningsSection    from "@/components/EarningsSection";
+import ChefProfiles       from "@/components/ChefProfiles";
+import DownloadCTA        from "@/components/DownloadCTA";
+import ClaimPage          from "@/components/ClaimPage";
+import Footer             from "@/components/Footer";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -71,24 +71,24 @@ export default function Home() {
         <Navbar />
         {/* 2. Hero */}
         <Hero />
-        {/* 3. Manifesto */}
+        {/* 3. Profile card + QR code showcase */}
+        <ProfileQRShowcase />
+        {/* 4. Manifesto */}
         <WhyThisExists />
-        {/* 4. Profile demo */}
+        {/* 5. Profile demo */}
         <LiveDemo />
-        {/* 5. QR code section */}
+        {/* 6. QR code section */}
         <QRSection />
-        {/* 6. Earnings section */}
+        {/* 7. Earnings section */}
         <EarningsSection />
-        {/* 7. Chef profiles */}
+        {/* 8. Chef profiles */}
         <ChefProfiles />
-        {/* 12. Download / final CTA */}
+        {/* 9. Download / final CTA */}
         <DownloadCTA />
-        {/* 13. Claim your page */}
+        {/* 10. Claim your page */}
         <ClaimPage />
-        {/* 14. Footer */}
+        {/* 11. Footer */}
         <Footer />
-        {/* Live tip notifications — fixed bottom-right */}
-        <LiveTipFeed />
       </main>
     </>
   );
