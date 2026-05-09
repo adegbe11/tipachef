@@ -189,7 +189,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                   <p style={{ fontFamily: "-apple-system,system-ui", fontSize: "0.9rem", color: "rgba(250,248,244,0.45)", marginBottom: "2rem", lineHeight: 1.7 }}>
                     We are currently vetting chefs in {cityName}. Join the waitlist and we will notify you the moment a chef in your city goes live.
                   </p>
-                  <Link href="/signup" style={{ display: "inline-block", background: "linear-gradient(135deg,#C9A96E,#B8934A)", color: "#1a1208", fontFamily: "-apple-system,system-ui", fontWeight: 700, fontSize: "13px", letterSpacing: "0.04em", padding: "13px 32px", borderRadius: "40px", textDecoration: "none", marginBottom: "12px", display: "inline-block" }}>
+                  <Link href="/signup" style={{ display: "inline-block", background: "linear-gradient(135deg,#C9A96E,#B8934A)", color: "#1a1208", fontFamily: "-apple-system,system-ui", fontWeight: 700, fontSize: "13px", letterSpacing: "0.04em", padding: "13px 32px", borderRadius: "40px", textDecoration: "none", marginBottom: "12px" }}>
                     Join the waitlist
                   </Link>
                 </div>

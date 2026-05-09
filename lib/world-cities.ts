@@ -12,11 +12,13 @@ export interface WorldCity {
   priceFrom:   number;  // USD/person starting price (used on cheap-chef template)
 }
 
-// Derive flag emoji from ISO country code
+// Derive flag emoji from ISO 3166-1 alpha-2 country code
 export function countryFlag(code: string): string {
-  return [...code.toUpperCase()].map(
-    (c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65)
-  ).join("");
+  const upper = code.toUpperCase();
+  return (
+    String.fromCodePoint(0x1f1e6 + upper.charCodeAt(0) - 65) +
+    String.fromCodePoint(0x1f1e6 + upper.charCodeAt(1) - 65)
+  );
 }
 
 export const WORLD_CITIES: WorldCity[] = [
