@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link  from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ClaimPage from "@/components/ClaimPage";
 
 export const metadata: Metadata = {
   title: "Chefs: Get Tips Directly From Your Diners | Tip a Chef",
@@ -174,23 +175,8 @@ export default function ForChefsPage() {
           </div>
         </section>
 
-        {/* Final CTA */}
-        <section style={{ paddingBottom: "8rem" }}>
-          <div className="content-container text-center" style={{ maxWidth: "560px" }}>
-            <div style={{ background: "rgba(201,169,110,0.06)", border: "1.5px solid rgba(201,169,110,0.2)", borderRadius: "24px", padding: "3rem 2rem" }}>
-              <p className="font-display text-ivory" style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)", fontWeight: 400, fontStyle: "italic", marginBottom: "0.75rem", lineHeight: 1.3 }}>
-                Ready to receive your first tip?
-              </p>
-              <p style={{ fontFamily: "-apple-system,system-ui", fontSize: "0.9rem", color: "rgba(250,248,244,0.45)", marginBottom: "2rem", lineHeight: 1.7 }}>
-                Five minutes to set up. Free forever. Your profile goes live the moment you finish.
-              </p>
-              <Link href="/signup" style={{ display: "inline-block", background: "linear-gradient(135deg,#C9A96E,#B8934A)", color: "#1a1208", fontFamily: "-apple-system,system-ui", fontWeight: 700, fontSize: "15px", letterSpacing: "0.04em", padding: "16px 44px", borderRadius: "40px", textDecoration: "none" }}>
-                Create your free profile
-              </Link>
-              <p style={{ fontFamily: "-apple-system,system-ui", fontSize: "12px", color: "rgba(250,248,244,0.2)", marginTop: "1.25rem" }}>No credit card. No monthly fee. Just your profile and a QR code.</p>
-            </div>
-          </div>
-        </section>
+        {/* Final CTA — live URL claim + QR preview */}
+        <ClaimPage />
 
       </main>
       <Footer />
