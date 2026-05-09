@@ -173,15 +173,6 @@ export default function ClaimPage() {
           </button>
         </form>
 
-        {/* fine print */}
-        <p style={{
-          fontFamily: "-apple-system,system-ui",
-          fontSize: "12px",
-          color: "rgba(250,248,244,0.2)",
-          marginBottom: "2.5rem",
-        }}>
-          Free forever · QR code included · No restaurant cut
-        </p>
 
         {/* ── QR card — slides down when handle typed ── */}
         <div style={{ display: "flex", justifyContent: "center", minHeight: "240px" }}>
