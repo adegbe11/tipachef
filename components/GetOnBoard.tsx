@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 function qrUrl(slug: string) {
-  return `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
+  return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
     `https://tipachef.com/${slug}`
   )}&bgcolor=F5EDD8&color=1a1208&margin=14&qzone=1`;
 }
@@ -14,39 +14,14 @@ export default function GetOnBoard() {
   const [qrSlug,  setQrSlug]  = useState("");
   const [qrReady, setQrReady] = useState(false);
   const router      = useRouter();
-  const sectionRef  = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  /* ── scroll-in ── */
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    el.style.opacity = "0";
-    el.style.transform = "translateY(28px)";
-    el.style.transition = "opacity 0.85s ease, transform 0.85s ease";
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.style.opacity = "1";
-          el.style.transform = "translateY(0)";
-          obs.unobserve(el);
-        }
-      },
-      { threshold: 0.2 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  /* ── debounced QR update ── */
+  /* debounced QR update */
   useEffect(() => {
     const slug = handle.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
     if (debounceRef.current) clearTimeout(debounceRef.current);
     if (slug.length < 2) { setQrSlug(""); setQrReady(false); return; }
-    debounceRef.current = setTimeout(() => {
-      setQrReady(false);
-      setQrSlug(slug);
-    }, 400);
+    debounceRef.current = setTimeout(() => { setQrReady(false); setQrSlug(slug); }, 400);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [handle]);
 
@@ -59,80 +34,60 @@ export default function GetOnBoard() {
   const displaySlug = handle.trim().toLowerCase().replace(/[^a-z0-9-]/g, "") || "yourname";
 
   return (
-    <section
-      style={{
-        background: "linear-gradient(180deg,#0a0908 0%,#0d0c0a 100%)",
-        paddingTop: "5rem",
-        paddingBottom: "6rem",
-        borderTop: "1px solid rgba(255,255,255,0.04)",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* top ambient glow */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          left: "50%", top: "0",
-          transform: "translateX(-50%)",
-          width: "900px", height: "400px",
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 65%)",
-          filter: "blur(60px)",
-          pointerEvents: "none",
-        }}
-      />
+    <section style={{
+      background: "#0d0c0a",
+      paddingTop: "5.5rem",
+      paddingBottom: "6rem",
+      borderTop: "1px solid rgba(255,255,255,0.05)",
+      position: "relative",
+      overflow: "hidden",
+    }}>
 
-      <div ref={sectionRef} className="content-container relative" style={{ textAlign: "center" }}>
+      {/* glow */}
+      <div aria-hidden style={{
+        position: "absolute", left: "50%", top: "0",
+        transform: "translateX(-50%)",
+        width: "800px", height: "360px",
+        background: "radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.1) 0%, transparent 65%)",
+        filter: "blur(60px)",
+        pointerEvents: "none",
+      }} />
 
-        {/* Eyebrow */}
+      <div className="content-container relative" style={{ textAlign: "center" }}>
+
+        {/* eyebrow */}
         <p className="eyebrow mb-5">For chefs</p>
 
-        {/* Headline */}
-        <h2
-          className="font-display text-ivory"
-          style={{
-            fontSize: "clamp(2.6rem, 5.5vw, 4.4rem)",
-            fontWeight: 400,
-            lineHeight: 1.1,
-            marginBottom: "1rem",
-          }}
-        >
-          Claim your{" "}
-          <em
-            style={{
-              fontStyle: "italic",
-              background: "linear-gradient(90deg,#C9A96E,#E8C97A,#C9A96E)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            page.
-          </em>
+        {/* headline */}
+        <h2 className="font-display text-ivory" style={{
+          fontSize: "clamp(2.8rem, 5.5vw, 4.6rem)",
+          fontWeight: 400,
+          lineHeight: 1.08,
+          marginBottom: "0.5rem",
+        }}>
+          Get on board.
         </h2>
 
-        {/* Subtitle */}
-        <p
-          style={{
-            fontFamily: "-apple-system,system-ui",
-            fontSize: "1.05rem",
-            color: "rgba(250,248,244,0.45)",
-            marginBottom: "2.5rem",
-            lineHeight: 1.7,
-          }}
-        >
-          Type your name and watch your QR code generate instantly.
+        {/* sub-headline italic gold */}
+        <p className="font-display" style={{
+          fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
+          fontWeight: 400,
+          fontStyle: "italic",
+          color: "rgba(201,169,110,0.65)",
+          marginBottom: "2rem",
+          lineHeight: 1.5,
+        }}>
+          Create your page and start receiving direct tips.
         </p>
 
-        {/* ── URL input ── */}
+        {/* URL input */}
         <form
           onSubmit={handleSubmit}
           style={{
             display: "flex",
             alignItems: "center",
-            maxWidth: "540px",
-            margin: "0 auto",
+            maxWidth: "560px",
+            margin: "0 auto 0.9rem",
             background: "rgba(255,255,255,0.04)",
             backdropFilter: "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",
@@ -145,16 +100,13 @@ export default function GetOnBoard() {
               "inset 0 1px 0 rgba(255,255,255,0.07)",
           }}
         >
-          <span
-            style={{
-              fontFamily: "-apple-system,system-ui",
-              fontSize: "15px",
-              color: "rgba(250,248,244,0.3)",
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-              letterSpacing: "0.01em",
-            }}
-          >
+          <span style={{
+            fontFamily: "-apple-system,system-ui",
+            fontSize: "15px",
+            color: "rgba(250,248,244,0.3)",
+            whiteSpace: "nowrap",
+            flexShrink: 0,
+          }}>
             tipachef.com/
           </span>
           <input
@@ -175,7 +127,6 @@ export default function GetOnBoard() {
               caretColor: "#C9A96E",
               padding: "0 10px",
               minWidth: 0,
-              letterSpacing: "0.01em",
             }}
           />
           <button
@@ -192,165 +143,121 @@ export default function GetOnBoard() {
               fontWeight: 700,
               fontSize: "14px",
               letterSpacing: "0.03em",
-              boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.28), 0 6px 20px rgba(201,169,110,0.3)",
-              transition: "opacity 0.2s, transform 0.15s",
               whiteSpace: "nowrap",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.28), 0 6px 20px rgba(201,169,110,0.3)",
+              transition: "opacity 0.2s",
             }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.opacity = "0.88";
-              (e.currentTarget as HTMLButtonElement).style.transform = "scale(0.98)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.opacity = "1";
-              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
-            }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.85")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
           >
-            Get on board →
+            Join Tip a Chef →
           </button>
         </form>
 
-        {/* ── QR card — slides in when handle typed ── */}
-        <div
-          style={{
-            marginTop: "2.5rem",
+        {/* fine print */}
+        <p style={{
+          fontFamily: "-apple-system,system-ui",
+          fontSize: "12px",
+          color: "rgba(250,248,244,0.2)",
+          marginBottom: "2.5rem",
+        }}>
+          Free forever · No credit card · Profile live in 5 minutes
+        </p>
+
+        {/* QR card — drops down when name is typed */}
+        <div style={{ display: "flex", justifyContent: "center", minHeight: "40px" }}>
+          <div style={{
+            opacity: qrSlug ? 1 : 0,
+            transform: qrSlug ? "translateY(0) scale(1)" : "translateY(16px) scale(0.97)",
+            transition: "opacity 0.4s ease, transform 0.4s ease",
             display: "flex",
-            justifyContent: "center",
-            minHeight: "220px",
-          }}
-        >
-          <div
-            style={{
-              opacity: qrSlug ? 1 : 0,
-              transform: qrSlug ? "translateY(0) scale(1)" : "translateY(16px) scale(0.96)",
-              transition: "opacity 0.45s ease, transform 0.45s ease",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "12px",
+          }}>
+            {/* card */}
+            <div style={{
+              width: "196px",
+              borderRadius: "26px",
+              background: "rgba(16,14,10,0.92)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
+              border: "1.5px solid rgba(201,169,110,0.24)",
+              boxShadow:
+                "0 36px 72px rgba(0,0,0,0.65), " +
+                "6px 6px 0 rgba(201,169,110,0.07), " +
+                "inset 0 1px 0 rgba(255,255,255,0.06)",
+              padding: "20px 18px 16px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "14px",
-            }}
-          >
-            {/* Card */}
-            <div
-              style={{
-                width: "190px",
-                borderRadius: "26px",
-                background: "rgba(18,16,12,0.85)",
-                backdropFilter: "blur(24px)",
-                WebkitBackdropFilter: "blur(24px)",
-                border: "1.5px solid rgba(201,169,110,0.25)",
-                boxShadow:
-                  "0 40px 80px rgba(0,0,0,0.65), " +
-                  "0 16px 40px rgba(0,0,0,0.4), " +
-                  "6px 6px 0 rgba(201,169,110,0.07), " +
-                  "inset 0 1px 0 rgba(255,255,255,0.06)",
-                padding: "18px 18px 14px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "12px",
-              }}
-            >
+              gap: "12px",
+            }}>
+
               {/* QR image */}
-              <div
-                style={{
-                  width: "150px",
-                  height: "150px",
-                  borderRadius: "16px",
-                  background: "#F5EDD8",
-                  overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.7)",
-                }}
-              >
+              <div style={{
+                width: "152px", height: "152px",
+                borderRadius: "16px",
+                background: "#F5EDD8",
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.6)",
+              }}>
                 {qrSlug && (
-                  /* eslint-disable-next-line @next/next/no-img-element */
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     key={qrSlug}
                     src={qrUrl(qrSlug)}
                     alt={`tipachef.com/${qrSlug}`}
-                    width={150}
-                    height={150}
+                    width={152}
+                    height={152}
                     onLoad={() => setQrReady(true)}
-                    style={{
-                      display: "block",
-                      opacity: qrReady ? 1 : 0,
-                      transition: "opacity 0.4s ease",
-                    }}
+                    style={{ display: "block", opacity: qrReady ? 1 : 0, transition: "opacity 0.4s ease" }}
                   />
                 )}
               </div>
 
-              {/* URL */}
+              {/* URL label */}
               <div style={{ textAlign: "center" }}>
-                <p
-                  style={{
-                    fontFamily: "-apple-system,system-ui",
-                    fontSize: "11px",
-                    color: "rgba(250,248,244,0.3)",
-                    margin: "0 0 2px",
-                    letterSpacing: "0.02em",
-                  }}
-                >
+                <p style={{ fontFamily: "-apple-system,system-ui", fontSize: "11px", color: "rgba(250,248,244,0.22)", margin: "0 0 2px" }}>
                   tipachef.com/
                 </p>
-                <p
-                  style={{
-                    fontFamily: "Georgia,serif",
-                    fontStyle: "italic",
-                    fontSize: "15px",
-                    color: "#C9A96E",
-                    margin: 0,
-                    fontWeight: 500,
-                  }}
-                >
+                <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: "16px", color: "#C9A96E", margin: 0, fontWeight: 500 }}>
                   {displaySlug}
                 </p>
               </div>
 
-              {/* Scan hint */}
-              <p
-                style={{
-                  fontFamily: "-apple-system,system-ui",
-                  fontSize: "9px",
-                  color: "rgba(250,248,244,0.18)",
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  margin: 0,
-                }}
-              >
-                🔒 Scannable · No app needed
-              </p>
+              {/* scan badge */}
+              <div style={{
+                display: "flex", alignItems: "center", gap: "6px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: "20px",
+                padding: "5px 12px",
+              }}>
+                <div style={{
+                  width: "6px", height: "6px", borderRadius: "50%",
+                  background: "#4ade80",
+                  boxShadow: "0 0 6px rgba(74,222,128,0.7)",
+                  animation: "gob-pulse 2s infinite",
+                }} />
+                <span style={{ fontFamily: "-apple-system,system-ui", fontSize: "10px", color: "rgba(255,255,255,0.3)", letterSpacing: "0.04em" }}>
+                  Scan · No app needed
+                </span>
+              </div>
             </div>
 
-            {/* Ready indicator */}
+            {/* ready label */}
             {qrReady && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "7px",
-                  animation: "fadeUp 0.4s ease",
-                }}
-              >
-                <div
-                  style={{
-                    width: "8px", height: "8px", borderRadius: "50%",
-                    background: "#4ade80",
-                    boxShadow: "0 0 8px rgba(74,222,128,0.7)",
-                    animation: "pulse 2s infinite",
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: "-apple-system,system-ui",
-                    fontSize: "11px",
-                    color: "rgba(250,248,244,0.4)",
-                    letterSpacing: "0.04em",
-                  }}
-                >
+              <div style={{ display: "flex", alignItems: "center", gap: "7px", animation: "gob-fadeUp 0.4s ease" }}>
+                <div style={{
+                  width: "7px", height: "7px", borderRadius: "50%",
+                  background: "#4ade80", boxShadow: "0 0 7px rgba(74,222,128,0.7)",
+                  animation: "gob-pulse 2s infinite",
+                }} />
+                <span style={{ fontFamily: "-apple-system,system-ui", fontSize: "11px", color: "rgba(250,248,244,0.38)", letterSpacing: "0.04em" }}>
                   Your QR is ready to print
                 </span>
               </div>
@@ -358,25 +265,14 @@ export default function GetOnBoard() {
           </div>
         </div>
 
-        {/* Fine print */}
-        <p
-          style={{
-            fontFamily: "-apple-system,system-ui",
-            fontSize: "12px",
-            color: "rgba(250,248,244,0.18)",
-            marginTop: "1.5rem",
-          }}
-        >
-          Free forever · No credit card · Profile live in 5 minutes
-        </p>
       </div>
 
       <style>{`
-        @keyframes pulse {
+        @keyframes gob-pulse {
           0%,100% { opacity:1; transform:scale(1); }
-          50% { opacity:0.5; transform:scale(1.3); }
+          50% { opacity:0.45; transform:scale(1.35); }
         }
-        @keyframes fadeUp {
+        @keyframes gob-fadeUp {
           from { opacity:0; transform:translateY(8px); }
           to   { opacity:1; transform:translateY(0); }
         }
