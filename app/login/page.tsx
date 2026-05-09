@@ -10,22 +10,36 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState("");
+  const [resetSent, setResetSent] = useState(false);
   const supabase = createClient();
+
+  async function sendPasswordReset() {
+    if (!email) { setError("Enter your email address above first."); return; }
+    setLoading(true); setError("");
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/api/auth/callback?next=/dashboard`,
+    });
+    setLoading(false);
+    if (resetError) { setError(resetError.message); return; }
+    setResetSent(true);
+  }
 
   async function signInWithGoogle() {
     setLoading(true);
-    await supabase.auth.signInWithOAuth({
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${window.location.origin}/api/auth/callback?next=/dashboard` },
     });
+    if (oauthError) { setError(oauthError.message); setLoading(false); }
   }
 
   async function signInWithApple() {
     setLoading(true);
-    await supabase.auth.signInWithOAuth({
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "apple",
       options: { redirectTo: `${window.location.origin}/api/auth/callback?next=/dashboard` },
     });
+    if (oauthError) { setError(oauthError.message); setLoading(false); }
   }
 
   async function signInWithEmail() {
@@ -143,7 +157,9 @@ export default function Login() {
             </div>
 
             <div className="flex justify-end mb-6">
-              <Link href="/forgot-password" className="text-xs text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors">Forgot password?</Link>
+              <button onClick={sendPasswordReset} disabled={loading} className="text-xs text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors disabled:opacity-50">
+                {resetSent ? "Reset email sent!" : "Forgot password?"}
+              </button>
             </div>
 
             <button onClick={signInWithEmail} disabled={loading || !email || !password} className="w-full py-3.5 rounded-2xl font-semibold text-sm transition-all duration-200 mb-8 disabled:opacity-50" style={{ background: email && password ? "#C9A96E" : "#E5E7EB", color: email && password ? "#111111" : "#9CA3AF" }}>

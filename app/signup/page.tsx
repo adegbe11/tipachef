@@ -35,22 +35,24 @@ export default function SignUp() {
 
   async function signUpWithGoogle() {
     setLoading(true);
-    await supabase.auth.signInWithOAuth({
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/api/auth/callback?slug=${slugValue}&next=/onboarding`,
       },
     });
+    if (oauthError) { setError(oauthError.message); setLoading(false); }
   }
 
   async function signUpWithApple() {
     setLoading(true);
-    await supabase.auth.signInWithOAuth({
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "apple",
       options: {
         redirectTo: `${window.location.origin}/api/auth/callback?slug=${slugValue}&next=/onboarding`,
       },
     });
+    if (oauthError) { setError(oauthError.message); setLoading(false); }
   }
 
   async function signUpWithEmail() {

@@ -24,7 +24,7 @@ export default function WhyThisExists() {
   }, []);
 
   return (
-    <section className="py-14 md:py-20 relative overflow-hidden" style={{ background:"#0a0908" }}>
+    <section id="how-it-works" className="py-14 md:py-20 relative overflow-hidden" style={{ background:"#0a0908" }}>
 
       {/* Deep ember glow */}
       <div

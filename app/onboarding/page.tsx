@@ -636,7 +636,7 @@ export default function Onboarding() {
             >
               {linkCopied ? "Copied!" : "Copy link"}
             </button>
-            <a href={`/${chef.slug}`} target="_blank" rel="noopener noreferrer"
+            <a href={`https://tipachef.com/${chef.slug}`} target="_blank" rel="noopener noreferrer"
               className="flex-1 py-3 rounded-2xl text-sm font-semibold text-center"
               style={{ background: "#C9A96E", color: "#111" }}
             >

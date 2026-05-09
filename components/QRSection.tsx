@@ -264,10 +264,10 @@ export default function QRSection() {
           </div>
 
           <Link
-            href="/search"
+            href="/signup"
             className="font-sans text-ember text-sm hover:text-ember-light transition-colors"
           >
-            Download your QR →
+            Get your QR code →
           </Link>
         </div>
 
