@@ -95,6 +95,8 @@ export default function Hero() {
             animationFillMode: "forwards",
           }}
         >
+          {/* Visually hidden prefix — gives Google "Tip a Chef" in the H1 */}
+          <span className="sr-only">Tip a Chef. </span>
           Earn what your{" "}
           <span
             className="text-ember-gradient italic inline-block"
