@@ -16,6 +16,9 @@ export default function GetOnBoard() {
   const router      = useRouter();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  /* load default QR on mount */
+  useEffect(() => { setQrReady(false); }, []);
+
   /* debounced QR update */
   useEffect(() => {
     const slug = handle.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
@@ -31,7 +34,8 @@ export default function GetOnBoard() {
     if (slug) router.push(`/signup?handle=${slug}`);
   }
 
-  const displaySlug = handle.trim().toLowerCase().replace(/[^a-z0-9-]/g, "") || "yourname";
+  const displaySlug  = handle.trim().toLowerCase().replace(/[^a-z0-9-]/g, "") || "yourname";
+  const activeSlug   = qrSlug || "yourname"; // always show a QR
 
   return (
     <section style={{
@@ -164,11 +168,10 @@ export default function GetOnBoard() {
           Free forever · No credit card · Profile live in 5 minutes
         </p>
 
-        {/* QR card — drops down when name is typed */}
-        <div style={{ display: "flex", justifyContent: "center", minHeight: "40px" }}>
+        {/* QR card — always visible, updates as you type */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{
-            opacity: qrSlug ? 1 : 0,
-            transform: qrSlug ? "translateY(0) scale(1)" : "translateY(16px) scale(0.97)",
+            opacity: 1,
             transition: "opacity 0.4s ease, transform 0.4s ease",
             display: "flex",
             flexDirection: "column",
@@ -205,18 +208,16 @@ export default function GetOnBoard() {
                 justifyContent: "center",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.6)",
               }}>
-                {qrSlug && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={qrSlug}
-                    src={qrUrl(qrSlug)}
-                    alt={`tipachef.com/${qrSlug}`}
-                    width={152}
-                    height={152}
-                    onLoad={() => setQrReady(true)}
-                    style={{ display: "block", opacity: qrReady ? 1 : 0, transition: "opacity 0.4s ease" }}
-                  />
-                )}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  key={activeSlug}
+                  src={qrUrl(activeSlug)}
+                  alt={`tipachef.com/${activeSlug}`}
+                  width={152}
+                  height={152}
+                  onLoad={() => setQrReady(true)}
+                  style={{ display: "block", opacity: qrReady ? 1 : 0, transition: "opacity 0.4s ease" }}
+                />
               </div>
 
               {/* URL label */}
@@ -224,7 +225,7 @@ export default function GetOnBoard() {
                 <p style={{ fontFamily: "-apple-system,system-ui", fontSize: "11px", color: "rgba(250,248,244,0.22)", margin: "0 0 2px" }}>
                   tipachef.com/
                 </p>
-                <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: "16px", color: "#C9A96E", margin: 0, fontWeight: 500 }}>
+                <p style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: "16px", color: "#C9A96E", margin: 0, fontWeight: 500, transition: "opacity 0.3s" }}>
                   {displaySlug}
                 </p>
               </div>
