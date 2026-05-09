@@ -265,7 +265,6 @@ export default function Onboarding() {
       role:       role.trim() || null,
       bio:        restaurant.trim() || null,
       city:       citySlug,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any).eq("id", chef.id).then(({ error }) => {
       if (error) console.error("Step1 save:", error.message);
     });
@@ -283,7 +282,6 @@ export default function Onboarding() {
     setStep(3);
     if (chef && selectedCuisines.length > 0) {
       supabase.from("chefs")
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .update({ cuisines: selectedCuisines.join(", ") } as any)
         .eq("id", chef.id)
         .then(({ error }) => { if (error) console.error("Cuisine save:", error.message); });
