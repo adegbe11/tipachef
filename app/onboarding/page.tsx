@@ -48,7 +48,7 @@ const HIRE_EVENT_TYPES = [
   "Weekly cooking", "Weddings", "Pop-ups", "Corporate events", "Private dining",
 ];
 
-type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 interface Chef {
   id: string;
@@ -149,10 +149,7 @@ export default function Onboarding() {
 
   const [chef,    setChef]    = useState<Chef | null>(null);
   const [loading, setLoading] = useState(true);
-  const [step,    setStep]    = useState<Step>(0);
-
-  /* Step 0 */
-  const [userType, setUserType] = useState<"chef" | "diner" | null>(null);
+  const [step,    setStep]    = useState<Step>(1);
 
   /* Step 1 */
   const [name,       setName]       = useState("");
@@ -255,16 +252,6 @@ export default function Onboarding() {
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  /* ── Step 0: role gate ────────────────────────────────────────── */
-  function goStep0() {
-    if (!userType) return;
-    if (userType === "diner") {
-      router.replace("/search");
-      return;
-    }
-    setStep(1);
-  }
 
   /* ── Step 1: save name/role/restaurant ───────────────────────── */
   function goStep1() {
@@ -396,121 +383,6 @@ export default function Onboarding() {
 
   const firstName  = (name.trim() || chef.slug).split(" ")[0];
   const profileUrl = `https://tipachef.com/${chef.slug}`;
-
-  /* ══ STEP 0: Role Gate ══════════════════════════════════════════ */
-  if (step === 0) {
-    return (
-      <div
-        className="min-h-screen flex flex-col items-center justify-center px-6"
-        style={{ background: "linear-gradient(160deg,#0d0d0d,#111008)" }}
-      >
-        {/* Glow */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 40%, rgba(201,169,110,0.07), transparent 65%)" }} />
-
-        <div className="relative z-10 w-full max-w-sm">
-          {/* Badge */}
-          <div className="mb-8 flex justify-center">
-            <span
-              className="text-xs font-medium px-4 py-1.5 rounded-full border"
-              style={{ borderColor: "rgba(201,169,110,0.3)", color: "#C9A96E", background: "rgba(201,169,110,0.08)" }}
-            >
-              Honour the craft.
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-white text-center mb-2" style={{ fontSize: "clamp(2rem,5vw,2.8rem)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.1 }}>
-            Welcome to
-          </h1>
-          <h1
-            className="text-center mb-5"
-            style={{ fontSize: "clamp(2rem,5vw,2.8rem)", fontWeight: 700, letterSpacing: "-0.03em", fontStyle: "italic", lineHeight: 1.1, color: "#C9A96E" }}
-          >
-            Tip a Chef.
-          </h1>
-          <p className="text-white/40 text-center text-sm leading-relaxed mb-10">
-            The platform where great cooking finally gets rewarded.<br />Who are you joining as?
-          </p>
-
-          {/* Cards */}
-          <div className="space-y-3 mb-8">
-            {/* Chef card */}
-            <button
-              onClick={() => setUserType("chef")}
-              className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left transition-all duration-200"
-              style={{
-                borderColor: userType === "chef" ? "#C9A96E" : "rgba(255,255,255,0.08)",
-                background:  userType === "chef" ? "rgba(201,169,110,0.10)" : "rgba(255,255,255,0.03)",
-                boxShadow:   userType === "chef" ? "0 0 0 1px #C9A96E" : "none",
-              }}
-            >
-              <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                style={{ background: userType === "chef" ? "rgba(201,169,110,0.2)" : "rgba(255,255,255,0.06)" }}
-              >
-                👨‍🍳
-              </div>
-              <div>
-                <p className="text-white font-semibold text-sm">I&apos;m a chef / food creator</p>
-                <p className="text-white/40 text-xs mt-0.5">I want to receive tips and build my supporter base</p>
-              </div>
-              {userType === "chef" && (
-                <div className="ml-auto w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "#C9A96E" }}>
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6L9 17l-5-5"/>
-                  </svg>
-                </div>
-              )}
-            </button>
-
-            {/* Diner card */}
-            <button
-              onClick={() => setUserType("diner")}
-              className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left transition-all duration-200"
-              style={{
-                borderColor: userType === "diner" ? "#C9A96E" : "rgba(255,255,255,0.08)",
-                background:  userType === "diner" ? "rgba(201,169,110,0.10)" : "rgba(255,255,255,0.03)",
-                boxShadow:   userType === "diner" ? "0 0 0 1px #C9A96E" : "none",
-              }}
-            >
-              <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                style={{ background: userType === "diner" ? "rgba(201,169,110,0.2)" : "rgba(255,255,255,0.06)" }}
-              >
-                🍽️
-              </div>
-              <div>
-                <p className="text-white font-semibold text-sm">I&apos;m a diner / food lover</p>
-                <p className="text-white/40 text-xs mt-0.5">I want to discover and support chefs I love</p>
-              </div>
-              {userType === "diner" && (
-                <div className="ml-auto w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "#C9A96E" }}>
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6L9 17l-5-5"/>
-                  </svg>
-                </div>
-              )}
-            </button>
-          </div>
-
-          {/* Continue */}
-          <button
-            onClick={goStep0}
-            disabled={!userType}
-            className="w-full py-4 rounded-2xl font-semibold text-sm transition-all duration-200"
-            style={{
-              background: userType ? "#C9A96E"      : "rgba(255,255,255,0.06)",
-              color:      userType ? "#111"          : "rgba(255,255,255,0.2)",
-              boxShadow:  userType ? "0 8px 30px rgba(201,169,110,0.35)" : "none",
-              cursor:     userType ? "pointer"       : "not-allowed",
-            }}
-          >
-            Continue
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   /* ══ STEP 5: For Hire ═══════════════════════════════════════════ */
   if (step === 5) {
@@ -906,18 +778,20 @@ export default function Onboarding() {
         {/* Topbar */}
         <div className="flex items-center justify-between px-8 py-5 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
           <ProgressBar step={step} />
-          <button
-            onClick={() => setStep(s => (s - 1) as Step)}
-            className="text-sm flex items-center gap-1 transition-colors"
-            style={{ color: "rgba(255,255,255,0.35)" }}
-            onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
-            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 5l-7 7 7 7"/>
-            </svg>
-            Back
-          </button>
+          {step > 1 && (
+            <button
+              onClick={() => setStep(s => (s - 1) as Step)}
+              className="text-sm flex items-center gap-1 transition-colors"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+              Back
+            </button>
+          )}
         </div>
 
         {/* Form */}
