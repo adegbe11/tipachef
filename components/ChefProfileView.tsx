@@ -10,6 +10,7 @@ const TIP_AMOUNTS = [
   { emoji: "🍷", label: "Good wine",   amount: 10 },
   { emoji: "🥩", label: "Wagyu cut",   amount: 25 },
 ];
+const CURRENCY = "£";
 
 export interface WallTip {
   name: string;
@@ -27,8 +28,8 @@ export interface ChefViewData {
   location: string;
   flag: string;
   hook: string;
-  photo: string;
-  cover: string;
+  photo: string | null;
+  cover: string | null;
   tips: number;
   supporters: number;
   years: number;
@@ -92,7 +93,6 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
   const [tipperName, setTipperName] = useState("");
   const [loading, setLoading] = useState(false);
   const [showNudge, setShowNudge] = useState(false);
-  const [tipSent, setTipSent] = useState(false);
   const coverRef = useRef<HTMLDivElement>(null);
 
   const tipAmount = customAmount
@@ -154,14 +154,19 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
           ref={coverRef}
           style={{ position: "absolute", inset: "-8%", transform: "scale(1.08)", willChange: "transform" }}
         >
-          <Image
-            src={chef.cover}
-            alt={chef.name}
-            fill
-            style={{ objectFit: "cover", objectPosition: "center 30%" }}
-            unoptimized
-            priority
-          />
+          {chef.cover ? (
+            <Image
+              src={chef.cover}
+              alt={chef.name}
+              fill
+              style={{ objectFit: "cover", objectPosition: "center 30%" }}
+              unoptimized
+              priority
+            />
+          ) : (
+            /* Fallback: rich dark gradient when no cover photo */
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#2a1800 0%,#1a1005 40%,#0d0a06 100%)" }} />
+          )}
         </div>
 
         {/* Gradient overlays */}
@@ -253,14 +258,22 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
             border: "2.5px solid rgba(201,169,110,0.55)",
             boxShadow: "0 0 0 5px rgba(201,169,110,0.07), 0 10px 36px rgba(0,0,0,0.65)",
             position: "relative", overflow: "hidden",
+            background: "linear-gradient(135deg,#2a1800,#1a1005)",
+            display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <Image
-              src={chef.photo}
-              alt={chef.name}
-              fill
-              style={{ objectFit: "cover", objectPosition: "center top" }}
-              unoptimized
-            />
+            {chef.photo ? (
+              <Image
+                src={chef.photo}
+                alt={chef.name}
+                fill
+                style={{ objectFit: "cover", objectPosition: "center top" }}
+                unoptimized
+              />
+            ) : (
+              <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "28px", fontWeight: 700, color: "#C9A96E", lineHeight: 1 }}>
+                {chef.name.charAt(0).toUpperCase()}
+              </span>
+            )}
             {/* Verified checkmark */}
             <div style={{
               position: "absolute", bottom: "1px", right: "1px",
@@ -308,10 +321,11 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
           </div>
         </div>
 
-        {/* Stats row */}
+        {/* Stats row — only show when there is meaningful data */}
+        {(chef.tips > 0 || chef.supporters > 0 || chef.years > 0) && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px", marginBottom: "22px" }}>
           {[
-            { value: `$${chef.tips.toLocaleString()}+`, label: "Tips received" },
+            { value: `${CURRENCY}${chef.tips.toLocaleString()}+`, label: "Tips received" },
             { value: `${chef.supporters}+`,              label: "Supporters"     },
             { value: `${chef.years} yrs`,                label: "On the line"    },
           ].map((s) => (
@@ -349,6 +363,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
             </div>
           ))}
         </div>
+        )}
 
         {/* Bio */}
         {chef.hook && (
@@ -403,21 +418,20 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
                 🎯 {chef.goalLabel}
               </p>
               <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", color: "rgba(250,248,244,0.3)", margin: 0 }}>
-                ${chef.goalCurrent} / ${chef.goalTarget}
+                {CURRENCY}{chef.goalCurrent} / {CURRENCY}{chef.goalTarget}
               </p>
             </div>
             <div style={{ height: "5px", background: "rgba(255,255,255,0.06)", borderRadius: "100px", overflow: "hidden" }}>
               <div style={{ height: "100%", width: `${goalPct}%`, background: "linear-gradient(90deg,#C9A96E,#D4B878)", borderRadius: "100px", transition: "width 1s cubic-bezier(0.25,0.46,0.45,0.94)" }} />
             </div>
             <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", color: "rgba(250,248,244,0.25)", margin: "6px 0 0" }}>
-              {goalPct}% funded · ${(chef.goalTarget - (chef.goalCurrent ?? 0)).toLocaleString()} to go
+              {goalPct}% funded · {CURRENCY}{(chef.goalTarget - (chef.goalCurrent ?? 0)).toLocaleString()} to go
             </p>
           </div>
         )}
 
         {/* ── Tip card ─────────────────────────────── */}
-        {!tipSent ? (
-          <div style={{
+        <div style={{
             background: "rgba(16,14,10,0.85)",
             backdropFilter: "blur(28px)",
             WebkitBackdropFilter: "blur(28px)",
@@ -469,7 +483,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
                     <span style={{ fontSize: "19px", lineHeight: 1 }}>{t.emoji}</span>
                     <div>
                       <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 700, color: active ? "#C9A96E" : "rgba(250,248,244,0.75)", margin: 0, letterSpacing: "-0.01em" }}>
-                        ${t.amount}
+                        {CURRENCY}{t.amount}
                       </p>
                       <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", color: "rgba(250,248,244,0.25)", margin: 0 }}>
                         {t.label}
@@ -490,7 +504,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
               marginBottom: "10px",
               transition: "border-color 0.15s",
             }}>
-              <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", color: "rgba(250,248,244,0.28)", fontWeight: 600 }}>$</span>
+              <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", color: "rgba(250,248,244,0.28)", fontWeight: 600 }}>{CURRENCY}</span>
               <input
                 type="number"
                 value={customAmount}
@@ -571,7 +585,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
               {loading
                 ? "Redirecting to payment..."
                 : tipAmount > 0
-                ? `Send $${tipAmount} tip to ${firstName} →`
+                ? `Send ${CURRENCY}${tipAmount} tip to ${firstName} →`
                 : "Choose an amount above"}
             </button>
 
@@ -585,25 +599,6 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
               🔒 Powered by Stripe · 100% goes directly to {firstName}
             </p>
           </div>
-        ) : (
-          /* Tip sent confirmation */
-          <div style={{
-            background: "rgba(74,222,128,0.06)",
-            border: "2px solid rgba(74,222,128,0.2)",
-            borderRadius: "24px",
-            padding: "32px 24px",
-            textAlign: "center",
-            marginBottom: "14px",
-          }}>
-            <div style={{ fontSize: "40px", marginBottom: "12px" }}>🎉</div>
-            <p style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.5rem", fontWeight: 400, color: "#FAF8F4", margin: "0 0 6px" }}>
-              Tip sent!
-            </p>
-            <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", color: "rgba(250,248,244,0.4)", margin: 0 }}>
-              {firstName} will love hearing from you.
-            </p>
-          </div>
-        )}
 
         {/* Demo nudge */}
         {showNudge && (
@@ -750,7 +745,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
                       {t.name}
                     </p>
                     <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 700, color: "#C9A96E", flexShrink: 0 }}>
-                      ${t.amount}
+                      {CURRENCY}{t.amount}
                     </span>
                     <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", color: "rgba(250,248,244,0.18)", flexShrink: 0 }}>
                       {t.time}

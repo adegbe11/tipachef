@@ -99,7 +99,7 @@ export default function TipSuccessToast({ reward }: TipSuccessToastProps) {
             </div>
             <div className="flex-1">
               <p className="text-white font-semibold text-sm">
-                {amount ? `$${amount} tip sent!` : "Tip sent!"} 🙏
+                {amount ? `£${amount} tip sent!` : "Tip sent!"} 🙏
               </p>
               {reward && (
                 <button

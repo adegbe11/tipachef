@@ -92,14 +92,14 @@ export async function generateMetadata(
         title,
         description,
         url: `https://tipachef.com/${demo.slug}`,
-        images: [{ url: demo.photo, width: 600, height: 800, alt: demo.name }],
+        images: demo.photo ? [{ url: demo.photo, width: 600, height: 800, alt: demo.name }] : [],
         type: "profile",
       },
       twitter: {
         card: "summary",
         title,
         description,
-        images: [demo.photo],
+        images: demo.photo ? [demo.photo] : [],
       },
       alternates: { canonical: `https://tipachef.com/${demo.slug}` },
     };
@@ -147,10 +147,21 @@ interface ChefRow {
   image_url: string | null;
   cover_url: string | null;
   bio: string | null;          // mapped to restaurant
+  city: string | null;         // slug e.g. "new-york"
+  cuisines: string | null;     // comma-separated e.g. "Italian, French"
   goal_label: string | null;
   goal_target: number;
   goal_current: number;
   tip_reward: string | null;
+}
+
+/** Convert a city slug "new-york" → "New York" */
+function citySlugToDisplay(slug: string | null): string {
+  if (!slug) return "";
+  return slug
+    .split("-")
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }
 
 interface TipRow {
@@ -222,20 +233,25 @@ export default async function ChefProfile({ params }: { params: { slug: string }
       time:    timeAgo(t.created_at),
     }));
 
+    const cityDisplay   = citySlugToDisplay(row.city);
+    const specialties   = row.cuisines
+      ? row.cuisines.split(",").map(s => s.trim()).filter(Boolean)
+      : [];
+
     const viewData: ChefViewData = {
       name:        row.name        ?? row.slug,
       slug:        row.slug,
       role:        row.role        ?? "Chef",
       restaurant:  row.bio         ?? "",
-      location:    "",
-      flag:        "🍴",
+      location:    cityDisplay,
+      flag:        cityDisplay ? "📍" : "",
       hook:        row.hook        ?? "",
-      photo:       row.image_url   ?? "",
-      cover:       row.cover_url   ?? "",
+      photo:       row.image_url   || null,   // null means "show initials fallback"
+      cover:       row.cover_url   || null,   // null means "show gradient only"
       tips:        row.goal_current ?? 0,
       supporters:  0,
       years:       0,
-      specialties: [],
+      specialties,
       wall,
       isDemo:      false,
       goalLabel:   row.goal_label,
