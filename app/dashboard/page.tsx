@@ -24,6 +24,11 @@ interface Chef {
   instagram_url: string | null;
   tiktok_url: string | null;
   youtube_url: string | null;
+  available_for_hire: boolean | null;
+  hire_event_types: string | null;
+  hire_rate: string | null;
+  hire_bio: string | null;
+  city: string | null;
 }
 
 interface Tip {
@@ -38,6 +43,7 @@ const NAV = [
   { id: "overview",    label: "Overview",        icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
   { id: "earnings",    label: "Earnings",         icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
   { id: "messages",    label: "Tips & messages",  icon: "M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" },
+  { id: "hire",        label: "For Hire",         icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
   { id: "memberships", label: "Memberships",      icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" },
   { id: "profile",     label: "My profile",       icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
   { id: "qr",          label: "QR code",          icon: "M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" },
@@ -108,6 +114,20 @@ function DashboardInner() {
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [coverUploading,  setCoverUploading]  = useState(false);
 
+  // For Hire tab state
+  const [hireAvailable,  setHireAvailable]  = useState(false);
+  const [hireEventTypes, setHireEventTypes] = useState<string[]>([]);
+  const [hireRate,       setHireRate]       = useState("");
+  const [hireBio,        setHireBio]        = useState("");
+  const [hireCity,       setHireCity]       = useState("");
+  const [hireSaving,     setHireSaving]     = useState(false);
+  const [hireSaved,      setHireSaved]      = useState(false);
+
+  const HIRE_EVENT_TYPES = [
+    "Dinner parties", "Birthday meals", "Meal prep",
+    "Weekly cooking", "Weddings", "Pop-ups", "Corporate events", "Private dining",
+  ];
+
   // Stripe
   const [connectingStripe, setConnectingStripe] = useState(false);
   const [stripeMessage,    setStripeMessage]    = useState("");
@@ -136,6 +156,11 @@ function DashboardInner() {
       setSReward(mapped.tip_reward ?? "");
       setSGoalLabel(mapped.goal_label ?? "");
       setSGoalTarget(mapped.goal_target ? String(mapped.goal_target) : "");
+      setHireAvailable(!!raw.available_for_hire);
+      setHireEventTypes(raw.hire_event_types ? String(raw.hire_event_types).split(", ").filter(Boolean) : []);
+      setHireRate(String(raw.hire_rate ?? ""));
+      setHireBio(String(raw.hire_bio ?? ""));
+      setHireCity(String(raw.city ?? ""));
     }
     setTips(tipsRes.data ?? []);
     setLoading(false);
@@ -255,6 +280,21 @@ function DashboardInner() {
     const data = await res.json();
     if (data.url) window.location.href = data.url;
     else { setConnectingStripe(false); setStripeMessage("Failed to connect Stripe. Try again."); }
+  }
+
+  async function saveHireSettings() {
+    if (!chef) return;
+    setHireSaving(true);
+    await supabase.from("chefs").update({
+      available_for_hire: hireAvailable,
+      hire_event_types: hireEventTypes.length > 0 ? hireEventTypes.join(", ") : null,
+      hire_rate: hireRate.trim() || null,
+      hire_bio: hireBio.trim() || null,
+      city: hireCity.trim().toLowerCase().replace(/\s+/g, "-") || null,
+    } as any).eq("id", chef.id);
+    setHireSaving(false);
+    setHireSaved(true);
+    setTimeout(() => setHireSaved(false), 2500);
   }
 
   async function signOut() {
@@ -647,6 +687,142 @@ function DashboardInner() {
                   ))}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* ══ FOR HIRE ════════════════════════════════════════ */}
+          {activeTab === "hire" && (
+            <div className="max-w-lg space-y-4">
+
+              {/* Availability toggle */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <p className="text-gray-900 font-semibold text-sm">Available for private hire</p>
+                    {hireAvailable ? (
+                      <p className="text-xs mt-1 font-medium" style={{ color: "#16a34a" }}>
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 align-middle" />
+                        Listed · Chefs in your city can find you.
+                      </p>
+                    ) : (
+                      <p className="text-gray-400 text-xs mt-1">You won&apos;t appear in private chef search results.</p>
+                    )}
+                  </div>
+                  {/* Pill toggle */}
+                  <button
+                    onClick={() => setHireAvailable(v => !v)}
+                    className="relative flex-shrink-0 w-12 h-6 rounded-full transition-colors duration-200 focus:outline-none"
+                    style={{ background: hireAvailable ? "#C9A96E" : "#E5E7EB" }}
+                  >
+                    <span
+                      className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+                      style={{ transform: hireAvailable ? "translateX(24px)" : "translateX(0)" }}
+                    />
+                  </button>
+                </div>
+              </div>
+
+              {/* City */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <label className="text-gray-900 font-semibold text-sm mb-1 block">City you cook in</label>
+                <p className="text-gray-400 text-xs mb-3">This determines which city pages you appear on.</p>
+                <input
+                  value={hireCity}
+                  onChange={e => setHireCity(e.target.value)}
+                  className={inputCls}
+                  placeholder="London, New York, Lagos..."
+                />
+              </div>
+
+              {/* Conditional: event types, rate, pitch — only when available */}
+              {hireAvailable && (
+                <>
+                  {/* Event types */}
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                    <p className="text-gray-900 font-semibold text-sm mb-1">Event types</p>
+                    <p className="text-gray-400 text-xs mb-4">Select up to 4 types of bookings you take.</p>
+                    <div className="flex flex-wrap gap-2">
+                      {HIRE_EVENT_TYPES.map(type => {
+                        const selected = hireEventTypes.includes(type);
+                        return (
+                          <button
+                            key={type}
+                            onClick={() => {
+                              if (selected) {
+                                setHireEventTypes(prev => prev.filter(t => t !== type));
+                              } else if (hireEventTypes.length < 4) {
+                                setHireEventTypes(prev => [...prev, type]);
+                              }
+                            }}
+                            className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
+                            style={selected
+                              ? { background: "#FEF3E2", borderColor: "#C9A96E", color: "#C9A96E" }
+                              : { background: "transparent", borderColor: "#E5E7EB", color: "#6B7280" }
+                            }
+                          >
+                            {type}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {hireEventTypes.length >= 4 && (
+                      <p className="text-xs text-gray-400 mt-2">Maximum 4 selected. Deselect one to choose another.</p>
+                    )}
+                  </div>
+
+                  {/* Rate */}
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                    <label className="text-gray-900 font-semibold text-sm mb-1 block">Your rate</label>
+                    <input
+                      value={hireRate}
+                      onChange={e => setHireRate(e.target.value)}
+                      className={inputCls}
+                      placeholder="£200/event, £400/day, negotiable..."
+                    />
+                  </div>
+
+                  {/* Hire pitch */}
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                    <label className="text-gray-900 font-semibold text-sm mb-1 block">Hire pitch</label>
+                    <p className="text-gray-400 text-xs mb-3">Tell potential clients what makes you the right chef for the job.</p>
+                    <textarea
+                      value={hireBio}
+                      onChange={e => { if (e.target.value.length <= 200) setHireBio(e.target.value); }}
+                      rows={4}
+                      className={`${inputCls} resize-none`}
+                      placeholder="I cook for groups of 4–20 in your home. Seasonal French-Italian menu, I bring everything."
+                    />
+                    <p className="text-right text-xs text-gray-300 mt-1">{hireBio.length}/200</p>
+                  </div>
+                </>
+              )}
+
+              {/* Save button */}
+              <button
+                onClick={saveHireSettings}
+                disabled={hireSaving}
+                className="w-full py-3.5 rounded-2xl text-sm font-semibold text-white transition-all disabled:opacity-60"
+                style={{ background: "#C9A96E" }}
+              >
+                {hireSaving ? "Saving..." : hireSaved ? "Saved ✓" : "Save hire settings"}
+              </button>
+
+              {/* Inquiry inbox */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="px-5 py-4 border-b border-gray-100">
+                  <p className="text-gray-900 font-semibold text-sm">Hire Inquiries</p>
+                </div>
+                <div className="px-5 py-12 text-center">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl" style={{ background: "#FEF3E2" }}>
+                    📬
+                  </div>
+                  <p className="text-gray-500 text-sm font-medium mb-1">No hire requests yet</p>
+                  <p className="text-gray-400 text-xs max-w-xs mx-auto leading-relaxed">
+                    Once you&apos;re listed and a diner submits a request from your city page, it will appear here.
+                  </p>
+                </div>
+              </div>
+
             </div>
           )}
 

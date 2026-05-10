@@ -43,7 +43,12 @@ const CUISINES = [
   "Turkish", "Peruvian", "Korean", "Brazilian", "British",
 ];
 
-type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+const HIRE_EVENT_TYPES = [
+  "Dinner parties", "Birthday meals", "Meal prep",
+  "Weekly cooking", "Weddings", "Pop-ups", "Corporate events", "Private dining",
+];
+
+type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 interface Chef {
   id: string;
@@ -61,7 +66,7 @@ function ProgressBar({ step }: { step: Step }) {
     <div className="flex items-center gap-2">
       <span className="text-base">🔥</span>
       <div className="flex gap-1.5">
-        {[1, 2, 3, 4].map((s) => (
+        {[1, 2, 3, 4, 5].map((s) => (
           <div
             key={s}
             className="h-1.5 rounded-full transition-all duration-500"
@@ -172,14 +177,21 @@ export default function Onboarding() {
   const setSecretContent = (val: string) =>
     setSecretContents(prev => ({ ...prev, [secretType]: val }));
 
-  /* Step 5 — QR (reuses chef.slug) */
+  /* Step 5 — For Hire */
+  const [availableForHire, setAvailableForHire] = useState<boolean | null>(null);
+  const [hireEventTypes,   setHireEventTypes]   = useState<string[]>([]);
+  const [hireRate,         setHireRate]         = useState("");
+  const [hireBio,          setHireBio]          = useState("");
+
+  /* Step 6 — QR (reuses chef.slug) */
   const [qrCopied, setQrCopied] = useState(false);
 
-  /* Step 6 — Moment */
+  /* Step 7 — Moment */
   const [notifVisible,    setNotifVisible]    = useState(false);
   const [connectingStripe, setConnectingStripe] = useState(false);
-  /* Step 7 — Launch */
-  const [linkCopied,   setLinkCopied]   = useState(false);
+
+  /* Step 8 — Launch */
+  const [linkCopied, setLinkCopied] = useState(false);
 
   /* ── Load chef ────────────────────────────────────────────────── */
   useEffect(() => {
@@ -315,7 +327,7 @@ export default function Onboarding() {
 
   /* ── Step 4: save secret ──────────────────────────────────────── */
   function goStep4Done() {
-    setStep(5); // → QR step
+    setStep(5); // -> For Hire step
     if (secretContent.trim() && chef) {
       supabase.from("chefs")
         .update({ tip_reward: secretContent.trim() } as never)
@@ -324,13 +336,28 @@ export default function Onboarding() {
     }
   }
 
-  /* ── Step 5 → 6: QR done, go to moment ───────────────────────── */
-  function goStep5Done() {
+  /* ── Step 5: For Hire save ────────────────────────────────────── */
+  function goStep5Hire() {
     setStep(6);
+    if (chef) {
+      supabase.from("chefs").update({
+        available_for_hire: availableForHire === true,
+        hire_event_types: hireEventTypes.length > 0 ? hireEventTypes.join(", ") : null,
+        hire_rate: hireRate.trim() || null,
+        hire_bio: hireBio.trim() || null,
+      } as any).eq("id", chef.id).then(({ error }) => {
+        if (error) console.error("Hire save:", error.message);
+      });
+    }
+  }
+
+  /* ── Step 6 -> 7: QR done, go to moment ──────────────────────── */
+  function goStep6Done() {
+    setStep(7);
     setTimeout(() => setNotifVisible(true), 400);
   }
 
-  /* ── Step 6: Connect Stripe ────────────────────────────────────── */
+  /* ── Step 7: Connect Stripe ────────────────────────────────────── */
   async function connectStripe() {
     setConnectingStripe(true);
     try {
@@ -485,12 +512,195 @@ export default function Onboarding() {
     );
   }
 
-  /* ══ STEP 5: QR Code ════════════════════════════════════════ */
+  /* ══ STEP 5: For Hire ═══════════════════════════════════════════ */
   if (step === 5) {
+    const hireYes = availableForHire === true;
+    const hireNo  = availableForHire === false;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12" style={{ background: "#0d0d0d" }}>
+        <div className="relative z-10 w-full max-w-sm">
+          {/* Back */}
+          <button
+            onClick={() => setStep(4)}
+            className="flex items-center gap-1 text-sm mb-8 transition-colors"
+            style={{ color: "rgba(255,255,255,0.35)" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
+            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            Back
+          </button>
+
+          <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>For Hire</p>
+          <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
+            Are you available<br />for private hire?
+          </h1>
+          <p className="text-sm mb-8" style={{ color: "rgba(255,255,255,0.35)" }}>
+            Let diners book you for events. You can update this any time.
+          </p>
+
+          {/* Yes / No cards */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <button
+              onClick={() => setAvailableForHire(true)}
+              className="flex flex-col items-center gap-2 px-4 py-5 rounded-2xl border text-center transition-all duration-200"
+              style={{
+                background:  hireYes ? "rgba(201,169,110,0.10)" : "rgba(255,255,255,0.03)",
+                border:      hireYes ? "1.5px solid #C9A96E"    : "1.5px solid rgba(255,255,255,0.08)",
+                boxShadow:   hireYes ? "0 0 0 1px #C9A96E"      : "none",
+              }}
+            >
+              <span className="text-2xl">🍽️</span>
+              <p className="text-sm font-semibold" style={{ color: hireYes ? "#C9A96E" : "rgba(255,255,255,0.7)" }}>
+                Yes, I&apos;m available
+              </p>
+            </button>
+
+            <button
+              onClick={() => setAvailableForHire(false)}
+              className="flex flex-col items-center gap-2 px-4 py-5 rounded-2xl border text-center transition-all duration-200"
+              style={{
+                background:  hireNo ? "rgba(201,169,110,0.10)" : "rgba(255,255,255,0.03)",
+                border:      hireNo ? "1.5px solid #C9A96E"    : "1.5px solid rgba(255,255,255,0.08)",
+                boxShadow:   hireNo ? "0 0 0 1px #C9A96E"      : "none",
+              }}
+            >
+              <span className="text-2xl">⏳</span>
+              <p className="text-sm font-semibold" style={{ color: hireNo ? "#C9A96E" : "rgba(255,255,255,0.7)" }}>
+                Not right now
+              </p>
+            </button>
+          </div>
+
+          {/* Expanded fields when "Yes" is selected */}
+          {hireYes && (
+            <div className="space-y-5 mb-6">
+              {/* Event types */}
+              <div>
+                <label className="text-xs font-medium mb-2 block" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  Event types <span style={{ color: "rgba(255,255,255,0.2)" }}>(pick up to 4)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {HIRE_EVENT_TYPES.map(evt => {
+                    const sel = hireEventTypes.includes(evt);
+                    return (
+                      <button
+                        key={evt}
+                        onClick={() => {
+                          setHireEventTypes(prev =>
+                            prev.includes(evt)
+                              ? prev.filter(x => x !== evt)
+                              : prev.length < 4 ? [...prev, evt] : prev
+                          );
+                        }}
+                        className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-150"
+                        style={{
+                          background: sel ? "#C9A96E"                          : "rgba(255,255,255,0.05)",
+                          color:      sel ? "#111"                              : "rgba(255,255,255,0.55)",
+                          border:     sel ? "1.5px solid #C9A96E"               : "1.5px solid rgba(255,255,255,0.08)",
+                          boxShadow:  sel ? "0 4px 16px rgba(201,169,110,0.25)" : "none",
+                        }}
+                      >
+                        {evt}
+                      </button>
+                    );
+                  })}
+                </div>
+                {hireEventTypes.length > 0 && (
+                  <p className="text-xs mt-2" style={{ color: "rgba(255,255,255,0.2)" }}>
+                    {hireEventTypes.length}/4 selected
+                  </p>
+                )}
+              </div>
+
+              {/* Rate */}
+              <div>
+                <label className="text-xs font-medium mb-1.5 block" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  Your rate
+                </label>
+                <input
+                  value={hireRate}
+                  onChange={e => setHireRate(e.target.value)}
+                  placeholder="£200/event, £400/day, negotiable..."
+                  className="w-full px-4 py-3.5 rounded-2xl text-sm outline-none transition-all placeholder:text-white/15"
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border:     "1.5px solid rgba(255,255,255,0.1)",
+                    color:      "white",
+                  }}
+                  onFocus={e => { e.currentTarget.style.borderColor = "#C9A96E"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(201,169,110,0.12)"; }}
+                  onBlur={e  => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.boxShadow = "none"; }}
+                />
+              </div>
+
+              {/* Hire pitch */}
+              <div>
+                <label className="text-xs font-medium mb-1.5 block" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  Your hire pitch
+                </label>
+                <textarea
+                  value={hireBio}
+                  onChange={e => setHireBio(e.target.value.slice(0, 200))}
+                  placeholder="I cook for groups of 4–20 in your home. French-Italian, seasonal menu, I bring all equipment..."
+                  rows={4}
+                  maxLength={200}
+                  className="w-full px-4 py-3.5 rounded-2xl text-sm outline-none transition-all resize-none leading-relaxed placeholder:text-white/15"
+                  style={{
+                    background: "rgba(255,255,255,0.04)",
+                    border:     "1.5px solid rgba(255,255,255,0.1)",
+                    color:      "white",
+                  }}
+                  onFocus={e => { e.currentTarget.style.borderColor = "#C9A96E"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(201,169,110,0.12)"; }}
+                  onBlur={e  => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.boxShadow = "none"; }}
+                />
+                <p className="text-xs mt-1.5 text-right" style={{ color: "rgba(255,255,255,0.2)" }}>
+                  {hireBio.length}/200
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Continue button — always enabled */}
+          <button
+            onClick={goStep5Hire}
+            className="w-full py-4 rounded-2xl font-semibold text-sm transition-all"
+            style={{
+              background: "#C9A96E",
+              color:      "#111",
+              boxShadow:  "0 6px 24px rgba(201,169,110,0.3)",
+            }}
+          >
+            Continue →
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /* ══ STEP 6: QR Code ════════════════════════════════════════════ */
+  if (step === 6) {
     const qrUrl = `https://tipachef.com/${chef.slug}`;
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background: "#0d0d0d" }}>
         <div className="relative z-10 w-full max-w-sm text-center">
+          {/* Back */}
+          <div className="flex justify-start mb-8">
+            <button
+              onClick={() => setStep(5)}
+              className="flex items-center gap-1 text-sm transition-colors"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+              Back
+            </button>
+          </div>
+
           <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Almost there 🔥</p>
           <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
             Your QR code<br />is ready.
@@ -542,7 +752,7 @@ export default function Onboarding() {
               {qrCopied ? "Copied!" : "Copy link"}
             </button>
             <button
-              onClick={goStep5Done}
+              onClick={goStep6Done}
               className="flex-1 py-3.5 rounded-2xl text-sm font-semibold"
               style={{ background: "#C9A96E", color: "#111", boxShadow: "0 6px 24px rgba(201,169,110,0.3)" }}
             >
@@ -554,8 +764,8 @@ export default function Onboarding() {
     );
   }
 
-  /* ══ STEP 6: The Moment ════════════════════════════════════════ */
-  if (step === 6) {
+  /* ══ STEP 7: The Moment ══════════════════════════════════════════ */
+  if (step === 7) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background: "#080808" }}>
         {/* Notification */}
@@ -599,7 +809,7 @@ export default function Onboarding() {
               }
             </button>
             <button
-              onClick={() => setStep(7)}
+              onClick={() => setStep(8)}
               disabled={connectingStripe}
               className="px-8 py-4 rounded-2xl font-semibold text-sm border disabled:opacity-40 transition-all"
               style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)" }}
@@ -612,8 +822,8 @@ export default function Onboarding() {
     );
   }
 
-  /* ══ STEP 7: Kitchen Is Open ════════════════════════════════════ */
-  if (step === 7) {
+  /* ══ STEP 8: Kitchen Is Open ════════════════════════════════════ */
+  if (step === 8) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 text-center">
         <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl" style={{ background: "#FEF3E2" }}>
@@ -684,7 +894,7 @@ export default function Onboarding() {
     );
   }
 
-  /* ══ STEPS 1-3: Split wizard ════════════════════════════════════ */
+  /* ══ STEPS 1-4: Split wizard ════════════════════════════════════ */
   const filteredRoles = ROLES.filter(r => r.toLowerCase().includes(role.toLowerCase()));
 
   return (
@@ -716,7 +926,7 @@ export default function Onboarding() {
           {/* ── STEP 1 ─────────────────────────────────────────── */}
           {step === 1 && (
             <div className="w-full max-w-sm">
-              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 1 of 4</p>
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 1 of 5</p>
               <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
                 Tell us who you are,<br />Chef.
               </h1>
@@ -815,7 +1025,7 @@ export default function Onboarding() {
           {/* ── STEP 2: Cuisine ───────────────────────────────── */}
           {step === 2 && (
             <div className="w-full max-w-sm">
-              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 2 of 4</p>
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 2 of 5</p>
               <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
                 What&apos;s your<br />cuisine?
               </h1>
@@ -870,7 +1080,7 @@ export default function Onboarding() {
           {/* ── STEP 3: Photo ──────────────────────────────────── */}
           {step === 3 && (
             <div className="w-full max-w-sm">
-              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 3 of 4</p>
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 3 of 5</p>
               <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
                 Put a face<br />to the food.
               </h1>
@@ -939,7 +1149,7 @@ export default function Onboarding() {
           {/* ── STEP 4: Kitchen Secret ─────────────────────────── */}
           {step === 4 && (
             <div className="w-full max-w-sm">
-              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 4 of 4</p>
+              <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: "#C9A96E" }}>Step 4 of 5</p>
               <h1 className="text-white font-semibold leading-tight mb-2" style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", letterSpacing: "-0.03em" }}>
                 Every great chef<br />has a secret.
               </h1>
