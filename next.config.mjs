@@ -8,19 +8,9 @@ const nextConfig = {
     ],
   },
   compress: true,
-
-  // Redirect www -> non-www so Google always lands on the canonical URL.
-  // All canonical tags in the codebase use https://tipachef.com (no www).
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.tipachef.com" }],
-        destination: "https://tipachef.com/:path*",
-        permanent: true, // 301 tells Google the canonical is non-www
-      },
-    ];
-  },
+  // www -> non-www redirect is handled in Vercel dashboard (Domains settings).
+  // Do NOT add it here — Vercel already redirects tipachef.com traffic and a
+  // code-level redirect on top creates a redirect loop (307 <-> 308).
 };
 
 export default nextConfig;
