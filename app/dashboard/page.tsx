@@ -39,10 +39,26 @@ interface Tip {
   created_at: string;
 }
 
+interface Post {
+  id: string;
+  title: string;
+  body: string | null;
+  post_type: string;
+  ingredients: string | null;
+  prep_time: string | null;
+  cook_time: string | null;
+  servings: string | null;
+  is_public: boolean;
+  created_at: string;
+}
+
+const CURRENCY = "£";
+
 const NAV = [
   { id: "overview",    label: "Overview",        icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
   { id: "earnings",    label: "Earnings",         icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
   { id: "messages",    label: "Tips & messages",  icon: "M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" },
+  { id: "posts",       label: "Posts & Recipes",  icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" },
   { id: "hire",        label: "For Hire",         icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
   { id: "memberships", label: "Memberships",      icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" },
   { id: "profile",     label: "My profile",       icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
@@ -123,6 +139,20 @@ function DashboardInner() {
   const [hireSaving,     setHireSaving]     = useState(false);
   const [hireSaved,      setHireSaved]      = useState(false);
 
+  // Posts & Recipes
+  const [posts,          setPosts]          = useState<Post[]>([]);
+  const [showPostForm,   setShowPostForm]   = useState(false);
+  const [postType,       setPostType]       = useState<"update" | "recipe">("update");
+  const [postTitle,      setPostTitle]      = useState("");
+  const [postBody,       setPostBody]       = useState("");
+  const [postIngredients,setPostIngredients]= useState("");
+  const [postPrepTime,   setPostPrepTime]   = useState("");
+  const [postCookTime,   setPostCookTime]   = useState("");
+  const [postServings,   setPostServings]   = useState("");
+  const [postSaving,     setPostSaving]     = useState(false);
+  const [postCreated,    setPostCreated]    = useState(false);
+  const [postError,      setPostError]      = useState("");
+
   const HIRE_EVENT_TYPES = [
     "Dinner parties", "Birthday meals", "Meal prep",
     "Weekly cooking", "Weddings", "Pop-ups", "Corporate events", "Private dining",
@@ -136,9 +166,10 @@ function DashboardInner() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { router.replace("/login"); return; }
 
-    const [chefRes, tipsRes] = await Promise.all([
+    const [chefRes, tipsRes, postsRes] = await Promise.all([
       supabase.from("chefs").select("*").eq("id", user.id).single(),
       supabase.from("tips").select("*").eq("chef_id", user.id).order("created_at", { ascending: false }).limit(200),
+      supabase.from("posts").select("*").eq("chef_id", user.id).order("created_at", { ascending: false }).limit(50),
     ]);
 
     if (chefRes.data) {
@@ -163,6 +194,7 @@ function DashboardInner() {
       setHireCity(String(raw.city ?? ""));
     }
     setTips(tipsRes.data ?? []);
+    setPosts((postsRes.data ?? []) as Post[]);
     setLoading(false);
   }, [supabase, router]);
 
@@ -297,6 +329,37 @@ function DashboardInner() {
     setTimeout(() => setHireSaved(false), 2500);
   }
 
+  async function createPost() {
+    if (!postTitle.trim()) { setPostError("Title is required"); return; }
+    setPostSaving(true); setPostError("");
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title:       postTitle.trim(),
+        body:        postBody.trim()         || null,
+        post_type:   postType,
+        ingredients: postIngredients.trim()  || null,
+        prep_time:   postPrepTime.trim()     || null,
+        cook_time:   postCookTime.trim()     || null,
+        servings:    postServings.trim()     || null,
+      }),
+    });
+    const data = await res.json();
+    setPostSaving(false);
+    if (!res.ok) { setPostError(data.error ?? "Failed to create post"); return; }
+    setPosts(prev => [data.post as Post, ...prev]);
+    setPostTitle(""); setPostBody(""); setPostIngredients("");
+    setPostPrepTime(""); setPostCookTime(""); setPostServings("");
+    setPostType("update"); setShowPostForm(false);
+    setPostCreated(true); setTimeout(() => setPostCreated(false), 3000);
+  }
+
+  async function deletePost(id: string) {
+    const res = await fetch(`/api/posts/${id}`, { method: "DELETE" });
+    if (res.ok) setPosts(prev => prev.filter(p => p.id !== id));
+  }
+
   async function signOut() {
     await supabase.auth.signOut();
     router.replace("/login");
@@ -318,10 +381,10 @@ function DashboardInner() {
   const monthTotal   = (monthTips.reduce((s, t)  => s + t.amount_cents, 0) / 100).toFixed(0);
 
   const OVERVIEW_STATS = [
-    { label: "Tonight's service", value: `$${tonightTotal}`, sub: `${tonightTips.length} tip${tonightTips.length !== 1 ? "s" : ""}` },
-    { label: "This week",         value: `$${weekTotal}`,    sub: `${weekTips.length} tips`    },
-    { label: "This month",        value: `$${monthTotal}`,   sub: `${monthTips.length} tips`   },
-    { label: "Total earned",      value: `$${totalEarned}`,  sub: `${tipCount} all time`       },
+    { label: "Tonight's service", value: `${CURRENCY}${tonightTotal}`, sub: `${tonightTips.length} tip${tonightTips.length !== 1 ? "s" : ""}` },
+    { label: "This week",         value: `${CURRENCY}${weekTotal}`,    sub: `${weekTips.length} tips`    },
+    { label: "This month",        value: `${CURRENCY}${monthTotal}`,   sub: `${monthTips.length} tips`   },
+    { label: "Total earned",      value: `${CURRENCY}${totalEarned}`,  sub: `${tipCount} all time`       },
   ];
 
   if (loading) return (
@@ -510,7 +573,7 @@ function DashboardInner() {
                             </div>
                             {t.message && <p className="text-gray-400 text-xs italic truncate">&ldquo;{t.message}&rdquo;</p>}
                           </div>
-                          <span className="flex-shrink-0 text-sm font-semibold" style={{ color: "#C9A96E" }}>${(t.amount_cents / 100).toFixed(0)}</span>
+                          <span className="flex-shrink-0 text-sm font-semibold" style={{ color: "#C9A96E" }}>{CURRENCY}{(t.amount_cents / 100).toFixed(0)}</span>
                         </div>
                       ))}
                     </div>
@@ -565,7 +628,7 @@ function DashboardInner() {
               {/* Payout balance card */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                 <p className="text-gray-400 text-xs mb-2">Payout balance</p>
-                <p className="text-gray-900 font-bold mb-4" style={{ fontSize: "2.5rem", letterSpacing: "-0.04em" }}>${totalEarned}</p>
+                <p className="text-gray-900 font-bold mb-4" style={{ fontSize: "2.5rem", letterSpacing: "-0.04em" }}>{CURRENCY}{totalEarned}</p>
                 <div className="flex items-center gap-3">
                   {chef.stripe_account_id ? (
                     <div className="flex items-center gap-2">
@@ -587,7 +650,7 @@ function DashboardInner() {
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
                   <p className="text-gray-900 font-semibold text-sm">All earnings</p>
-                  <p className="text-xs text-gray-400">{tipCount} tips · ${avgTip} avg</p>
+                  <p className="text-xs text-gray-400">{tipCount} tips · {CURRENCY}{avgTip} avg</p>
                 </div>
                 {tips.length === 0 ? (
                   <div className="px-5 py-12 text-center text-gray-400 text-sm">No tips yet.</div>
@@ -606,7 +669,7 @@ function DashboardInner() {
                           <tr key={t.id}>
                             <td className="px-5 py-3 text-xs text-gray-400 whitespace-nowrap">{new Date(t.created_at).toLocaleDateString()}</td>
                             <td className="px-5 py-3 text-sm text-gray-700">{t.tipper_name ?? "Anonymous"}</td>
-                            <td className="px-5 py-3 text-sm font-semibold" style={{ color: "#C9A96E" }}>${(t.amount_cents / 100).toFixed(0)}</td>
+                            <td className="px-5 py-3 text-sm font-semibold" style={{ color: "#C9A96E" }}>{CURRENCY}{(t.amount_cents / 100).toFixed(0)}</td>
                             <td className="px-5 py-3 text-base">{tipEmoji(t.amount_cents)}</td>
                             <td className="px-5 py-3 text-xs text-gray-400 max-w-xs truncate italic">{t.message || "—"}</td>
                           </tr>
@@ -624,7 +687,7 @@ function DashboardInner() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden max-w-3xl">
               <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
                 <p className="text-gray-900 font-semibold text-sm">All tips &amp; messages ({tipCount})</p>
-                <p className="text-xs text-gray-400">{totalEarned} total</p>
+                <p className="text-xs text-gray-400">{CURRENCY}{totalEarned} total</p>
               </div>
               {tips.length === 0 ? (
                 <div className="px-5 py-16 text-center">
@@ -650,8 +713,182 @@ function DashboardInner() {
                         }
                       </div>
                       <div className="flex-shrink-0 text-right">
-                        <p className="text-sm font-semibold" style={{ color: "#C9A96E" }}>${(t.amount_cents / 100).toFixed(0)}</p>
+                        <p className="text-sm font-semibold" style={{ color: "#C9A96E" }}>{CURRENCY}{(t.amount_cents / 100).toFixed(0)}</p>
                         <p className="text-base">{tipEmoji(t.amount_cents)}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ══ POSTS & RECIPES ════════════════════════════════ */}
+          {activeTab === "posts" && (
+            <div className="max-w-2xl space-y-4">
+
+              {/* Header + new post button */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-900 font-semibold text-base">Posts &amp; Recipes</p>
+                  <p className="text-gray-400 text-xs mt-0.5">Share updates, recipes, and kitchen tips with your supporters.</p>
+                </div>
+                <button
+                  onClick={() => { setShowPostForm(v => !v); setPostError(""); }}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
+                  style={{ background: "#C9A96E" }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  {showPostForm ? "Cancel" : "New post"}
+                </button>
+              </div>
+
+              {postCreated && (
+                <div className="px-4 py-3 rounded-xl text-sm bg-green-50 border border-green-100 text-green-700">
+                  Post published! It&apos;s now live on your profile.
+                </div>
+              )}
+
+              {/* Create post form */}
+              {showPostForm && (
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+                  {/* Type toggle */}
+                  <div className="flex gap-2">
+                    {(["update", "recipe"] as const).map(t => (
+                      <button
+                        key={t}
+                        onClick={() => setPostType(t)}
+                        className="px-4 py-2 rounded-xl text-sm font-medium border transition-all capitalize"
+                        style={postType === t
+                          ? { background: "#FEF3E2", borderColor: "#C9A96E", color: "#C9A96E" }
+                          : { background: "transparent", borderColor: "#E5E7EB", color: "#6B7280" }
+                        }
+                      >
+                        {t === "update" ? "✍️ Update" : "🍴 Recipe"}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Title */}
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">
+                      {postType === "recipe" ? "Recipe name" : "Title"}
+                    </label>
+                    <input
+                      value={postTitle}
+                      onChange={e => setPostTitle(e.target.value)}
+                      className={inputCls}
+                      placeholder={postType === "recipe" ? "e.g. My carbonara" : "What are you sharing?"}
+                    />
+                  </div>
+
+                  {/* Recipe-specific fields */}
+                  {postType === "recipe" && (
+                    <>
+                      <div>
+                        <label className="text-xs text-gray-400 mb-1 block">Ingredients</label>
+                        <textarea
+                          value={postIngredients}
+                          onChange={e => setPostIngredients(e.target.value)}
+                          rows={4}
+                          className={`${inputCls} resize-none`}
+                          placeholder={"200g guanciale\n4 egg yolks\n50g Pecorino Romano..."}
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div>
+                          <label className="text-xs text-gray-400 mb-1 block">Prep time</label>
+                          <input value={postPrepTime} onChange={e => setPostPrepTime(e.target.value)} className={inputCls} placeholder="15 min" />
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-400 mb-1 block">Cook time</label>
+                          <input value={postCookTime} onChange={e => setPostCookTime(e.target.value)} className={inputCls} placeholder="20 min" />
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-400 mb-1 block">Serves</label>
+                          <input value={postServings} onChange={e => setPostServings(e.target.value)} className={inputCls} placeholder="2" />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Body */}
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">
+                      {postType === "recipe" ? "Method / Instructions" : "Content"}
+                    </label>
+                    <textarea
+                      value={postBody}
+                      onChange={e => setPostBody(e.target.value)}
+                      rows={5}
+                      className={`${inputCls} resize-none`}
+                      placeholder={postType === "recipe"
+                        ? "Step 1: Render the guanciale until crispy...\nStep 2: Mix egg yolks with cheese off the heat..."
+                        : "Share what's on your mind, a technique, a kitchen story..."
+                      }
+                    />
+                  </div>
+
+                  {postError && <p className="text-red-500 text-xs">{postError}</p>}
+
+                  <button
+                    onClick={createPost}
+                    disabled={postSaving}
+                    className="w-full py-3.5 rounded-2xl text-sm font-semibold text-white transition-all disabled:opacity-60"
+                    style={{ background: "#C9A96E" }}
+                  >
+                    {postSaving ? "Publishing..." : "Publish post"}
+                  </button>
+                </div>
+              )}
+
+              {/* Posts list */}
+              {posts.length === 0 && !showPostForm ? (
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-14 text-center">
+                  <p className="text-3xl mb-3">📝</p>
+                  <p className="text-gray-500 text-sm font-medium mb-1">No posts yet</p>
+                  <p className="text-gray-400 text-xs max-w-xs mx-auto leading-relaxed">
+                    Share a recipe, a kitchen update, or a technique. Posts appear live on your public profile.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {posts.map(p => (
+                    <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                      <div className="flex items-start gap-3">
+                        <span className="text-lg flex-shrink-0 mt-0.5">{p.post_type === "recipe" ? "🍴" : "✍️"}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="text-gray-900 font-semibold text-sm truncate">{p.title}</p>
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-50 border border-gray-100 text-gray-400 capitalize flex-shrink-0">
+                              {p.post_type}
+                            </span>
+                          </div>
+                          {p.post_type === "recipe" && (p.prep_time || p.cook_time || p.servings) && (
+                            <div className="flex gap-3 mb-2">
+                              {p.prep_time  && <span className="text-xs text-gray-400">⏱ Prep: {p.prep_time}</span>}
+                              {p.cook_time  && <span className="text-xs text-gray-400">🔥 Cook: {p.cook_time}</span>}
+                              {p.servings   && <span className="text-xs text-gray-400">🍽️ Serves: {p.servings}</span>}
+                            </div>
+                          )}
+                          {p.body && (
+                            <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">{p.body}</p>
+                          )}
+                          <p className="text-gray-300 text-xs mt-2">
+                            {new Date(p.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => { if (confirm("Delete this post?")) deletePost(p.id); }}
+                          className="flex-shrink-0 p-1.5 rounded-lg hover:bg-red-50 text-gray-300 hover:text-red-400 transition-all"
+                          title="Delete post"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+                          </svg>
+                        </button>
                       </div>
                     </div>
                   ))}

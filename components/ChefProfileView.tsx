@@ -12,6 +12,18 @@ const TIP_AMOUNTS = [
 ];
 const CURRENCY = "£";
 
+export interface Post {
+  id: string;
+  title: string;
+  body: string | null;
+  post_type: string;
+  ingredients: string | null;
+  prep_time: string | null;
+  cook_time: string | null;
+  servings: string | null;
+  created_at: string;
+}
+
 export interface WallTip {
   name: string;
   amount: number;
@@ -40,6 +52,7 @@ export interface ChefViewData {
   goalTarget?: number;
   goalCurrent?: number;
   tipReward?: string | null;
+  posts?: Post[];
 }
 
 function CopyButton({ slug }: { slug: string }) {
@@ -761,6 +774,106 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
                       lineHeight: 1.6,
                     }}>
                       {t.message}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── Posts & Recipes ──────────────────────── */}
+        {chef.posts && chef.posts.length > 0 && (
+          <div style={{ marginTop: "28px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
+              <p style={{
+                fontFamily: "var(--font-cormorant), Georgia, serif",
+                fontSize: "1.25rem",
+                fontWeight: 400,
+                color: "rgba(250,248,244,0.55)",
+                margin: 0,
+                letterSpacing: "-0.01em",
+              }}>
+                From the kitchen
+              </p>
+              <div style={{
+                fontFamily: "-apple-system, system-ui",
+                fontSize: "10px",
+                color: "rgba(250,248,244,0.25)",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: "100px",
+                padding: "2px 8px",
+              }}>
+                {chef.posts.length} post{chef.posts.length !== 1 ? "s" : ""}
+              </div>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {chef.posts.map((p) => (
+                <div
+                  key={p.id}
+                  style={{
+                    background: "rgba(255,255,255,0.025)",
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    borderRadius: "18px",
+                    padding: "16px 18px",
+                  }}
+                >
+                  {/* Post header */}
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "10px" }}>
+                    <span style={{ fontSize: "16px", lineHeight: 1, marginTop: "2px", flexShrink: 0 }}>
+                      {p.post_type === "recipe" ? "🍴" : "✍️"}
+                    </span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13.5px", fontWeight: 700, color: "rgba(250,248,244,0.85)", margin: "0 0 3px", lineHeight: 1.3 }}>
+                        {p.title}
+                      </p>
+                      {p.post_type === "recipe" && (p.prep_time || p.cook_time || p.servings) && (
+                        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                          {p.prep_time && <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "10.5px", color: "rgba(250,248,244,0.3)" }}>⏱ Prep: {p.prep_time}</span>}
+                          {p.cook_time && <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "10.5px", color: "rgba(250,248,244,0.3)" }}>🔥 Cook: {p.cook_time}</span>}
+                          {p.servings  && <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "10.5px", color: "rgba(250,248,244,0.3)" }}>🍽️ Serves: {p.servings}</span>}
+                        </div>
+                      )}
+                    </div>
+                    <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", color: "rgba(250,248,244,0.2)", flexShrink: 0 }}>
+                      {new Date(p.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                    </span>
+                  </div>
+
+                  {/* Ingredients (recipes) */}
+                  {p.ingredients && (
+                    <div style={{
+                      background: "rgba(201,169,110,0.04)",
+                      border: "1px solid rgba(201,169,110,0.1)",
+                      borderRadius: "12px",
+                      padding: "10px 12px",
+                      marginBottom: "10px",
+                    }}>
+                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", fontWeight: 700, color: "rgba(201,169,110,0.6)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 5px" }}>
+                        Ingredients
+                      </p>
+                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "rgba(250,248,244,0.45)", margin: 0, lineHeight: 1.6, whiteSpace: "pre-line" }}>
+                        {p.ingredients}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Body */}
+                  {p.body && (
+                    <p style={{
+                      fontFamily: p.post_type === "recipe" ? "-apple-system, system-ui" : "Georgia, serif",
+                      fontStyle: p.post_type === "recipe" ? "normal" : "italic",
+                      fontSize: "12.5px",
+                      color: "rgba(250,248,244,0.38)",
+                      margin: 0,
+                      lineHeight: 1.65,
+                      whiteSpace: "pre-line",
+                    }}>
+                      {p.body}
                     </p>
                   )}
                 </div>

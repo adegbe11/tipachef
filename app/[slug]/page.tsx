@@ -172,6 +172,18 @@ interface TipRow {
   created_at: string;
 }
 
+interface PostRow {
+  id: string;
+  title: string;
+  body: string | null;
+  post_type: string;
+  ingredients: string | null;
+  prep_time: string | null;
+  cook_time: string | null;
+  servings: string | null;
+  created_at: string;
+}
+
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
@@ -218,13 +230,34 @@ export default async function ChefProfile({ params }: { params: { slug: string }
   if (raw) {
     const row = raw as unknown as ChefRow;
 
-    const { data: tips } = await adminClient
-      .from("tips")
-      .select("*")
-      .eq("chef_id", row.id)
-      .not("message", "is", null)
-      .order("created_at", { ascending: false })
-      .limit(10);
+    const [{ data: tips }, { data: postsData }] = await Promise.all([
+      adminClient
+        .from("tips")
+        .select("*")
+        .eq("chef_id", row.id)
+        .not("message", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(10),
+      adminClient
+        .from("posts")
+        .select("*")
+        .eq("chef_id", row.id)
+        .eq("is_public", true)
+        .order("created_at", { ascending: false })
+        .limit(20),
+    ]);
+
+    const posts = ((postsData ?? []) as PostRow[]).map((p) => ({
+      id:          p.id,
+      title:       p.title,
+      body:        p.body,
+      post_type:   p.post_type,
+      ingredients: p.ingredients,
+      prep_time:   p.prep_time,
+      cook_time:   p.cook_time,
+      servings:    p.servings,
+      created_at:  p.created_at,
+    }));
 
     const wall: ChefViewData["wall"] = ((tips ?? []) as TipRow[]).map((t) => ({
       name:    t.tipper_name ?? "Anonymous",
@@ -253,6 +286,7 @@ export default async function ChefProfile({ params }: { params: { slug: string }
       years:       0,
       specialties,
       wall,
+      posts,
       isDemo:      false,
       goalLabel:   row.goal_label,
       goalTarget:  row.goal_target,
