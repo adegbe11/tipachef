@@ -2,6 +2,7 @@ import Navbar             from "@/components/Navbar";
 import Hero               from "@/components/Hero";
 import GetOnBoard         from "@/components/GetOnBoard";
 import WhyThisExists      from "@/components/WhyThisExists";
+import VideoSection       from "@/components/VideoSection";
 import LiveDemo           from "@/components/LiveDemo";
 import QRSection          from "@/components/QRSection";
 import EarningsSection    from "@/components/EarningsSection";
@@ -75,7 +76,9 @@ export default function Home() {
         <GetOnBoard />
         {/* 4. Manifesto */}
         <WhyThisExists />
-        {/* 5. Profile demo */}
+        {/* 5. Video */}
+        <VideoSection />
+        {/* 6. Profile demo */}
         <LiveDemo />
         {/* 6. QR code section */}
         <QRSection />
