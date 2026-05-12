@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "About Tip a Chef — The Story Behind the Mission",
   description:
-    "I spent several summers working in a hotel laundry section, right next to the kitchen. What I witnessed there is why Tip a Chef exists.",
+    "I started in kitchens in 2020 as a dishwasher at 19. Over four years across four restaurants I watched chefs with 20+ years of experience earn nothing from tips while front-of-house staff pocketed everything. This is why Tip a Chef exists.",
   keywords: [
     "about tip a chef",
     "chef tipping platform",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About Tip a Chef — The Story Behind the Mission",
     description:
-      "I watched chefs give everything for every plate. Nobody ever thanked them. That stayed with me.",
+      "From dishwasher in 2020 to building a QR tipping platform for chefs. Four years in kitchens, one question that wouldn't leave me alone.",
     url: "https://tipachef.com/about",
     type: "website",
   },
@@ -92,33 +92,120 @@ export default function AboutPage() {
         <section className="py-20 md:py-32">
           <div className="content-container max-w-2xl">
 
-            {/* Drop cap paragraph */}
+            {/* Chapter label */}
+            <p
+              className="font-sans text-xs font-medium uppercase tracking-widest mb-10"
+              style={{ color: "#C9A96E" }}
+            >
+              The Story So Far
+            </p>
+
+            {/* Drop cap opening */}
             <p
               className="drop-cap font-sans font-light leading-relaxed mb-8"
               style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
             >
-              Several summers I worked as a dishwasher in a restaurant. My station was at the back of the kitchen, sink right there in the middle of everything. I was in the kitchen every service, every night.
+              It started in 2020 with a pair of rubber gloves and a sink that never stopped filling. I was 19, I needed money, and a hotel near me was hiring kitchen assistants. I had no idea what I was walking into.
             </p>
 
             <p
               className="font-sans font-light leading-relaxed mb-8"
               style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
             >
-              The heat in that kitchen was serious. You walked in at five and your body would adjust before your mind did. The chefs moved fast and they never stopped. I saw one burn his arm on the oven door and keep plating the dish. I saw another go into the cold storage, stay a minute, come back out and carry on. They were under pressure I had never seen anywhere else.
+              My job that first week was simple: wash everything. Pots, trays, insert pans, hotel pans with baked-on grease that hadn't fully cooled yet. Eight, sometimes ten hours a day. The kitchen ran on a Saturday night the way I imagine a flight deck runs. Everyone moving. Everyone shouting in a language that was half English and half something specific to that kitchen. I was completely lost and completely focused at the same time.
             </p>
 
             <p
               className="font-sans font-light leading-relaxed mb-8"
               style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
             >
-              No guest ever walked through to say anything. The compliments stayed at the front. A server would pass something on sometimes — "the couple on seven said the fish was incredible." The chef would hear it, nod, and call the next ticket. That was the whole exchange. The people who ate went home full and happy. The person who cooked went home and came back and did it again.
+              The head chef was a man I will call Marcus. He had been cooking professionally for 22 years. I know because on his second week back from leave someone brought a cake and there was a card that said exactly that. Twenty-two years. He had spent more time in professional kitchens than some of the servers had been alive. He knew every technique, every supplier, every plate the restaurant had ever served. He ran that kitchen with the kind of calm authority that only comes from having survived every possible crisis twice.
+            </p>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              He earned roughly the same as the front-of-house staff who had been there six months.
+            </p>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              I went back to kitchens after that. Different place, different city, but same structure. Kitchen assistant, then commis prep, then general helper on busy nights. Over the next four years I worked in or around professional kitchens in four different restaurants. I scrubbed floors. I peeled vegetables at 6am. I ran plates. I watched. And the same thing was true in every single one: the people who made the food were invisible.
+            </p>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              The waiters got tips. The waiters smelled nice and came out at the end of their shift looking almost as fresh as when they arrived. They had conversations with the tables. They got thanked directly, looked in the eye, handed folded notes. In some restaurants the tips went into a shared pot and the kitchen got a small percentage. In most, they got nothing. In none of them did a guest ever walk to the pass and say "that was one of the best things I have ever eaten" directly to the person who cooked it.
+            </p>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              I kept thinking: why is there no mechanism for this? Your food arrives and it is extraordinary and there is no way to reach the person responsible. The waiter is the face. The chef is the ghost.
+            </p>
+
+            {/* Pull-out */}
+            <div
+              className="my-12 py-8 px-8"
+              style={{
+                borderLeft: "3px solid #C9A96E",
+                background: "#fdfcfb",
+              }}
+            >
+              <p
+                className="font-display font-light leading-tight"
+                style={{ color: "#222222", fontSize: "clamp(1.2rem, 2vw, 1.5rem)", fontStyle: "italic" }}
+              >
+                "Fourteen hours on your feet. Burns on your arms. The physical cost of every service written into your body. And at the end of the night, no way for a single person who ate your food to say thank you and mean it with money."
+              </p>
+            </div>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              I kept that thought for a long time. Long enough that I eventually stopped waiting for someone else to build the solution.
+            </p>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              In early 2024 I started building. I had some experience with web development and I knew enough to be dangerous. I used Next.js for the frontend, Supabase for the database and auth, and Stripe Connect to handle payments. The core idea was dead simple: every chef gets a profile page and a QR code. A diner scans it, picks an amount, pays. The money goes directly to the chef's bank account. No app needed. No account needed. Just a phone and a scan.
+            </p>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              I built the first version in about six weeks. It was rough. The profile page barely had any styling. The Stripe integration worked but the error messages were terrible. The QR code generator was something I bolted on at the last minute. But it worked. A chef could sign up, connect their bank account, get a QR code, and receive a tip in under ten minutes. That was the whole thing.
+            </p>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              I spent the next three months improving it. The profile got a proper design. I added a Kitchen Secret feature: a personal message, recipe, or technique that tippers receive the moment their payment goes through. I added post and recipe sharing so chefs could build a following. I made the QR code downloadable. I added analytics. I went from a rough proof-of-concept to something I would actually want to hand to someone I respected.
+            </p>
+
+            <p
+              className="font-sans font-light leading-relaxed mb-8"
+              style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
+            >
+              The thing that kept me going, every time I hit a wall, was Marcus. I don't know where he is now. I don't know if he's still cooking. But I kept thinking about that card. Twenty-two years. Twenty-two years of doing something with your hands that most people genuinely cannot do, and not a single mechanism existed for a customer to go directly to you and say: that meal changed my evening. Here is something for you.
             </p>
 
             <p
               className="font-sans font-light leading-relaxed mb-12"
               style={{ color: "#333333", fontSize: "1.05rem", lineHeight: 1.85 }}
             >
-              I built Tip a Chef because of those summers. I knew what it looked like when someone gave everything and heard nothing back. I just wanted to fix the one part I could.
+              Tip a Chef is for Marcus. It is for every chef I worked next to and every chef I will never meet. It costs nothing to join. It takes two minutes to set up. And every tip goes directly to the person who earned it. That is the whole idea. That has always been the whole idea.
             </p>
 
             {/* Signature block */}
