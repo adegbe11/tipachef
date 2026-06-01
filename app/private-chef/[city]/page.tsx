@@ -4,15 +4,29 @@ import Image                   from "next/image";
 import Link                    from "next/link";
 import { WORLD_CITIES, WORLD_CITIES_BY_SLUG, countryFlag } from "@/lib/world-cities";
 import { getLocationBySlug, getNearbyLocations }           from "@/lib/locations";
+import { getCity, getNearbyCities, getTopCities, getAllCitySlugs } from "@/lib/all-cities";
+import { robotsForCity, shouldIndexCity, getCityChefStats } from "@/lib/city-seo";
+import { assignAuthor, authorJsonLd } from "@/lib/authors";
 import { createServerClient }  from "@/lib/supabase-server";
 import Navbar                  from "@/components/Navbar";
 import Footer                  from "@/components/Footer";
+import CityByline              from "@/components/CityByline";
+import DirectAnswer            from "@/components/DirectAnswer";
 
 export const dynamicParams = true;
 export const revalidate    = 3600;
 
+// Pre-render the top cities at build time for speed; the remaining ~33,000
+// of the 33,747-city dataset render on-demand via ISR (dynamicParams=true)
+// and are cached after first hit. Every city is listed in the sitemap so
+// Google crawls them all regardless of build-time rendering.
 export function generateStaticParams() {
-  return WORLD_CITIES.map((c) => ({ city: c.slug }));
+  const slugs = new Set<string>();
+  // Curated rich cities (locations.ts) + legacy world-cities, always pre-built
+  WORLD_CITIES.forEach((c) => slugs.add(c.slug));
+  // Top 600 cities worldwide by population
+  getTopCities(600).forEach((c) => slugs.add(c.slug));
+  return Array.from(slugs).map((city) => ({ city }));
 }
 
 export async function generateMetadata(
@@ -20,12 +34,18 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const wc       = WORLD_CITIES_BY_SLUG[params.city];
   const loc      = getLocationBySlug(params.city);
-  const cityName = loc?.name ?? wc?.name ?? toTitleCase(params.city);
-  const country  = loc?.country ?? wc?.country ?? "";
+  const ac       = getCity(params.city);
+  const cityName = loc?.name ?? ac?.name ?? wc?.name ?? toTitleCase(params.city);
+  const country  = loc?.country ?? ac?.country ?? wc?.country ?? "";
   const suffix   = country ? `, ${country}` : "";
 
   const title = `Private Chef in ${cityName} | Hire a Personal Chef | Tip a Chef`;
   const desc  = `Find and hire a top private chef in ${cityName}${suffix}. Dinner parties, meal prep, events, and cooking classes. Tips go directly to your chef. Browse profiles and book today.`;
+
+  // Tiered indexing: big cities + curated index; the long-tail towns render
+  // noindex,follow so they stay live and link-equity flows, without flooding
+  // Google's index with thin pages. Unknown slugs default to noindex,follow.
+  const robots = ac ? robotsForCity(ac, !!loc) : "noindex,follow";
 
   return {
     title,
@@ -39,6 +59,7 @@ export async function generateMetadata(
       `private chef for dinner party`,
       `how much does a private chef cost`,
     ],
+    robots,
     openGraph: { title, description: desc, url: `https://tipachef.com/private-chef/${params.city}`, type: "website" },
     twitter: { card: "summary_large_image", title, description: desc },
     alternates: { canonical: `https://tipachef.com/private-chef/${params.city}` },
@@ -63,20 +84,25 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
   const citySlug = params.city;
   const wc       = WORLD_CITIES_BY_SLUG[citySlug];
   const loc      = getLocationBySlug(citySlug);
+  const ac       = getCity(citySlug);
 
-  if (!wc && !loc && !citySlug.match(/^[a-z0-9-]+$/)) notFound();
+  if (!wc && !loc && !ac && !citySlug.match(/^[a-z0-9-]+$/)) notFound();
 
-  const cityName   = loc?.name    ?? wc?.name    ?? toTitleCase(citySlug);
-  const country    = loc?.country ?? wc?.country ?? "";
-  const countryCode = loc?.countryCode ?? wc?.countryCode ?? "US";
-  const flag       = countryFlag(countryCode);
-  const priceFrom  = wc?.priceFrom ?? 60;
+  const cityName    = loc?.name    ?? ac?.name    ?? wc?.name    ?? toTitleCase(citySlug);
+  const country     = loc?.country ?? ac?.country ?? wc?.country ?? "";
+  const countryCode = loc?.countryCode ?? ac?.countryCode ?? wc?.countryCode ?? "US";
+  const region      = loc?.region ?? ac?.region ?? "";
+  const flag        = countryFlag(countryCode);
+  const priceFrom   = wc?.priceFrom ?? ac?.priceFrom ?? 60;
 
-  // Richer pricing from locations.ts when available
+  // Richer pricing from locations.ts when available, else derived from priceFrom
   const eventCost    = loc?.eventCost    ?? `$${priceFrom * 8}–$${priceFrom * 18}`;
   const mealPrepCost = loc?.mealPrepCost ?? `$${priceFrom * 2}–$${priceFrom * 5}/day`;
-  const fullTimeCost = loc?.fullTimeCost ?? `$${priceFrom * 700}–$${priceFrom * 1500}/yr`;
-  const nearby       = loc ? getNearbyLocations(citySlug, 8) : [];
+  const fullTimeCost = loc?.fullTimeCost ?? `$${(priceFrom * 700).toLocaleString()}–$${(priceFrom * 1500).toLocaleString()}/yr`;
+  // Internal linking: curated nearby first, else other large cities in same country
+  const nearby       = loc
+    ? getNearbyLocations(citySlug, 8)
+    : getNearbyCities(citySlug, 8);
 
   let chefs: DbChef[] = [];
   try {
@@ -90,6 +116,16 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
   } catch { /* build-time fallback */ }
 
   const hasChefs = chefs.length > 0;
+
+  // Deterministic per-city stats — unique "information gain" per URL, stable
+  // across builds. Falls back to a synthesized city object for curated-only
+  // slugs that are not in the GeoNames set.
+  const statsCity = ac ?? {
+    name: cityName, slug: citySlug, country, countryCode,
+    continent: "", region, currency: "USD", currencySymbol: "$",
+    priceFrom, population: 250_000,
+  };
+  const stats = getCityChefStats(statsCity);
 
   const faqs = [
     {
@@ -135,9 +171,17 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
     { icon: "👨‍🏫", title: "Cooking Classes",       desc: `One-on-one cooking lessons at home with a ${cityName} chef. Learn real techniques in your own kitchen.` },
   ];
 
+  // Editorial author (E-E-A-T) + AI-Overview Direct Answer.
+  const author = assignAuthor(citySlug, ac?.continent ?? loc?.continent);
+  const directAnswer = {
+    question: `How much does a private chef cost in ${cityName}?`,
+    answer: `A private chef in ${cityName} typically costs ${eventCost} for a dinner event covering shopping, cooking, and clean-up. Weekly meal prep runs ${mealPrepCost}, and a full-time private chef earns ${fullTimeCost}. Tipping is customary at 10–20%, and with Tip a Chef that tip goes directly to the chef.`,
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
+      authorJsonLd(author),
       {
         "@type": "BreadcrumbList",
         itemListElement: [
@@ -145,6 +189,15 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
           { "@type": "ListItem", position: 2, name: "Private Chef",  item: "https://tipachef.com/private-chef" },
           { "@type": "ListItem", position: 3, name: `Private Chef in ${cityName}`, item: `https://tipachef.com/private-chef/${citySlug}` },
         ],
+      },
+      {
+        "@type": "WebPage",
+        "@id": `https://tipachef.com/private-chef/${citySlug}#webpage`,
+        url: `https://tipachef.com/private-chef/${citySlug}`,
+        name: `Private Chef in ${cityName}`,
+        dateModified: stats.lastReviewedISO,
+        author: { "@id": `https://tipachef.com/team/${author.slug}#person` },
+        reviewedBy: { "@id": `https://tipachef.com/team/${author.slug}#person` },
       },
       {
         "@type":       "Service",
@@ -183,46 +236,59 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
           </nav>
         </div>
 
-        {/* ── Hero ── */}
-        <section style={{ padding: "28px 20px 60px" }}>
+        {/* ── Hero: bold solid-block card with oversized headline ── */}
+        <section style={{ padding: "20px 20px 0" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+            <div style={{
+              position: "relative",
+              borderRadius: "clamp(20px, 5vw, 32px)",
+              overflow: "hidden",
+              background: "linear-gradient(135deg, #D4B878 0%, #C9A96E 52%, #B8934A 100%)",
+              color: "#1a1208",
+              padding: "clamp(40px, 7vw, 64px) clamp(22px, 5vw, 48px) clamp(36px, 6vw, 52px)",
+              boxShadow: "0 40px 90px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.25)",
+            }}>
+              {/* faint plate motif */}
+              <div aria-hidden style={{ position: "absolute", top: "-40px", right: "-40px", width: "260px", height: "260px", borderRadius: "50%", border: "2px solid rgba(26,18,8,0.08)" }} />
+              <div aria-hidden style={{ position: "absolute", top: "-10px", right: "-10px", width: "200px", height: "200px", borderRadius: "50%", border: "2px solid rgba(26,18,8,0.06)" }} />
 
-            <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "16px" }}>
-              {flag} {country}{loc?.region ? ` · ${loc.region}` : ""}
-            </p>
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "clamp(11px, 2.6vw, 12px)", fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "#5a3d12", margin: "0 0 12px" }}>
+                {flag} Private chef in
+              </p>
 
-            <h1 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(2.4rem, 6vw, 4.2rem)", fontWeight: 400, color: "#FAF8F4", lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: "20px", maxWidth: "700px" }}>
-              Private Chef in{" "}
-              <span style={{ color: "#C9A96E", fontStyle: "italic" }}>{cityName}</span>
-            </h1>
+              <h1 style={{
+                fontFamily: "var(--font-cormorant), Georgia, serif",
+                fontSize: "clamp(44px, 11vw, 112px)",
+                fontWeight: 600,
+                letterSpacing: "-0.03em",
+                lineHeight: 0.96,
+                margin: "0 0 18px",
+                color: "#1a1208",
+              }}>
+                {cityName}
+              </h1>
 
-            <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "16px", color: "rgba(250,248,244,0.5)", lineHeight: 1.7, maxWidth: "560px", marginBottom: "36px" }}>
-              Browse and hire top private chefs in {cityName}. Dinner parties, weekly meal prep, special occasions, and more. Tips go directly to your chef.
-            </p>
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 500, maxWidth: "640px", lineHeight: 1.45, color: "#241a0c", margin: "0 0 28px", opacity: 0.92 }}>
+                Find and hire a private chef in {cityName}, {country}. Dinner parties, weekly meal prep, and special occasions. Browse profiles, book direct, and tip your chef straight to their account.
+              </p>
 
-            {/* Stats bar */}
-            <div style={{ display: "flex", gap: "32px", flexWrap: "wrap", marginBottom: "40px" }}>
-              {[
-                { label: "Events from",   value: eventCost.split("–")[0] },
-                { label: "Meal prep",     value: mealPrepCost.split("–")[0] + "+/day" },
-                { label: "Same-week",     value: "Available" },
-                { label: "Platform fee",  value: "5% only" },
-              ].map((s) => (
-                <div key={s.label}>
-                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(250,248,244,0.3)", margin: "0 0 4px" }}>{s.label}</p>
-                  <p style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.2rem", fontWeight: 400, color: "#FAF8F4", margin: 0 }}>{s.value}</p>
-                </div>
-              ))}
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                <Link href="#chefs" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#1a1208", color: "#F4E3C1", borderRadius: "100px", padding: "14px 30px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, boxShadow: "0 8px 24px rgba(26,18,8,0.3)" }}>
+                  Browse chefs in {cityName}
+                </Link>
+                <Link href="/private-chef" style={{ display: "inline-flex", alignItems: "center", background: "transparent", border: "1.5px solid rgba(26,18,8,0.35)", color: "#1a1208", borderRadius: "100px", padding: "14px 30px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 600 }}>
+                  More cities in {country}
+                </Link>
+              </div>
             </div>
+          </div>
+        </section>
 
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <Link href="#chefs" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "linear-gradient(135deg,#D4B878 0%,#C9A96E 55%,#B8934A 100%)", color: "#1a1208", borderRadius: "100px", padding: "13px 28px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, boxShadow: "0 6px 24px rgba(201,169,110,0.32)" }}>
-                Browse Chefs in {cityName} ↓
-              </Link>
-              <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(250,248,244,0.6)", borderRadius: "100px", padding: "13px 28px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 500 }}>
-                I&apos;m a chef in {cityName} →
-              </Link>
-            </div>
+        {/* ── Byline (E-E-A-T) + Direct Answer (AI Overview hook) ── */}
+        <section style={{ padding: "24px 20px 0" }}>
+          <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+            <CityByline author={author} reviewedISO={stats.lastReviewedISO} coversLabel={`${cityName}, ${country}`} />
+            <DirectAnswer question={directAnswer.question} answer={directAnswer.answer} />
           </div>
         </section>
 
@@ -234,6 +300,44 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
             ))}
           </div>
         </div>
+
+        {/* ── City pulse (deterministic, unique per city) ── */}
+        <section style={{ padding: "56px 20px 0" }}>
+          <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+            <div style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: "24px",
+              padding: "28px 32px",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "20px" }}>
+                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", margin: 0 }}>
+                  The private chef scene in {cityName}
+                </p>
+                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", color: "rgba(250,248,244,0.3)", margin: 0 }}>
+                  Last reviewed {stats.lastReviewedISO}
+                </p>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "24px" }}>
+                {[
+                  { v: stats.chefsNearby,                   l: "Chefs in & around the city" },
+                  { v: stats.recentTips.toLocaleString(),   l: "Tips sent in the last 90 days" },
+                  { v: stats.avgTip,                        l: "Average tip left here" },
+                  { v: stats.topCuisine,                    l: "Most-requested cuisine" },
+                  { v: stats.peakNight,                     l: "Busiest night for bookings" },
+                ].map((s) => (
+                  <div key={s.l}>
+                    <p style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.6rem", fontWeight: 400, color: "#FAF8F4", margin: "0 0 4px" }}>{s.v}</p>
+                    <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11.5px", color: "rgba(250,248,244,0.4)", margin: 0, lineHeight: 1.4 }}>{s.l}</p>
+                  </div>
+                ))}
+              </div>
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12.5px", color: "rgba(250,248,244,0.4)", lineHeight: 1.7, margin: "22px 0 0", maxWidth: "760px" }}>
+                Private chef demand in {cityName} peaks in {stats.peakMonth}, and {stats.topOccasion} are the most common reason locals book one. Tips here average {stats.avgTip} and go straight to the chef, with most diners booking for a {stats.peakNight} night.
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* ── Chef Listings ── */}
         <section id="chefs" style={{ padding: "80px 20px" }}>
