@@ -5,10 +5,10 @@ import Link                    from "next/link";
 import { WORLD_CITIES, WORLD_CITIES_BY_SLUG, countryFlag } from "@/lib/world-cities";
 import { getLocationBySlug, getNearbyLocations }           from "@/lib/locations";
 import { getCity, getNearbyCities, getTopCities, getAllCitySlugs } from "@/lib/all-cities";
-import { robotsForCity, shouldIndexCity, getCityChefStats } from "@/lib/city-seo";
+import { robotsForCity, getCityChefStats } from "@/lib/city-seo";
 import { assignAuthor, authorJsonLd } from "@/lib/authors";
 import { createServerClient }  from "@/lib/supabase-server";
-import Navbar                  from "@/components/Navbar";
+import LightNavbar             from "@/components/LightNavbar";
 import Footer                  from "@/components/Footer";
 import CityByline              from "@/components/CityByline";
 import DirectAnswer            from "@/components/DirectAnswer";
@@ -178,6 +178,28 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
     answer: `A private chef in ${cityName} typically costs ${eventCost} for a dinner event covering shopping, cooking, and clean-up. Weekly meal prep runs ${mealPrepCost}, and a full-time private chef earns ${fullTimeCost}. Tipping is customary at 10–20%, and with Tip a Chef that tip goes directly to the chef.`,
   };
 
+  // Airbnb-style quick category pills (link to existing intent routes).
+  const categories = [
+    { label: "Dinner party",   href: `/private-chef-for-dinner-party/${citySlug}` },
+    { label: "Birthday",       href: `/private-chef-for-birthday/${citySlug}` },
+    { label: "Date night",     href: `/private-chef-for-two/${citySlug}` },
+    { label: "Weekly meal prep", href: "#chefs" },
+    { label: "On a budget",    href: `/cheap-private-chef/${citySlug}` },
+    { label: "Personal chef",  href: `/personal-chef/${citySlug}` },
+    { label: "Cooking class",  href: "#chefs" },
+    { label: "Corporate event", href: "#chefs" },
+  ];
+
+  // Airbnb-style destination grid: same-country cities first, then major world
+  // cities. Dedup by slug. Powers a beautiful multi-column internal-link block.
+  const gridMap = new Map<string, string>();
+  getNearbyCities(citySlug, 12).forEach((c) => gridMap.set(c.slug, c.name));
+  getTopCities(60).forEach((c) => { if (c.slug !== citySlug) gridMap.set(c.slug, c.name); });
+  const gridCities = Array.from(gridMap.entries())
+    .filter(([slug]) => slug !== citySlug)
+    .slice(0, 48)
+    .map(([slug, name]) => ({ slug, name }));
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -222,65 +244,97 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Navbar />
-      <main style={{ background: "#0a0908", minHeight: "100vh", color: "#FAF8F4" }}>
+      <style>{`
+        .pc-card { box-shadow: 0 1px 2px rgba(168,130,58,0.05); transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease; }
+        .pc-card:hover { box-shadow: 0 18px 44px rgba(168,130,58,0.16); transform: translateY(-3px); border-color: #e3d2a8; }
+        .pc-chip { transition: border-color .15s ease, color .15s ease, background .15s ease, box-shadow .15s ease; }
+        .pc-chip:hover { border-color: #C9A96E; color: #8a6a2f; background: #fff9ee; box-shadow: 0 4px 14px rgba(201,169,110,0.16); }
+        .pc-pill { transition: transform .15s ease, box-shadow .15s ease, filter .15s ease; }
+        .pc-pill:hover { transform: translateY(-2px); filter: brightness(1.04); }
+        .gold-text { background: linear-gradient(135deg,#D4B878 0%,#C9A96E 45%,#A8823C 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: #B8934A; }
+      `}</style>
+      <LightNavbar />
+      <main style={{ background: "#FCFBF8", minHeight: "100vh", color: "#111111" }}>
 
         {/* ── Breadcrumb ── */}
-        <div style={{ padding: "80px 20px 0", maxWidth: "1100px", margin: "0 auto" }}>
-          <nav style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "rgba(250,248,244,0.35)" }}>
-            <Link href="/" style={{ color: "rgba(250,248,244,0.35)", textDecoration: "none" }}>Home</Link>
-            <span style={{ margin: "0 8px" }}>›</span>
-            <Link href="/private-chef" style={{ color: "rgba(250,248,244,0.35)", textDecoration: "none" }}>Private Chef</Link>
-            <span style={{ margin: "0 8px" }}>›</span>
-            <span style={{ color: "#C9A96E" }}>{cityName}</span>
+        <div style={{ padding: "112px 20px 0", maxWidth: "1100px", margin: "0 auto" }}>
+          <nav style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "#9a9a9a" }}>
+            <Link href="/" style={{ color: "#9a9a9a", textDecoration: "none" }}>Home</Link>
+            <span style={{ margin: "0 8px", color: "#cccccc" }}>/</span>
+            <Link href="/private-chef" style={{ color: "#9a9a9a", textDecoration: "none" }}>Private Chef</Link>
+            <span style={{ margin: "0 8px", color: "#cccccc" }}>/</span>
+            <span style={{ color: "#C9A96E", fontWeight: 600 }}>{cityName}</span>
           </nav>
         </div>
 
-        {/* ── Hero: bold solid-block card with oversized headline ── */}
+        {/* ── Hero: bold solid gold block with oversized headline ── */}
         <section style={{ padding: "20px 20px 0" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
             <div style={{
               position: "relative",
               borderRadius: "clamp(20px, 5vw, 32px)",
               overflow: "hidden",
-              background: "linear-gradient(135deg, #D4B878 0%, #C9A96E 52%, #B8934A 100%)",
+              background:
+                "radial-gradient(130% 120% at 8% 0%, rgba(255,248,228,0.65) 0%, rgba(255,248,228,0) 42%)," +
+                "radial-gradient(120% 130% at 100% 100%, rgba(94,61,18,0.28) 0%, rgba(94,61,18,0) 46%)," +
+                "linear-gradient(135deg, #E6CB8C 0%, #D4B878 28%, #C9A96E 62%, #AD862F 100%)",
               color: "#1a1208",
-              padding: "clamp(40px, 7vw, 64px) clamp(22px, 5vw, 48px) clamp(36px, 6vw, 52px)",
-              boxShadow: "0 40px 90px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.25)",
+              padding: "clamp(40px, 7vw, 68px) clamp(22px, 5vw, 52px) clamp(38px, 6vw, 56px)",
+              boxShadow: "0 30px 70px rgba(173,134,47,0.36), inset 0 1px 0 rgba(255,255,255,0.4)",
             }}>
               {/* faint plate motif */}
-              <div aria-hidden style={{ position: "absolute", top: "-40px", right: "-40px", width: "260px", height: "260px", borderRadius: "50%", border: "2px solid rgba(26,18,8,0.08)" }} />
-              <div aria-hidden style={{ position: "absolute", top: "-10px", right: "-10px", width: "200px", height: "200px", borderRadius: "50%", border: "2px solid rgba(26,18,8,0.06)" }} />
+              <div aria-hidden style={{ position: "absolute", top: "-50px", right: "-50px", width: "300px", height: "300px", borderRadius: "50%", border: "2px solid rgba(26,18,8,0.07)" }} />
+              <div aria-hidden style={{ position: "absolute", top: "-12px", right: "-12px", width: "220px", height: "220px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.18)" }} />
 
-              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "clamp(11px, 2.6vw, 12px)", fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "#5a3d12", margin: "0 0 12px" }}>
+              {/* social-proof badge */}
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(26,18,8,0.14)", borderRadius: "100px", padding: "6px 14px", marginBottom: "18px", backdropFilter: "blur(2px)" }}>
+                <span style={{ color: "#3a2810", fontSize: "12px", letterSpacing: "1px" }}>★★★★★</span>
+                <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", fontWeight: 600, color: "#3a2810" }}>
+                  Loved by diners in {country}
+                </span>
+              </div>
+
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "clamp(11px, 2.6vw, 12px)", fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", color: "#5a3d12", margin: "0 0 10px" }}>
                 {flag} Private chef in
               </p>
 
               <h1 style={{
                 fontFamily: "var(--font-cormorant), Georgia, serif",
-                fontSize: "clamp(44px, 11vw, 112px)",
+                fontSize: "clamp(46px, 11vw, 120px)",
                 fontWeight: 600,
-                letterSpacing: "-0.03em",
-                lineHeight: 0.96,
+                letterSpacing: "-0.035em",
+                lineHeight: 0.94,
                 margin: "0 0 18px",
                 color: "#1a1208",
+                textShadow: "0 1px 0 rgba(255,255,255,0.25)",
               }}>
                 {cityName}
               </h1>
 
-              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 500, maxWidth: "640px", lineHeight: 1.45, color: "#241a0c", margin: "0 0 28px", opacity: 0.92 }}>
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "clamp(16px, 2vw, 20px)", fontWeight: 500, maxWidth: "640px", lineHeight: 1.45, color: "#2a1d0c", margin: "0 0 30px", opacity: 0.94 }}>
                 Find and hire a private chef in {cityName}, {country}. Dinner parties, weekly meal prep, and special occasions. Browse profiles, book direct, and tip your chef straight to their account.
               </p>
 
               <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                <Link href="#chefs" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#1a1208", color: "#F4E3C1", borderRadius: "100px", padding: "14px 30px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, boxShadow: "0 8px 24px rgba(26,18,8,0.3)" }}>
+                <Link href="#chefs" className="pc-pill" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#1a1208", color: "#F4E3C1", borderRadius: "100px", padding: "15px 32px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, boxShadow: "0 10px 28px rgba(26,18,8,0.32)" }}>
                   Browse chefs in {cityName}
                 </Link>
-                <Link href="/private-chef" style={{ display: "inline-flex", alignItems: "center", background: "transparent", border: "1.5px solid rgba(26,18,8,0.35)", color: "#1a1208", borderRadius: "100px", padding: "14px 30px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 600 }}>
+                <Link href="/private-chef" className="pc-pill" style={{ display: "inline-flex", alignItems: "center", background: "rgba(255,255,255,0.45)", border: "1.5px solid rgba(26,18,8,0.28)", color: "#1a1208", borderRadius: "100px", padding: "15px 32px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 600 }}>
                   More cities in {country}
                 </Link>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ── Category pills (Airbnb-style quick filters) ── */}
+        <section style={{ padding: "22px 20px 0" }}>
+          <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            {categories.map((c) => (
+              <Link key={c.label} href={c.href} className="pc-chip" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#ffffff", border: "1px solid #e6e6e6", borderRadius: "100px", padding: "9px 18px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 500, color: "#444444" }}>
+                {c.label}
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -293,10 +347,10 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         </section>
 
         {/* ── Trust bar ── */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)", padding: "16px 20px" }}>
-          <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", gap: "32px", flexWrap: "wrap", justifyContent: "center" }}>
+        <div style={{ borderTop: "1px solid #f0f0f0", borderBottom: "1px solid #f0f0f0", padding: "18px 20px", marginTop: "40px", background: "#F7F3EA" }}>
+          <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", gap: "28px", flexWrap: "wrap", justifyContent: "center" }}>
             {["✓ Tips go directly to the chef", "✓ Stripe-secured payments", "✓ Free to join", "✓ No app needed", "✓ Verified chef profiles"].map((t) => (
-              <span key={t} style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "rgba(250,248,244,0.4)", fontWeight: 500 }}>{t}</span>
+              <span key={t} style={{ fontFamily: "-apple-system, system-ui", fontSize: "12.5px", color: "#7a7a7a", fontWeight: 500 }}>{t}</span>
             ))}
           </div>
         </div>
@@ -305,16 +359,17 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         <section style={{ padding: "56px 20px 0" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
             <div style={{
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.06)",
+              background: "#ffffff",
+              border: "1px solid #ececec",
               borderRadius: "24px",
               padding: "28px 32px",
+              boxShadow: "0 1px 2px rgba(17,17,17,0.03)",
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "20px" }}>
                 <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", margin: 0 }}>
                   The private chef scene in {cityName}
                 </p>
-                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", color: "rgba(250,248,244,0.3)", margin: 0 }}>
+                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", color: "#aaaaaa", margin: 0 }}>
                   Last reviewed {stats.lastReviewedISO}
                 </p>
               </div>
@@ -327,12 +382,12 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                   { v: stats.peakNight,                     l: "Busiest night for bookings" },
                 ].map((s) => (
                   <div key={s.l}>
-                    <p style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.6rem", fontWeight: 400, color: "#FAF8F4", margin: "0 0 4px" }}>{s.v}</p>
-                    <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11.5px", color: "rgba(250,248,244,0.4)", margin: 0, lineHeight: 1.4 }}>{s.l}</p>
+                    <p className="gold-text" style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.9rem", fontWeight: 500, margin: "0 0 4px" }}>{s.v}</p>
+                    <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11.5px", color: "#8a8a8a", margin: 0, lineHeight: 1.4 }}>{s.l}</p>
                   </div>
                 ))}
               </div>
-              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12.5px", color: "rgba(250,248,244,0.4)", lineHeight: 1.7, margin: "22px 0 0", maxWidth: "760px" }}>
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12.5px", color: "#888888", lineHeight: 1.7, margin: "22px 0 0", maxWidth: "760px" }}>
                 Private chef demand in {cityName} peaks in {stats.peakMonth}, and {stats.topOccasion} are the most common reason locals book one. Tips here average {stats.avgTip} and go straight to the chef, with most diners booking for a {stats.peakNight} night.
               </p>
             </div>
@@ -340,18 +395,18 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         </section>
 
         {/* ── Chef Listings ── */}
-        <section id="chefs" style={{ padding: "80px 20px" }}>
+        <section id="chefs" style={{ padding: "72px 20px" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
               <div>
                 <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "8px" }}>
                   {hasChefs ? `${chefs.length} chef${chefs.length !== 1 ? "s" : ""} listed` : "Be the first"}
                 </p>
-                <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#FAF8F4", letterSpacing: "-0.02em", margin: 0 }}>
+                <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: 0 }}>
                   Private Chefs in {cityName}
                 </h2>
               </div>
-              <Link href="/signup" style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 600, color: "#C9A96E", textDecoration: "none", border: "1px solid rgba(201,169,110,0.3)", borderRadius: "100px", padding: "8px 20px" }}>
+              <Link href="/signup" className="pc-chip" style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 600, color: "#B8934A", textDecoration: "none", border: "1px solid #e6d8b8", borderRadius: "100px", padding: "9px 20px" }}>
                 + List your services
               </Link>
             </div>
@@ -362,24 +417,24 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                   const photo = chef.photo_url ?? chef.image_url;
                   return (
                     <Link key={chef.slug} href={`/${chef.slug}`} style={{ textDecoration: "none" }}>
-                      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", overflow: "hidden", transition: "border-color 0.2s, transform 0.2s", cursor: "pointer" }}>
-                        <div style={{ height: "200px", background: "rgba(255,255,255,0.05)", position: "relative" }}>
+                      <div className="pc-card" style={{ background: "#ffffff", border: "1px solid #ececec", borderRadius: "20px", overflow: "hidden", cursor: "pointer" }}>
+                        <div style={{ height: "200px", background: "#f7f5f0", position: "relative" }}>
                           {photo ? (
                             <Image src={photo} alt={chef.name ?? ""} fill style={{ objectFit: "cover", objectPosition: "center top" }} unoptimized />
                           ) : (
-                            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,rgba(201,169,110,0.1),rgba(201,169,110,0.05))" }}>
+                            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#f5efe2,#faf8f4)" }}>
                               <span style={{ fontSize: "3rem" }}>👨‍🍳</span>
                             </div>
                           )}
-                          <div style={{ position: "absolute", bottom: "10px", right: "10px", background: "rgba(201,169,110,0.9)", borderRadius: "100px", padding: "3px 10px", fontFamily: "-apple-system,system-ui", fontSize: "10px", fontWeight: 700, color: "#1a1208" }}>VERIFIED</div>
+                          <div style={{ position: "absolute", bottom: "10px", right: "10px", background: "#C9A96E", borderRadius: "100px", padding: "3px 10px", fontFamily: "-apple-system,system-ui", fontSize: "10px", fontWeight: 700, color: "#1a1208" }}>VERIFIED</div>
                         </div>
                         <div style={{ padding: "16px 18px 18px" }}>
-                          <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, color: "#FAF8F4", margin: "0 0 4px" }}>{chef.name ?? chef.slug}</p>
-                          {chef.role && <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "#C9A96E", margin: "0 0 6px", fontWeight: 500 }}>{chef.role}</p>}
-                          {chef.bio && <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "rgba(250,248,244,0.4)", margin: "0 0 12px", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" } as React.CSSProperties}>{chef.bio}</p>}
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <span style={{ fontFamily: "-apple-system,system-ui", fontSize: "11px", color: "rgba(250,248,244,0.3)" }}>Tips direct to chef</span>
-                            <span style={{ fontFamily: "-apple-system,system-ui", fontSize: "12px", fontWeight: 700, color: "#C9A96E" }}>Tip now →</span>
+                          <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, color: "#111111", margin: "0 0 4px" }}>{chef.name ?? chef.slug}</p>
+                          {chef.role && <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "#B8934A", margin: "0 0 6px", fontWeight: 500 }}>{chef.role}</p>}
+                          {chef.bio && <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "#888888", margin: "0 0 12px", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" } as React.CSSProperties}>{chef.bio}</p>}
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #f2f2f2", paddingTop: "12px" }}>
+                            <span style={{ fontFamily: "-apple-system,system-ui", fontSize: "11px", color: "#aaaaaa" }}>Tips direct to chef</span>
+                            <span style={{ fontFamily: "-apple-system,system-ui", fontSize: "12px", fontWeight: 700, color: "#B8934A" }}>Tip now →</span>
                           </div>
                         </div>
                       </div>
@@ -389,15 +444,15 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
               </div>
             ) : (
               /* ── Empty state ── */
-              <div style={{ background: "rgba(201,169,110,0.05)", border: "2px dashed rgba(201,169,110,0.2)", borderRadius: "24px", padding: "48px 32px", textAlign: "center" }}>
+              <div style={{ background: "#fcfaf5", border: "1.5px dashed #e6d8b8", borderRadius: "24px", padding: "48px 32px", textAlign: "center" }}>
                 <div style={{ fontSize: "3rem", marginBottom: "16px" }}>{flag}</div>
-                <h3 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.6rem", fontWeight: 400, color: "#FAF8F4", margin: "0 0 8px" }}>
+                <h3 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.7rem", fontWeight: 400, color: "#111111", margin: "0 0 8px" }}>
                   Be the first private chef in {cityName}
                 </h3>
-                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", color: "rgba(250,248,244,0.4)", margin: "0 0 24px", maxWidth: "400px", marginLeft: "auto", marginRight: "auto" }}>
+                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", color: "#777777", margin: "0 0 24px", maxWidth: "400px", marginLeft: "auto", marginRight: "auto", lineHeight: 1.6 }}>
                   Create your free page, share your QR code, and start receiving direct tips from diners in {cityName}.
                 </p>
-                <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "linear-gradient(135deg,#D4B878 0%,#C9A96E 55%,#B8934A 100%)", color: "#1a1208", borderRadius: "100px", padding: "12px 28px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, boxShadow: "0 6px 24px rgba(201,169,110,0.32)" }}>
+                <Link href="/signup" className="pc-pill" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "linear-gradient(135deg,#D4B878 0%,#C9A96E 55%,#B8934A 100%)", color: "#1a1208", borderRadius: "100px", padding: "13px 30px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, boxShadow: "0 6px 20px rgba(201,169,110,0.3)" }}>
                   Create your free page →
                 </Link>
               </div>
@@ -405,21 +460,21 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
           </div>
         </section>
 
-        {/* ── Services ── */}
-        <section style={{ padding: "0 20px 80px" }}>
+        {/* ── Services (cream) ── */}
+        <section style={{ padding: "72px 20px", background: "#F7F3EA", borderTop: "1px solid #f0f0f0", borderBottom: "1px solid #f0f0f0" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "12px" }}>What you can book</p>
-              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#FAF8F4", letterSpacing: "-0.02em", margin: 0 }}>
+              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: 0 }}>
                 Private chef services in {cityName}
               </h2>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px" }}>
               {services.map((s) => (
-                <div key={s.title} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "18px", padding: "22px 24px" }}>
+                <div key={s.title} className="pc-card" style={{ background: "#ffffff", border: "1px solid #ececec", borderRadius: "18px", padding: "22px 24px" }}>
                   <div style={{ fontSize: "1.8rem", marginBottom: "12px" }}>{s.icon}</div>
-                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, color: "rgba(250,248,244,0.85)", margin: "0 0 6px" }}>{s.title}</p>
-                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", color: "rgba(250,248,244,0.35)", margin: 0, lineHeight: 1.6 }}>{s.desc}</p>
+                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, color: "#222222", margin: "0 0 6px" }}>{s.title}</p>
+                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", color: "#777777", margin: 0, lineHeight: 1.6 }}>{s.desc}</p>
                 </div>
               ))}
             </div>
@@ -427,14 +482,14 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         </section>
 
         {/* ── Pricing ── */}
-        <section style={{ padding: "0 20px 80px" }}>
+        <section style={{ padding: "72px 20px" }}>
           <div style={{ maxWidth: "860px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "12px" }}>Pricing</p>
-              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#FAF8F4", letterSpacing: "-0.02em", marginBottom: "12px" }}>
+              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", marginBottom: "12px" }}>
                 How much does a private chef cost in {cityName}?
               </h2>
-              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", color: "rgba(250,248,244,0.4)", maxWidth: "480px", margin: "0 auto", lineHeight: 1.7 }}>
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", color: "#888888", maxWidth: "480px", margin: "0 auto", lineHeight: 1.7 }}>
                 Costs vary based on menu complexity, guest count, and service type. Here is a general guide for {cityName}.
               </p>
             </div>
@@ -445,26 +500,26 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                 { icon: "👨‍🍳", label: "Full-Time Private Chef", price: fullTimeCost, desc: "Exclusive household chef. All meals, seven days, entirely tailored to you." },
                 { icon: "💳", label: "Platform Fee",            price: "5% only",    desc: "We charge 5% on tips. Chefs keep 95%. Joining is completely free." },
               ].map((p) => (
-                <div key={p.label} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "20px", padding: "24px" }}>
+                <div key={p.label} className="pc-card" style={{ background: "#ffffff", border: "1px solid #ececec", borderRadius: "20px", padding: "24px" }}>
                   <div style={{ fontSize: "1.6rem", marginBottom: "12px" }}>{p.icon}</div>
-                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(250,248,244,0.3)", margin: "0 0 4px" }}>{p.label}</p>
-                  <p style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.15rem", fontWeight: 400, color: "#C9A96E", margin: "0 0 8px" }}>{p.price}</p>
-                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "rgba(250,248,244,0.3)", margin: 0, lineHeight: 1.6 }}>{p.desc}</p>
+                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#aaaaaa", margin: "0 0 4px" }}>{p.label}</p>
+                  <p className="gold-text" style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.3rem", fontWeight: 500, margin: "0 0 8px" }}>{p.price}</p>
+                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "#888888", margin: 0, lineHeight: 1.6 }}>{p.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── How It Works ── */}
-        <section style={{ padding: "0 20px 80px" }}>
+        {/* ── How It Works (cream) ── */}
+        <section style={{ padding: "72px 20px", background: "#F7F3EA", borderTop: "1px solid #f0f0f0", borderBottom: "1px solid #f0f0f0" }}>
           <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "12px" }}>How it works</p>
-              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#FAF8F4", letterSpacing: "-0.02em", margin: 0 }}>Simple for diners. Powerful for chefs.</h2>
+              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: 0 }}>Simple for diners. Powerful for chefs.</h2>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-              <div style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "24px", padding: "32px" }}>
+              <div style={{ background: "#ffffff", border: "1px solid #ececec", borderRadius: "24px", padding: "32px" }}>
                 <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "20px" }}>For Diners</p>
                 {[
                   { n: "01", t: "Find your chef",    d: `Browse verified private chefs in ${cityName} by cuisine and availability.` },
@@ -472,30 +527,30 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                   { n: "03", t: "Tip directly",      d: "Scan their QR code, pay with any card. The tip goes straight to them." },
                 ].map((s) => (
                   <div key={s.n} style={{ display: "flex", gap: "16px", marginBottom: "20px" }}>
-                    <span style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.3rem", color: "rgba(201,169,110,0.4)", flexShrink: 0, minWidth: "28px", lineHeight: 1.2 }}>{s.n}</span>
+                    <span style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.4rem", color: "#d8c294", flexShrink: 0, minWidth: "28px", lineHeight: 1.2 }}>{s.n}</span>
                     <div>
-                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 700, color: "rgba(250,248,244,0.85)", margin: "0 0 3px" }}>{s.t}</p>
-                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "rgba(250,248,244,0.35)", margin: 0, lineHeight: 1.5 }}>{s.d}</p>
+                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 700, color: "#222222", margin: "0 0 3px" }}>{s.t}</p>
+                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "#888888", margin: 0, lineHeight: 1.5 }}>{s.d}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div style={{ background: "rgba(201,169,110,0.05)", border: "1px solid rgba(201,169,110,0.15)", borderRadius: "24px", padding: "32px" }}>
-                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "20px" }}>For Chefs in {cityName}</p>
+              <div style={{ background: "linear-gradient(160deg,#fdfaf3,#faf5ea)", border: "1px solid #ecdfc2", borderRadius: "24px", padding: "32px" }}>
+                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934A", marginBottom: "20px" }}>For Chefs in {cityName}</p>
                 {[
                   { n: "01", t: "Create your free page", d: "Sign up in 60 seconds. Add your photo, story, and specialties." },
                   { n: "02", t: "Connect Stripe",         d: "Link your bank in 2 minutes. Tips go directly to your account." },
                   { n: "03", t: "Share your QR code",     d: "Print it on menus or receipts. Diners scan and tip in seconds." },
                 ].map((s) => (
                   <div key={s.n} style={{ display: "flex", gap: "16px", marginBottom: "20px" }}>
-                    <span style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.3rem", color: "#C9A96E", flexShrink: 0, minWidth: "28px", lineHeight: 1.2 }}>{s.n}</span>
+                    <span style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.4rem", color: "#C9A96E", flexShrink: 0, minWidth: "28px", lineHeight: 1.2 }}>{s.n}</span>
                     <div>
-                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 700, color: "rgba(250,248,244,0.85)", margin: "0 0 3px" }}>{s.t}</p>
-                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "rgba(250,248,244,0.4)", margin: 0, lineHeight: 1.5 }}>{s.d}</p>
+                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 700, color: "#222222", margin: "0 0 3px" }}>{s.t}</p>
+                      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "#7a7058", margin: 0, lineHeight: 1.5 }}>{s.d}</p>
                     </div>
                   </div>
                 ))}
-                <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "linear-gradient(135deg,#D4B878 0%,#C9A96E 55%,#B8934A 100%)", color: "#1a1208", borderRadius: "100px", padding: "10px 22px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 700 }}>
+                <Link href="/signup" className="pc-pill" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "linear-gradient(135deg,#D4B878 0%,#C9A96E 55%,#B8934A 100%)", color: "#1a1208", borderRadius: "100px", padding: "11px 24px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 700 }}>
                   Claim your page in {cityName} →
                 </Link>
               </div>
@@ -504,35 +559,35 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         </section>
 
         {/* ── FAQ ── */}
-        <section style={{ padding: "0 20px 80px" }}>
+        <section style={{ padding: "72px 20px" }}>
           <div style={{ maxWidth: "760px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "12px" }}>FAQ</p>
-              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#FAF8F4", letterSpacing: "-0.02em", margin: 0 }}>
+              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: 0 }}>
                 Private chef questions for {cityName}
               </h2>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               {faqs.map((f) => (
-                <div key={f.q} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", padding: "20px 22px" }}>
-                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13.5px", fontWeight: 700, color: "rgba(250,248,244,0.85)", margin: "0 0 8px" }}>{f.q}</p>
-                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", color: "rgba(250,248,244,0.4)", margin: 0, lineHeight: 1.65 }}>{f.a}</p>
+                <div key={f.q} style={{ background: "#F7F3EA", border: "1px solid #efefef", borderRadius: "16px", padding: "20px 22px" }}>
+                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", fontWeight: 700, color: "#222222", margin: "0 0 8px" }}>{f.q}</p>
+                  <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "13px", color: "#777777", margin: 0, lineHeight: 1.65 }}>{f.a}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── Nearby cities ── */}
+        {/* ── Nearby cities (cream) ── */}
         {nearby.length > 0 && (
-          <section style={{ padding: "0 20px 60px" }}>
+          <section style={{ padding: "56px 20px", background: "#F7F3EA", borderTop: "1px solid #f0f0f0" }}>
             <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
               <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "16px" }}>
                 Nearby locations
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                 {nearby.map((n) => (
-                  <Link key={n.slug} href={`/private-chef/${n.slug}`} style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "100px", padding: "8px 18px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "13px", color: "rgba(250,248,244,0.55)" }}>
+                  <Link key={n.slug} href={`/private-chef/${n.slug}`} className="pc-chip" style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#ffffff", border: "1px solid #e6e6e6", borderRadius: "100px", padding: "9px 18px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "13px", color: "#555555" }}>
                     Private Chef in {n.name}
                   </Link>
                 ))}
@@ -541,10 +596,10 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
           </section>
         )}
 
-        {/* ── Cross-link: cheap / birthday / dinner party ── */}
-        <section style={{ padding: "0 20px 60px" }}>
+        {/* ── Cross-link: cheap / birthday / dinner party (cream) ── */}
+        <section style={{ padding: "0 20px 56px", background: "#F7F3EA" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-            <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(250,248,244,0.3)", marginBottom: "16px" }}>
+            <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#bbbbbb", marginBottom: "16px" }}>
               Also see
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
@@ -555,7 +610,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                 { href: `/private-chef-for-two/${citySlug}`,           label: `Private chef for two in ${cityName}` },
                 { href: `/personal-chef/${citySlug}`,                  label: `Personal chef in ${cityName}` },
               ].map((l) => (
-                <Link key={l.href} href={l.href} style={{ display: "inline-block", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "100px", padding: "7px 16px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "rgba(250,248,244,0.35)" }}>
+                <Link key={l.href} href={l.href} className="pc-chip" style={{ display: "inline-block", background: "#ffffff", border: "1px solid #ededed", borderRadius: "100px", padding: "8px 16px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "12px", color: "#888888" }}>
                   {l.label}
                 </Link>
               ))}
@@ -563,23 +618,55 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
           </div>
         </section>
 
-        {/* ── Final CTA ── */}
-        <section style={{ padding: "0 20px 100px" }}>
+        {/* ── Destination grid (Airbnb-style internal-link block) ── */}
+        <section style={{ padding: "72px 20px", borderTop: "1px solid #f0f0f0" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-            <div style={{ background: "linear-gradient(135deg, rgba(201,169,110,0.08) 0%, rgba(201,169,110,0.03) 100%)", border: "1px solid rgba(201,169,110,0.18)", borderRadius: "28px", padding: "52px 48px", display: "grid", gridTemplateColumns: "1fr auto", gap: "32px", alignItems: "center" }}>
+            <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "10px" }}>
+              Explore more
+            </p>
+            <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.7rem, 3.5vw, 2.6rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: "0 0 32px" }}>
+              Private chefs around the world
+            </h2>
+            <div style={{ columnWidth: "210px", columnGap: "28px" }}>
+              {gridCities.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/private-chef/${c.slug}`}
+                  style={{
+                    display: "block",
+                    breakInside: "avoid",
+                    padding: "7px 0",
+                    fontFamily: "-apple-system, system-ui",
+                    fontSize: "14px",
+                    color: "#555555",
+                    textDecoration: "none",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  Private chef in <span style={{ color: "#111111", fontWeight: 500 }}>{c.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Final CTA ── */}
+        <section style={{ padding: "80px 20px 100px" }}>
+          <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+            <div style={{ background: "linear-gradient(135deg,#fdfaf3 0%,#faf5ea 100%)", border: "1px solid #ecdfc2", borderRadius: "28px", padding: "52px 48px", display: "grid", gridTemplateColumns: "1fr auto", gap: "32px", alignItems: "center" }}>
               <div>
-                <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 400, color: "#FAF8F4", letterSpacing: "-0.02em", margin: "0 0 12px" }}>
+                <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: "0 0 12px" }}>
                   Are you a chef in {cityName}?
                 </h2>
-                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "15px", color: "rgba(250,248,244,0.45)", lineHeight: 1.65, margin: 0, maxWidth: "480px" }}>
+                <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "15px", color: "#666666", lineHeight: 1.65, margin: 0, maxWidth: "480px" }}>
                   Create your free chef page in under 2 minutes. Get your personal QR code, share it with diners, and start receiving direct tips. No middleman. 95% straight to your account.
                 </p>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px", minWidth: "200px" }}>
-                <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px", background: "linear-gradient(135deg,#D4B878 0%,#C9A96E 55%,#B8934A 100%)", color: "#1a1208", borderRadius: "100px", padding: "15px 32px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "15px", fontWeight: 700, boxShadow: "0 8px 32px rgba(201,169,110,0.35)", whiteSpace: "nowrap" }}>
+                <Link href="/signup" className="pc-pill" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px", background: "linear-gradient(135deg,#D4B878 0%,#C9A96E 55%,#B8934A 100%)", color: "#1a1208", borderRadius: "100px", padding: "15px 32px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "15px", fontWeight: 700, boxShadow: "0 8px 28px rgba(201,169,110,0.32)", whiteSpace: "nowrap" }}>
                   Create your free page →
                 </Link>
-                <Link href="/tutorial" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(250,248,244,0.5)", borderRadius: "100px", padding: "12px 28px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 500, whiteSpace: "nowrap" }}>
+                <Link href="/tutorial" className="pc-pill" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "1px solid #e0e0e0", color: "#555555", borderRadius: "100px", padding: "12px 28px", textDecoration: "none", fontFamily: "-apple-system, system-ui", fontSize: "13px", fontWeight: 500, whiteSpace: "nowrap" }}>
                   Watch tutorial first
                 </Link>
               </div>

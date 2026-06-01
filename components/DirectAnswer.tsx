@@ -14,21 +14,23 @@ export default function DirectAnswer({ question, answer }: Props) {
     <section
       aria-label="Quick answer"
       style={{
-        background: "rgba(201,169,110,0.05)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "#ffffff",
+        borderTop: "1px solid #ececec",
+        borderRight: "1px solid #ececec",
+        borderBottom: "1px solid #ececec",
         borderLeft: "4px solid #C9A96E",
         borderRadius: 16,
         padding: "22px 24px",
-        marginBottom: 32,
+        marginBottom: 8,
       }}
     >
       <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#C9A96E", margin: "0 0 8px" }}>
         Quick answer
       </p>
-      <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(20px, 2.6vw, 28px)", fontWeight: 400, letterSpacing: "-0.01em", color: "#FAF8F4", margin: "0 0 10px", lineHeight: 1.2 }}>
+      <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(20px, 2.6vw, 28px)", fontWeight: 500, letterSpacing: "-0.01em", color: "#111111", margin: "0 0 10px", lineHeight: 1.2 }}>
         {question}
       </h2>
-      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 15.5, lineHeight: 1.65, color: "rgba(250,248,244,0.6)", fontWeight: 400, margin: 0 }}>
+      <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 15.5, lineHeight: 1.65, color: "#555555", fontWeight: 400, margin: 0 }}>
         {answer}
       </p>
     </section>

@@ -21,19 +21,19 @@ export default function CityByline({ author, reviewedISO, coversLabel }: Props) 
     <div style={{
       display: "flex", alignItems: "center", gap: 14,
       padding: "14px 18px",
-      background: "rgba(255,255,255,0.03)",
-      border: "1px solid rgba(255,255,255,0.08)",
+      background: "#ffffff",
+      border: "1px solid #ececec",
       borderRadius: 16,
-      marginBottom: 28,
+      marginBottom: 24,
     }}>
       <Avatar name={author.name} size={44} />
       <div>
-        <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 14, fontWeight: 500, color: "rgba(250,248,244,0.85)", margin: 0, lineHeight: 1.3 }}>
-          <span style={{ color: "rgba(250,248,244,0.4)" }}>By</span>{" "}
-          <Link href={`/team/${author.slug}`} style={{ color: "#FAF8F4", fontWeight: 700, textDecoration: "none" }}>{author.name}</Link>{" "}
-          <span style={{ color: "rgba(250,248,244,0.4)" }}>· {author.role}</span>
+        <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 14, fontWeight: 500, color: "#1d1d1f", margin: 0, lineHeight: 1.3 }}>
+          <span style={{ color: "#8a8a8a" }}>By</span>{" "}
+          <Link href={`/team/${author.slug}`} style={{ color: "#111111", fontWeight: 700, textDecoration: "none" }}>{author.name}</Link>{" "}
+          <span style={{ color: "#8a8a8a" }}>· {author.role}</span>
         </p>
-        <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 12, color: "rgba(250,248,244,0.4)", margin: "4px 0 0", lineHeight: 1.3 }}>
+        <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 12, color: "#9a9a9a", margin: "4px 0 0", lineHeight: 1.3 }}>
           Reviewed <time dateTime={reviewedISO}>{reviewed}</time> · Covers {coversLabel}
         </p>
       </div>
