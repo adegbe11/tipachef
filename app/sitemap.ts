@@ -3,6 +3,7 @@ import { createServerClient } from "@/lib/supabase-server";
 import { ALL_POSTS } from "@/lib/blog-index";
 import { CITIES, CUISINES, TIP_GUIDES } from "@/lib/pseo-data";
 import { WORLD_CITIES } from "@/lib/world-cities";
+import { getAllLocationSlugs } from "@/lib/locations";
 
 // Fixed dates per content type — prevents Google ignoring lastModified
 // when it sees every page stamped "today" on every deploy.
@@ -15,17 +16,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Static pages — use real meaningful dates, not new Date()
   const staticPages: MetadataRoute.Sitemap = [
-    { url: base,                  lastModified: LAUNCH,         changeFrequency: "weekly",  priority: 1.0 },
-    { url: `${base}/for-chefs`,   lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.9 },
-    { url: `${base}/search`,      lastModified: LAUNCH,         changeFrequency: "daily",   priority: 0.9 },
-    { url: `${base}/blog`,        lastModified: LAUNCH,         changeFrequency: "weekly",  priority: 0.9 },
-    { url: `${base}/chefs`,       lastModified: LAUNCH,         changeFrequency: "weekly",  priority: 0.9 },
-    { url: `${base}/about`,       lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/contact`,     lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/help`,        lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/terms`,       lastModified: TERMS_UPDATED,  changeFrequency: "yearly",  priority: 0.3 },
-    { url: `${base}/privacy`,     lastModified: TERMS_UPDATED,  changeFrequency: "yearly",  priority: 0.3 },
+    { url: base,                     lastModified: LAUNCH,         changeFrequency: "weekly",  priority: 1.0 },
+    { url: `${base}/private-chef`,   lastModified: PSEO_PUBLISHED, changeFrequency: "weekly",  priority: 0.95 },
+    { url: `${base}/for-chefs`,      lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.9 },
+    { url: `${base}/search`,         lastModified: LAUNCH,         changeFrequency: "daily",   priority: 0.9 },
+    { url: `${base}/blog`,           lastModified: LAUNCH,         changeFrequency: "weekly",  priority: 0.9 },
+    { url: `${base}/chefs`,          lastModified: LAUNCH,         changeFrequency: "weekly",  priority: 0.9 },
+    { url: `${base}/tutorial`,       lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.85 },
+    { url: `${base}/about`,          lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/contact`,        lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/help`,           lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/terms`,          lastModified: TERMS_UPDATED,  changeFrequency: "yearly",  priority: 0.3 },
+    { url: `${base}/privacy`,        lastModified: TERMS_UPDATED,  changeFrequency: "yearly",  priority: 0.3 },
   ];
+
+  // All rich location pages from lib/locations.ts (merged into private-chef/[city] template)
+  const locationSlugs = getAllLocationSlugs();
+  const richLocationPages: MetadataRoute.Sitemap = locationSlugs.map((slug) => ({
+    url: `${base}/private-chef/${slug}`,
+    lastModified: PSEO_PUBLISHED,
+    changeFrequency: "weekly" as const,
+    priority: 0.88,
+  }));
 
   // Blog post pages — use actual post date (already correct)
   const blogPages: MetadataRoute.Sitemap = ALL_POSTS.map((post) => ({
@@ -128,6 +140,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  // Deduplicate private-chef pages: prefer richLocationPages over privateChefPages when slug overlaps
+  const richSlugsSet = new Set(locationSlugs);
+  const remainingPrivateChefPages = privateChefPages.filter(
+    (p) => !richSlugsSet.has(p.url.replace(`${base}/private-chef/`, ""))
+  );
+
   return [
     ...staticPages,
     ...blogPages,
@@ -135,7 +153,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...cityPages,
     ...cuisinePages,
     ...tipGuidePages,
-    ...privateChefPages,
+    ...richLocationPages,
+    ...remainingPrivateChefPages,
     ...cheapChefPages,
     ...birthdayChefPages,
     ...dinnerPartyPages,
