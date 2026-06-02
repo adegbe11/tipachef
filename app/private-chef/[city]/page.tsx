@@ -257,7 +257,6 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         @media (max-width: 760px) {
           .pc-2col { grid-template-columns: 1fr; }
           .pc-cta { grid-template-columns: 1fr; padding: 36px 24px; gap: 24px; }
-          .pc-cta > div:last-child { min-width: 0 !important; }
         }
       `}</style>
       <LightNavbar />

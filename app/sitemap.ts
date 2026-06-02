@@ -7,6 +7,7 @@ import { getAllLocationSlugs } from "@/lib/locations";
 import { ALL_CITIES } from "@/lib/all-cities";
 import { getIndexableCitySlugs } from "@/lib/city-seo";
 import { AUTHORS } from "@/lib/authors";
+import { getAllTippingSlugs } from "@/lib/tipping-guides";
 
 // Fixed dates per content type — prevents Google ignoring lastModified
 // when it sees every page stamped "today" on every deploy.
@@ -21,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: base,                     lastModified: LAUNCH,         changeFrequency: "weekly",  priority: 1.0 },
     { url: `${base}/private-chef`,   lastModified: PSEO_PUBLISHED, changeFrequency: "weekly",  priority: 0.95 },
+    { url: `${base}/tipping`,        lastModified: PSEO_PUBLISHED, changeFrequency: "weekly",  priority: 0.9 },
     { url: `${base}/team`,           lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/for-chefs`,      lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/search`,         lastModified: LAUNCH,         changeFrequency: "daily",   priority: 0.9 },
@@ -153,9 +155,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.4,
   }));
 
+  // Tipping-guide cluster (do you tip / how much to tip a [type] chef)
+  const tippingPages: MetadataRoute.Sitemap = getAllTippingSlugs().map((slug) => ({
+    url: `${base}/tipping/${slug}`,
+    lastModified: PSEO_PUBLISHED,
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
   const all: MetadataRoute.Sitemap = [
     ...staticPages,
     ...authorPages,
+    ...tippingPages,
     ...blogPages,
     ...chefPages,
     ...cityPages,
