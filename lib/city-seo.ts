@@ -19,11 +19,13 @@ export function cityTier(population: number): CityTier {
   return "B";
 }
 
-// Curated cities (in lib/locations.ts) always index regardless of population.
-export function shouldIndexCity(city: AllCity, curated: boolean): boolean {
-  if (curated) return true;
-  const t = cityTier(city.population);
-  return t === "S" || t === "A";
+// Every real city in the dataset is indexable. Each page carries unique
+// content (per-city stats, pricing, services, FAQ, nearby-city links), so we
+// open the full long tail to search engines rather than gating by population.
+// (Unknown/typed slugs not in the dataset are still noindex in the page, to
+// avoid an infinite low-quality URL space.)
+export function shouldIndexCity(_city: AllCity, _curated: boolean): boolean {
+  return true;
 }
 
 export function robotsForCity(city: AllCity, curated: boolean): string {
@@ -121,9 +123,8 @@ export function getCityChefStats(city: AllCity): CityChefStats {
   };
 }
 
-// Cities worth listing in the sitemap: indexable only (S + A). The long tail
-// is intentionally excluded so we don't burn crawl budget on thin pages — they
-// stay discoverable via the nearby-city internal links (noindex,follow).
+// Every city is now indexable, so the sitemap lists them all. Total sitemap
+// size stays under Google's 50,000-URL cap (checked in app/sitemap.ts).
 export function getIndexableCitySlugs(cities: AllCity[]): string[] {
-  return cities.filter((c) => shouldIndexCity(c, false)).map((c) => c.slug);
+  return cities.map((c) => c.slug);
 }
