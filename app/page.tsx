@@ -51,9 +51,9 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": "https://tipachef.com/#webpage",
       url: "https://tipachef.com",
-      name: "Tip a Chef | Make money as a chef",
+      name: "Tip a Chef | Tip & Hire a Private Chef Directly",
       description:
-        "Join thousands of chefs worldwide on Tip a Chef. Make money as a chef with every dish you serve. Create your page, get your link and QR code, get tipped instantly.",
+        "Tip a Chef connects diners with private chefs, with every tip going straight to the chef who cooked, not a pool. Find a private chef near you, or create your free chef page and get tipped by QR code.",
       isPartOf: { "@id": "https://tipachef.com/#website" },
       about: { "@id": "https://tipachef.com/#organization" },
     },

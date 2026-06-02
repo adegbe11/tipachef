@@ -24,10 +24,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Tip a Chef | Make money as a chef",
+  title: "Tip a Chef | Tip & Hire a Private Chef Directly",
   description:
-    "Join thousands of chefs worldwide on Tip a Chef. Make money as a chef with every dish you serve. Create your page, get your link and QR code, get tipped instantly.",
-  keywords: ["tip a chef", "chef tipping", "make money as a chef", "restaurant kitchen tips", "direct chef tips", "earn tips cooking"],
+    "Tip a Chef connects diners with private chefs, with every tip going straight to the chef who cooked, not a pool. Find a private chef near you, or create your free chef page and get tipped by QR code.",
+  keywords: [
+    "tip a chef", "tip a private chef", "tip your chef",
+    "private chef", "hire a private chef", "private chef near me",
+    "personal chef", "do you tip a private chef", "how much to tip a private chef",
+    "chef tipping", "make money as a chef",
+  ],
   icons: {
     icon: [
       { url: "/favicon.ico",        sizes: "any",      type: "image/x-icon" },
@@ -44,17 +49,17 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Tip a Chef | Make money as a chef",
-    description: "Join thousands of chefs worldwide on Tip a Chef. Make money as a chef with every dish you serve. Create your page, get your link and QR code, get tipped instantly.",
+    title: "Tip a Chef | Tip & Hire a Private Chef Directly",
+    description: "Tip and hire a private chef directly. Every tip goes straight to the chef who cooked, not a pool. Find a private chef near you, or create your free chef page and get tipped by QR code.",
     url: "https://tipachef.com",
     siteName: "Tip a Chef",
-    images: [{ url: "/og", width: 1200, height: 630, alt: "Tip a Chef — Make money doing what you cook" }],
+    images: [{ url: "/og", width: 1200, height: 630, alt: "Tip a Chef — tip and hire a private chef directly" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tip a Chef | Make money as a chef",
-    description: "Join thousands of chefs worldwide on Tip a Chef. Make money as a chef with every dish you serve. Create your page, get your link and QR code, get tipped instantly.",
+    title: "Tip a Chef | Tip & Hire a Private Chef Directly",
+    description: "Tip and hire a private chef directly. Every tip goes straight to the chef who cooked, not a pool. Find a chef near you, or create your free page and get tipped by QR code.",
     images: ["/og"],
   },
   metadataBase: new URL("https://tipachef.com"),
