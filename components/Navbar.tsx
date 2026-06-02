@@ -6,9 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const NAV_LINKS = [
-  { label: "How it works", href: "#how-it-works" },
-  { label: "For chefs",    href: "/for-chefs"    },
-  { label: "Find a chef",  href: "/search"       },
+  { label: "Private chefs", href: "/private-chef" },
+  { label: "Tipping guide", href: "/tipping"      },
+  { label: "For chefs",     href: "/for-chefs"    },
+  { label: "Find a chef",   href: "/search"       },
 ];
 
 const SEARCH_SUGGESTIONS = [

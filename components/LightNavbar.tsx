@@ -42,6 +42,24 @@ export default function LightNavbar() {
           </span>
         </Link>
 
+        {/* Center nav (internal links for SEO + discovery) */}
+        <nav className="hidden md:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
+          {[
+            { label: "Private chefs", href: "/private-chef" },
+            { label: "Tipping guide", href: "/tipping" },
+            { label: "For chefs",     href: "/for-chefs" },
+            { label: "Find a chef",   href: "/search" },
+          ].map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="font-sans text-sm font-medium text-black/55 hover:text-black transition-colors duration-200 tracking-wide whitespace-nowrap"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+
         {/* Right */}
         <div className="flex items-center gap-2.5">
           <Link
