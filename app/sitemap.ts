@@ -23,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: base,                     lastModified: LAUNCH,         changeFrequency: "weekly",  priority: 1.0 },
     { url: `${base}/private-chef`,   lastModified: PSEO_PUBLISHED, changeFrequency: "weekly",  priority: 0.95 },
     { url: `${base}/tipping`,        lastModified: PSEO_PUBLISHED, changeFrequency: "weekly",  priority: 0.9 },
+    { url: `${base}/private-chef-for-wedding`, lastModified: PSEO_PUBLISHED, changeFrequency: "weekly", priority: 0.85 },
     { url: `${base}/team`,           lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/for-chefs`,      lastModified: LAUNCH,         changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/search`,         lastModified: LAUNCH,         changeFrequency: "daily",   priority: 0.9 },
