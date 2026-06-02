@@ -29,7 +29,7 @@ export default function TeamPage() {
               Former chefs, hospitality journalists, and private dining specialists who research, write, and review every city guide on Tip a Chef.
             </p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))", gap: "16px" }}>
               {AUTHORS.map((a) => (
                 <Link key={a.slug} href={`/team/${a.slug}`} style={{ textDecoration: "none" }}>
                   <div style={{ display: "flex", gap: "16px", alignItems: "flex-start", background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "20px", padding: "22px 24px", height: "100%" }}>

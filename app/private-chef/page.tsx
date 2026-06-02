@@ -208,7 +208,7 @@ export default function PrivateChefHubPage() {
         {/* ── What is a private chef ── */}
         <section style={{ padding: "0 20px 80px" }}>
           <div style={{ maxWidth: "860px", margin: "0 auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
               {[
                 { q: "What is a private chef?", a: "A private chef is a professional cook who prepares meals exclusively for you, in your home, holiday villa, or event venue. They handle shopping, cooking, and clean-up." },
                 { q: "What does a private chef cost?", a: "Dinner party events typically range from $300–$1,500 depending on location and menu. Meal prep services run $150–$600/day. Full-time chefs earn $40k–$160k/year." },

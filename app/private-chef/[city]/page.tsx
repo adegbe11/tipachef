@@ -252,6 +252,13 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         .pc-pill { transition: transform .15s ease, box-shadow .15s ease, filter .15s ease; }
         .pc-pill:hover { transform: translateY(-2px); filter: brightness(1.04); }
         .gold-text { background: linear-gradient(135deg,#D4B878 0%,#C9A96E 45%,#A8823C 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: #B8934A; }
+        .pc-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .pc-cta { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; padding: 52px 48px; }
+        @media (max-width: 760px) {
+          .pc-2col { grid-template-columns: 1fr; }
+          .pc-cta { grid-template-columns: 1fr; padding: 36px 24px; gap: 24px; }
+          .pc-cta > div:last-child { min-width: 0 !important; }
+        }
       `}</style>
       <LightNavbar />
       <main style={{ background: "#FCFBF8", minHeight: "100vh", color: "#111111" }}>
@@ -518,7 +525,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
               <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "12px" }}>How it works</p>
               <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: 0 }}>Simple for diners. Powerful for chefs.</h2>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+            <div className="pc-2col">
               <div style={{ background: "#ffffff", border: "1px solid #ececec", borderRadius: "24px", padding: "32px" }}>
                 <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "20px" }}>For Diners</p>
                 {[
@@ -653,7 +660,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         {/* ── Final CTA ── */}
         <section style={{ padding: "80px 20px 100px" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-            <div style={{ background: "linear-gradient(135deg,#fdfaf3 0%,#faf5ea 100%)", border: "1px solid #ecdfc2", borderRadius: "28px", padding: "52px 48px", display: "grid", gridTemplateColumns: "1fr auto", gap: "32px", alignItems: "center" }}>
+            <div className="pc-cta" style={{ background: "linear-gradient(135deg,#fdfaf3 0%,#faf5ea 100%)", border: "1px solid #ecdfc2", borderRadius: "28px" }}>
               <div>
                 <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: "0 0 12px" }}>
                   Are you a chef in {cityName}?
