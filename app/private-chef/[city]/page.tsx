@@ -12,6 +12,7 @@ import LightNavbar             from "@/components/LightNavbar";
 import Footer                  from "@/components/Footer";
 import CityByline              from "@/components/CityByline";
 import DirectAnswer            from "@/components/DirectAnswer";
+import CityChefCalculator      from "@/components/CityChefCalculator";
 
 export const dynamicParams = true;
 export const revalidate    = 3600;
@@ -94,6 +95,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
   const region      = loc?.region ?? ac?.region ?? "";
   const flag        = countryFlag(countryCode);
   const priceFrom   = wc?.priceFrom ?? ac?.priceFrom ?? 60;
+  const currencySymbol = ac?.currencySymbol ?? "$";
 
   // Richer pricing from locations.ts when available, else derived from priceFrom
   const eventCost    = loc?.eventCost    ?? `$${priceFrom * 8}–$${priceFrom * 18}`;
@@ -254,6 +256,8 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         .gold-text { background: linear-gradient(135deg,#D4B878 0%,#C9A96E 45%,#A8823C 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: #B8934A; }
         .pc-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .pc-cta { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; padding: 52px 48px; }
+        .pc-calc { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        @media (max-width: 880px) { .pc-calc { grid-template-columns: 1fr; gap: 28px; } }
         @media (max-width: 760px) {
           .pc-2col { grid-template-columns: 1fr; }
           .pc-cta { grid-template-columns: 1fr; padding: 36px 24px; gap: 24px; }
@@ -349,6 +353,74 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
             <CityByline author={author} reviewedISO={stats.lastReviewedISO} coversLabel={`${cityName}, ${country}`} />
             <DirectAnswer question={directAnswer.question} answer={directAnswer.answer} />
+          </div>
+        </section>
+
+        {/* ── Interactive cost + tip calculator (the centerpiece tool) ── */}
+        <section style={{ padding: "44px 20px 8px" }}>
+          <div className="pc-calc" style={{ maxWidth: "1100px", margin: "0 auto" }}>
+            <div>
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "14px" }}>
+                Cost calculator
+              </p>
+              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.9rem, 4vw, 3rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", lineHeight: 1.05, margin: "0 0 16px" }}>
+                What will a private chef cost in {cityName}?
+              </h2>
+              <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "16px", color: "#666666", lineHeight: 1.7, maxWidth: "440px", margin: "0 0 24px" }}>
+                Set your guests, courses, and cuisine for a live estimate, then add the tip. When you are ready, browse {cityName} chefs and book one at that price.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "8px" }}>
+                {["Verified chef profiles", "Book direct, no agency cut", "100% of the tip goes to the chef"].map((t) => (
+                  <p key={t} style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", color: "#444", margin: 0, display: "flex", gap: "10px", alignItems: "center" }}>
+                    <span style={{ color: "#C9A96E", fontWeight: 700 }}>✓</span> {t}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <CityChefCalculator cityName={cityName} currencySymbol={currencySymbol} perGuest={priceFrom} />
+          </div>
+        </section>
+
+        {/* ── Comparison: private chef vs alternatives (Wise-style "vs banks") ── */}
+        <section style={{ padding: "56px 20px 0" }}>
+          <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+            <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "12px" }}>
+              Why a private chef
+            </p>
+            <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 400, color: "#111111", letterSpacing: "-0.02em", margin: "0 0 28px" }}>
+              Private chef vs the alternatives in {cityName}
+            </h2>
+            <div style={{ overflowX: "auto", borderRadius: "20px", border: "1px solid #ececec", boxShadow: "0 1px 2px rgba(168,130,58,0.05)" }}>
+              <table style={{ width: "100%", minWidth: "640px", borderCollapse: "collapse", background: "#ffffff", fontFamily: "-apple-system, system-ui" }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left", padding: "16px 20px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "#aaa", background: "#fafafa", borderBottom: "1px solid #ececec" }}></th>
+                    <th style={{ textAlign: "left", padding: "16px 20px", fontSize: "13.5px", fontWeight: 700, color: "#1a1208", background: "linear-gradient(135deg,#fdf6e6,#faf0d8)", borderBottom: "2px solid #C9A96E" }}>Private chef</th>
+                    <th style={{ textAlign: "left", padding: "16px 20px", fontSize: "13px", fontWeight: 600, color: "#888", background: "#fafafa", borderBottom: "1px solid #ececec" }}>Eating out</th>
+                    <th style={{ textAlign: "left", padding: "16px 20px", fontSize: "13px", fontWeight: 600, color: "#888", background: "#fafafa", borderBottom: "1px solid #ececec" }}>Catering company</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { f: "Where it happens", a: "Your home or venue", b: "You travel to them", c: "Your venue" },
+                    { f: "The menu", a: "Bespoke, built with you", b: "Fixed menu", c: "Set packages" },
+                    { f: "How it's cooked", a: "Fresh, on-site, just for you", b: "Line kitchen, many tables", c: "Often off-site, reheated" },
+                    { f: "Dietary needs", a: "Handled individually", b: "Limited swaps", c: "Hard at scale" },
+                    { f: "Who gets your tip", a: "100% the chef", b: "Split with front-of-house", c: "Often pooled" },
+                    { f: "Booking", a: "Direct with the chef", b: "Reservation", c: "Via a sales team" },
+                  ].map((r, i, arr) => (
+                    <tr key={r.f}>
+                      <td style={{ padding: "14px 20px", fontSize: "13px", fontWeight: 600, color: "#444", borderBottom: i < arr.length - 1 ? "1px solid #f2f2f2" : "none" }}>{r.f}</td>
+                      <td style={{ padding: "14px 20px", fontSize: "13.5px", fontWeight: 600, color: "#1a1208", background: "rgba(201,169,110,0.06)", borderBottom: i < arr.length - 1 ? "1px solid #f0e8d4" : "none" }}>
+                        <span style={{ color: "#C9A96E", marginRight: "6px" }}>✓</span>{r.a}
+                      </td>
+                      <td style={{ padding: "14px 20px", fontSize: "13px", color: "#888", borderBottom: i < arr.length - 1 ? "1px solid #f2f2f2" : "none" }}>{r.b}</td>
+                      <td style={{ padding: "14px 20px", fontSize: "13px", color: "#888", borderBottom: i < arr.length - 1 ? "1px solid #f2f2f2" : "none" }}>{r.c}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
