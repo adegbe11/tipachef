@@ -19,13 +19,17 @@ export function cityTier(population: number): CityTier {
   return "B";
 }
 
-// Every real city in the dataset is indexable. Each page carries unique
-// content (per-city stats, pricing, services, FAQ, nearby-city links), so we
-// open the full long tail to search engines rather than gating by population.
-// (Unknown/typed slugs not in the dataset are still noindex in the page, to
-// avoid an infinite low-quality URL space.)
-export function shouldIndexCity(_city: AllCity, _curated: boolean): boolean {
-  return true;
+// Focus indexing on cities with real search demand. Curated cities and Tier
+// S/A (population >= 100K) ask to be indexed; the Tier B long tail renders
+// noindex,follow so it stays live and link-equity flows, but Google's limited
+// crawl budget for a young domain concentrates on pages that can actually
+// rank. (GSC confirmed: dumping all 34k pages just produced 34k "Discovered,
+// currently not indexed". Refocusing helps the best pages get indexed faster.)
+// Re-open the full tail by returning true here once the domain has authority.
+export function shouldIndexCity(city: AllCity, curated: boolean): boolean {
+  if (curated) return true;
+  const t = cityTier(city.population);
+  return t === "S" || t === "A";
 }
 
 export function robotsForCity(city: AllCity, curated: boolean): string {
@@ -123,8 +127,9 @@ export function getCityChefStats(city: AllCity): CityChefStats {
   };
 }
 
-// Every city is now indexable, so the sitemap lists them all. Total sitemap
-// size stays under Google's 50,000-URL cap (checked in app/sitemap.ts).
+// Cities the sitemap should list: indexable only (curated + Tier S/A). The
+// noindex long tail is excluded so crawl budget is spent on pages that can
+// rank now; those towns stay reachable via the nearby-city internal links.
 export function getIndexableCitySlugs(cities: AllCity[]): string[] {
-  return cities.map((c) => c.slug);
+  return cities.filter((c) => shouldIndexCity(c, false)).map((c) => c.slug);
 }
