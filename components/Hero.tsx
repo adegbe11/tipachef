@@ -122,7 +122,7 @@ export default function Hero() {
             animationFillMode: "forwards",
           }}
         >
-          Join thousands of chefs getting tipped directly by the people who love their food.
+          A direct way for diners to support the chef behind the meal. Create your page, share your QR code, and keep 95% of every tip before Stripe fees.
         </p>
 
         <div

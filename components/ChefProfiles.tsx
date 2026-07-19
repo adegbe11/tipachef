@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRef, useEffect } from "react";
 
-const TOP_CHEFS = [
+const PROFILE_EXAMPLES = [
   {
     slug:     "marco-esposito",
     name:     "Marco Esposito",
@@ -12,7 +11,6 @@ const TOP_CHEFS = [
     venue:    "Osteria del Fuoco",
     location: "Rome, Italy",
     flag:     "🇮🇹",
-    tips:     "312",
     photo:    "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=600&auto=format&q=85",
   },
   {
@@ -22,7 +20,6 @@ const TOP_CHEFS = [
     venue:    "Kuzina",
     location: "Athens, Greece",
     flag:     "🇬🇷",
-    tips:     "247",
     photo:    "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=600&auto=format&q=85",
   },
   {
@@ -32,7 +29,6 @@ const TOP_CHEFS = [
     venue:    "Le Comptoir",
     location: "Paris, France",
     flag:     "🇫🇷",
-    tips:     "189",
     photo:    "https://images.unsplash.com/photo-1566554273541-37a9ca77b91f?w=600&auto=format&q=85",
   },
 ];
@@ -86,22 +82,21 @@ export default function ChefProfiles() {
 
         {/* Header */}
         <div ref={headerRef} className="text-center mb-14">
-          <p className="eyebrow mb-4">Check out our top chef profiles</p>
+          <p className="eyebrow mb-4">See what your page can become</p>
           <h2
             className="font-display text-ivory leading-tight"
             style={{ fontSize:"clamp(2rem, 3.8vw, 3rem)", fontWeight:400 }}
           >
-            Real chefs.{" "}
-            <span className="text-ember-gradient italic">Real gratitude.</span>
+            Your craft.{" "}
+            <span className="text-ember-gradient italic">Beautifully presented.</span>
           </h2>
         </div>
 
         {/* 3-card grid */}
         <div ref={gridRef} className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {TOP_CHEFS.map((chef) => (
-            <Link
+          {PROFILE_EXAMPLES.map((chef) => (
+            <div
               key={chef.slug}
-              href={`/${chef.slug}`}
               className="group block"
               style={{ textDecoration:"none" }}
             >
@@ -195,9 +190,9 @@ export default function ChefProfiles() {
                   </div>
                   <div>
                     <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"13px", fontWeight:700, color:"rgba(250,248,244,0.88)", margin:0 }}>
-                      {chef.tips}+ tips
+                      Profile preview
                     </p>
-                    <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"10px", color:"rgba(250,248,244,0.3)", margin:0 }}>received</p>
+                    <p style={{ fontFamily:"-apple-system,system-ui", fontSize:"10px", color:"rgba(250,248,244,0.3)", margin:0 }}>example design</p>
                   </div>
                 </div>
 
@@ -207,10 +202,10 @@ export default function ChefProfiles() {
                     color:"#C9A96E", letterSpacing:"0.02em",
                   }}
                 >
-                  Tip now →
+                  Preview
                 </span>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 

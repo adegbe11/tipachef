@@ -110,7 +110,7 @@ export default function TipTiers() {
         </div>
 
         <p className="text-center font-sans text-ivory/30 text-sm mt-8">
-          You set the perks. Diners choose what feels right. 100% goes to you.
+          You set the perks. Diners choose what feels right. You keep 95% before Stripe processing fees.
         </p>
       </div>
     </section>

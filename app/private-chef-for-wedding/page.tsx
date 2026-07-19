@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import CityByline from "@/components/CityByline";
 import DirectAnswer from "@/components/DirectAnswer";
 import { assignAuthor, authorJsonLd } from "@/lib/authors";
-import { getCityChefStats } from "@/lib/city-seo";
 
 export const metadata: Metadata = {
   title: "Private Chef for Your Wedding | Personal Wedding Catering | Tip a Chef",
@@ -90,10 +89,7 @@ const jsonLd = {
 
 export default function WeddingChefPage() {
   const author = assignAuthor("private-chef-for-wedding", "Europe");
-  const reviewedISO = getCityChefStats({
-    name: "wedding", slug: "private-chef-for-wedding", country: "", countryCode: "US",
-    continent: "", region: "", currency: "USD", currencySymbol: "$", priceFrom: 120, population: 500000,
-  }).lastReviewedISO;
+  const reviewedISO = "2026-07-18";
 
   const directAnswer = {
     question: "How much does a private chef cost for a wedding?",

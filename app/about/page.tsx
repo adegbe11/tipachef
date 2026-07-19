@@ -299,7 +299,7 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
               {[
                 { value: "Every", label: "Country" },
-                { value: "100%",  label: "To the chef" },
+                { value: "95%",   label: "To the chef before Stripe fees" },
                 { value: "2 min", label: "To go live" },
                 { value: "Free",  label: "To join" },
               ].map((s) => (

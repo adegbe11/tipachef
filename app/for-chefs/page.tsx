@@ -6,10 +6,10 @@ import ClaimPage from "@/components/ClaimPage";
 
 export const metadata: Metadata = {
   title: "Chefs: Get Tips Directly From Your Diners | Tip a Chef",
-  description: "Create a free Tip a Chef profile. Your diners scan your QR code, send a tip, and leave a personal message. 100% reaches you instantly via Stripe. No restaurant cut.",
+  description: "Create a free Tip a Chef profile. Diners scan your QR code, send a tip, and leave a message. Keep 95% before Stripe processing fees.",
   openGraph: {
     title: "Get Direct Tips From Your Diners | Tip a Chef",
-    description: "Free profile. QR code. 100% of every tip goes straight to you.",
+    description: "Free profile. Personal QR code. Keep 95% of each tip before Stripe processing fees.",
     url: "https://tipachef.com/for-chefs",
     type: "website",
   },
@@ -20,7 +20,7 @@ const STEPS = [
   { n: "01", title: "Create your free profile", body: "Takes five minutes. Add your name, photo, role, and city. We give you a public profile page and a QR code card." },
   { n: "02", title: "Put your QR code where diners see it", body: "On your pass, on the menu, on a card at the table. Anywhere a diner might want to say thank you." },
   { n: "03", title: "Diner scans, picks an amount, leaves a note", body: "No app download. No account needed on their side. Thirty seconds on any phone." },
-  { n: "04", title: "Money hits your Stripe account directly", body: "100% of every tip. Instant transfer. No restaurant cut, no platform fee on tips received." },
+  { n: "04", title: "Payments route to your Stripe account", body: "Keep 95% before Stripe processing fees. No restaurant pool or management cut." },
 ];
 
 const EARNINGS = [
@@ -143,7 +143,7 @@ export default function ForChefsPage() {
             <p className="eyebrow mb-8 text-center">Why chefs choose Tip a Chef</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px" }}>
               {[
-                { icon: "💸", title: "100% goes to you", body: "We do not take a cut of your tips. Every penny a diner sends lands in your Stripe account." },
+                { icon: "💸", title: "Keep 95%", body: "A transparent 5% platform fee applies, plus Stripe processing fees. There is no restaurant pool." },
                 { icon: "🆓", title: "Free to join", body: "No monthly fee, no setup fee, no hidden charge. Your profile is yours for life." },
                 { icon: "📱", title: "No app for diners", body: "Diners scan a QR code and pay from the browser. Nothing to download. Higher conversion." },
                 { icon: "🌍", title: "Works anywhere you cook", body: "Restaurant, private event, pop-up, supper club. Your profile moves with you." },

@@ -114,7 +114,7 @@ export default function TipCard({ chefSlug, chefName }: TipCardProps) {
         {loading ? "Redirecting to payment..." : tipAmount > 0 ? `Send $${tipAmount} tip →` : "Choose an amount"}
       </button>
 
-      <p className="text-center text-xs text-gray-300 mt-3">Powered by Stripe · 100% goes to {firstName}</p>
+      <p className="text-center text-xs text-gray-400 mt-3">Powered by Stripe · {firstName} receives 95% before Stripe processing fees</p>
     </div>
   );
 }

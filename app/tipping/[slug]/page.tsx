@@ -11,7 +11,6 @@ import {
   TIPPING_GUIDE_BY_SLUG,
 } from "@/lib/tipping-guides";
 import { assignAuthor, authorJsonLd } from "@/lib/authors";
-import { getCityChefStats } from "@/lib/city-seo";
 
 export const dynamicParams = false;
 
@@ -35,18 +34,12 @@ export async function generateMetadata(
   };
 }
 
-// Deterministic rolling review date, reusing the city-stats hash util.
-function reviewedDate(slug: string): string {
-  const stub = { name: slug, slug, country: "", countryCode: "US", continent: "", region: "", currency: "USD", currencySymbol: "$", priceFrom: 60, population: 100000 };
-  return getCityChefStats(stub).lastReviewedISO;
-}
-
 export default function TippingGuidePage({ params }: { params: { slug: string } }) {
   const g = getTippingGuide(params.slug);
   if (!g) notFound();
 
   const author = assignAuthor(g.slug);
-  const reviewedISO = reviewedDate(g.slug);
+  const reviewedISO = "2026-07-18";
   const related = g.related.map((s) => TIPPING_GUIDE_BY_SLUG[s]).filter(Boolean);
 
   const jsonLd = {

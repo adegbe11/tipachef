@@ -85,7 +85,7 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": "https://tipachef.com/private-chef",
       name: "Private Chef | Hire a Personal Chef Near You",
-      description: "Find and hire a professional private chef near you. Browse verified chefs in 200+ cities worldwide.",
+      description: "Find independent chefs who have created profiles, or list your own private-chef services.",
       url: "https://tipachef.com/private-chef",
       isPartOf: { "@id": "https://tipachef.com/#website" },
     },

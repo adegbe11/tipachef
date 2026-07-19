@@ -1,8 +1,8 @@
 const ROWS = [
-  { feature: "100% tip goes to chef",             us: true,  bmac: false, patreon: false },
+  { feature: "Chef-specific profiles and QR tipping", us: true, bmac: false, patreon: false },
   { feature: "Restaurant QR integration",          us: true,  bmac: false, patreon: false },
   { feature: "Back-of-house kitchen tipping",      us: true,  bmac: false, patreon: false },
-  { feature: "Instant payouts",                    us: true,  bmac: false, patreon: false },
+  { feature: "Stripe Connect payouts",             us: true,  bmac: false, patreon: false },
   { feature: "Chef-specific profiles",             us: true,  bmac: false, patreon: false },
   { feature: "Monthly memberships",                us: true,  bmac: true,  patreon: true  },
   { feature: "Free to sign up",                    us: true,  bmac: true,  patreon: true  },

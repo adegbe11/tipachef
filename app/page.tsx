@@ -53,7 +53,7 @@ const jsonLd = {
       url: "https://tipachef.com",
       name: "Tip a Chef | Tip & Hire a Private Chef Directly",
       description:
-        "Tip a Chef connects diners with private chefs, with every tip going straight to the chef who cooked, not a pool. Find a private chef near you, or create your free chef page and get tipped by QR code.",
+        "Tip a Chef helps diners support chefs directly. Find a private chef, or create a free chef page, share a QR code, and receive tips through Stripe.",
       isPartOf: { "@id": "https://tipachef.com/#website" },
       about: { "@id": "https://tipachef.com/#organization" },
     },

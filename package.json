@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start --port 3014",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.4.0",

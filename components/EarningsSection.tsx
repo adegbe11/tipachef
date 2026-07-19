@@ -35,7 +35,7 @@ const STATS = [
   { display: <AnimCounter end={247} prefix="$" />, label: "Tips received" },
   { display: <AnimCounter end={14} />,              label: "Supporters"    },
   { display: <AnimCounter end={1840} prefix="$" />, label: "This month"    },
-  { display: <AnimCounter end={100} suffix="%" />,  label: "Goes to you"   },
+  { display: <AnimCounter end={95} suffix="%" />,   label: "Before Stripe fees" },
 ];
 
 const TIPS = [
@@ -82,13 +82,13 @@ export default function EarningsSection() {
             className="font-display text-ivory leading-tight mb-6"
             style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)", fontWeight: 300 }}
           >
-            100% yours.<br />
-            Paid<br />
-            <span className="text-ember-gradient italic">instantly.</span>
+            95% yours.<br />
+            Routed<br />
+            <span className="text-ember-gradient italic">directly.</span>
           </h2>
           <p className="font-sans text-ivory/45 text-sm leading-relaxed font-light mb-10 max-w-sm">
-            Every tip goes directly to your account. Not the restaurant. Not a
-            shared pool. Yours. Cash out any time. No minimum. No waiting.
+            Payments are routed to your connected Stripe account, not a restaurant
+            pool. Stripe controls settlement and payout timing for your account.
           </p>
           <Link
             href="/for-chefs#how-it-works"
@@ -149,7 +149,7 @@ export default function EarningsSection() {
                     animation: "pulse 2s infinite",
                   }}
                 />
-                <span style={{ fontFamily: "-apple-system,system-ui", fontSize: "9px", color: "rgba(255,255,255,0.28)", letterSpacing: "0.04em" }}>LIVE</span>
+                <span style={{ fontFamily: "-apple-system,system-ui", fontSize: "9px", color: "rgba(255,255,255,0.28)", letterSpacing: "0.04em" }}>PREVIEW</span>
               </div>
             </div>
 
@@ -286,7 +286,7 @@ export default function EarningsSection() {
                   letterSpacing: "0.03em",
                 }}
               >
-                Instant payouts · Secured by Stripe
+                Payouts managed by Stripe
               </span>
             </div>
           </div>

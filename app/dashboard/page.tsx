@@ -633,7 +633,7 @@ function DashboardInner() {
                   {chef.stripe_account_id ? (
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-green-400 inline-block" />
-                      <span className="text-sm text-gray-600">Stripe connected · Instant payouts</span>
+                      <span className="text-sm text-gray-600">Stripe connected · Payout schedule managed by Stripe</span>
                     </div>
                   ) : (
                     <button onClick={connectStripe} disabled={connectingStripe}

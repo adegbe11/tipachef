@@ -64,7 +64,7 @@ const FAQS = (cityName: string, priceFrom: number) => [
   },
   {
     q: "Can I tip a private chef after the event?",
-    a: "Yes, and most clients do. Every chef in our network has a Tip a Chef profile. After your dinner, scan their QR code and send a direct tip with a personal note. 100% reaches the chef immediately. It is the best way to say thank you.",
+    a: "Yes, and many clients do. When your chef shares a Tip a Chef QR code, you can send a direct tip with a personal note. The chef keeps 95% before Stripe processing fees.",
   },
 ];
 

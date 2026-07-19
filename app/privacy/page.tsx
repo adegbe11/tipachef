@@ -204,7 +204,7 @@ export default function PrivacyPage() {
                       Stripe's Consumer Terms
                     </a>.
                   </p>
-                  <p>A small platform fee is deducted from each tip and shown to you before you confirm payment. 100% of the remainder goes to the chef.</p>
+                  <p>A 5% platform fee is deducted from each tip. The remaining 95% is routed to the chef before Stripe processing fees.</p>
                 </Section>
 
                 <Section id="terms" title="Terms of service">

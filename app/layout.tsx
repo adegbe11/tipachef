@@ -26,7 +26,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Tip a Chef | Tip & Hire a Private Chef Directly",
   description:
-    "Tip a Chef connects diners with private chefs, with every tip going straight to the chef who cooked, not a pool. Find a private chef near you, or create your free chef page and get tipped by QR code.",
+    "Tip a Chef helps diners support chefs directly. Find a private chef, or create a free chef page, share a QR code, and receive tips through Stripe.",
   keywords: [
     "tip a chef", "tip a private chef", "tip your chef",
     "private chef", "hire a private chef", "private chef near me",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Tip a Chef | Tip & Hire a Private Chef Directly",
-    description: "Tip and hire a private chef directly. Every tip goes straight to the chef who cooked, not a pool. Find a private chef near you, or create your free chef page and get tipped by QR code.",
+    description: "Tip and hire chefs directly. Create a free chef page, share a QR code, and receive tips securely through Stripe.",
     url: "https://tipachef.com",
     siteName: "Tip a Chef",
     images: [{ url: "/og", width: 1200, height: 630, alt: "Tip a Chef — tip and hire a private chef directly" }],
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Tip a Chef | Tip & Hire a Private Chef Directly",
-    description: "Tip and hire a private chef directly. Every tip goes straight to the chef who cooked, not a pool. Find a chef near you, or create your free page and get tipped by QR code.",
+    description: "Tip and hire chefs directly. Create a free chef page, share a QR code, and receive tips securely through Stripe.",
     images: ["/og"],
   },
   metadataBase: new URL("https://tipachef.com"),

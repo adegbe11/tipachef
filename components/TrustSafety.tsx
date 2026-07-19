@@ -17,7 +17,7 @@ const PILLARS = [
       </svg>
     ),
     title: "Fully transparent",
-    body:  "You see exactly where your money goes. 100% of every tip reaches the chef. No hidden fees, no surprise deductions.",
+    body:  "The 5% platform fee is stated clearly. The remaining 95% is routed to the chef's connected Stripe account before Stripe processing fees.",
   },
   {
     icon: (
@@ -26,7 +26,7 @@ const PILLARS = [
         <polyline points="9 12 11 14 15 10"/>
       </svg>
     ),
-    title: "Verified chef profiles",
+    title: "Chef-owned profiles",
     body:  "Every profile is reviewed before going live. Real names, real kitchens. You always know who you're tipping.",
   },
   {

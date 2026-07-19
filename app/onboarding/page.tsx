@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 
 const ROLES = [
@@ -91,9 +92,9 @@ function ProfilePreview({ name, role, restaurant, avatarUrl, slug }: {
     <div className="w-60 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white/10 bg-gray-50">
       <div className="h-20" style={{ background: "linear-gradient(135deg,#4a2c0a,#1a1a1a)" }} />
       <div className="px-4 pb-4 -mt-8">
-        <div className="w-14 h-14 rounded-2xl border-4 border-white shadow-md bg-amber-50 flex items-center justify-center overflow-hidden mb-2">
+        <div className="relative w-14 h-14 rounded-2xl border-4 border-white shadow-md bg-amber-50 flex items-center justify-center overflow-hidden mb-2">
           {avatarUrl
-            ? <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
+            ? <Image src={avatarUrl} alt={`${display} profile preview`} fill unoptimized className="object-cover" />
             : <span className="text-amber-700 font-bold text-xl">{display[0]?.toUpperCase()}</span>
           }
         </div>
@@ -602,7 +603,7 @@ export default function Onboarding() {
             {[
               { v: "$47",    l: "Avg tip earned" },
               { v: "2 min",  l: "To set up"      },
-              { v: "100%",   l: "Goes to you"    },
+              { v: "95%",    l: "Before Stripe fees" },
             ].map(s => (
               <div key={s.l} className="rounded-2xl p-3 text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
                 <p className="font-semibold text-base mb-0.5" style={{ color: "#C9A96E" }}>{s.v}</p>
@@ -969,7 +970,7 @@ export default function Onboarding() {
                 >
                   {avatarUrl ? (
                     <>
-                      <img src={avatarUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                      <Image src={avatarUrl} alt="Your chef profile photo" fill unoptimized className="object-cover" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>

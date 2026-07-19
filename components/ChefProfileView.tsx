@@ -609,7 +609,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
               color: "rgba(250,248,244,0.16)",
               margin: "10px 0 0",
             }}>
-              🔒 Powered by Stripe · 100% goes directly to {firstName}
+              🔒 Powered by Stripe · {firstName} receives 95% before Stripe processing fees
             </p>
           </div>
 

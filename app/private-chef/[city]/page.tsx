@@ -5,7 +5,7 @@ import Link                    from "next/link";
 import { WORLD_CITIES, WORLD_CITIES_BY_SLUG, countryFlag } from "@/lib/world-cities";
 import { getLocationBySlug, getNearbyLocations }           from "@/lib/locations";
 import { getCity, getNearbyCities, getTopCities, getAllCitySlugs } from "@/lib/all-cities";
-import { robotsForCity, getCityChefStats } from "@/lib/city-seo";
+import { robotsForCity } from "@/lib/city-seo";
 import { assignAuthor, authorJsonLd } from "@/lib/authors";
 import { createServerClient }  from "@/lib/supabase-server";
 import LightNavbar             from "@/components/LightNavbar";
@@ -122,12 +122,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
   // Deterministic per-city stats — unique "information gain" per URL, stable
   // across builds. Falls back to a synthesized city object for curated-only
   // slugs that are not in the GeoNames set.
-  const statsCity = ac ?? {
-    name: cityName, slug: citySlug, country, countryCode,
-    continent: "", region, currency: "USD", currencySymbol: "$",
-    priceFrom, population: 250_000,
-  };
-  const stats = getCityChefStats(statsCity);
+  const contentReviewedISO = "2026-07-18";
 
   const faqs = [
     {
@@ -136,7 +131,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
     },
     {
       q: `How do I hire a private chef in ${cityName}?`,
-      a: `Browse verified chef profiles on this page. Every chef in ${cityName} has a full profile, menu style, and direct contact method. For events, book 1–2 weeks in advance. For larger occasions, aim for 3–4 weeks.`,
+      a: `Browse chef-created profiles on this page. Available details may include cuisine, services, and a direct inquiry form. Confirm identity, availability, pricing, and credentials directly before booking.`,
     },
     {
       q: `What services do private chefs in ${cityName} offer?`,
@@ -148,7 +143,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
     },
     {
       q: `Do you tip a private chef in ${cityName}?`,
-      a: `Yes. Tipping a private chef is standard and warmly appreciated. For events, 10–20% of the chef's fee is customary. With Tip a Chef you can tip directly from your phone in seconds — no cash, no split with management. 100% goes to the chef.`,
+      a: `Yes. Tipping a private chef is often appreciated. For events, 10–20% is a common reference point when service is not already included. With Tip a Chef, 95% routes to the chef before Stripe processing fees.`,
     },
     {
       q: `How far in advance should I book a private chef in ${cityName}?`,
@@ -219,7 +214,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         "@id": `https://tipachef.com/private-chef/${citySlug}#webpage`,
         url: `https://tipachef.com/private-chef/${citySlug}`,
         name: `Private Chef in ${cityName}`,
-        dateModified: stats.lastReviewedISO,
+        dateModified: contentReviewedISO,
         author: { "@id": `https://tipachef.com/team/${author.slug}#person` },
         reviewedBy: { "@id": `https://tipachef.com/team/${author.slug}#person` },
       },
@@ -351,7 +346,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         {/* ── Byline (E-E-A-T) + Direct Answer (AI Overview hook) ── */}
         <section style={{ padding: "24px 20px 0" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-            <CityByline author={author} reviewedISO={stats.lastReviewedISO} coversLabel={`${cityName}, ${country}`} />
+            <CityByline author={author} reviewedISO={contentReviewedISO} coversLabel={`${cityName}, ${country}`} />
             <DirectAnswer question={directAnswer.question} answer={directAnswer.answer} />
           </div>
         </section>
@@ -370,7 +365,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                 Set your guests, courses, and cuisine for a live estimate, then add the tip. When you are ready, browse {cityName} chefs and book one at that price.
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "8px" }}>
-                {["Verified chef profiles", "Book direct, no agency cut", "100% of the tip goes to the chef"].map((t) => (
+                {["Chef-owned profiles", "Book direct, no agency cut", "Chef keeps 95% before Stripe fees"].map((t) => (
                   <p key={t} style={{ fontFamily: "-apple-system, system-ui", fontSize: "14px", color: "#444", margin: 0, display: "flex", gap: "10px", alignItems: "center" }}>
                     <span style={{ color: "#C9A96E", fontWeight: 700 }}>✓</span> {t}
                   </p>
@@ -406,7 +401,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                     { f: "The menu", a: "Bespoke, built with you", b: "Fixed menu", c: "Set packages" },
                     { f: "How it's cooked", a: "Fresh, on-site, just for you", b: "Line kitchen, many tables", c: "Often off-site, reheated" },
                     { f: "Dietary needs", a: "Handled individually", b: "Limited swaps", c: "Hard at scale" },
-                    { f: "Who gets your tip", a: "100% the chef", b: "Split with front-of-house", c: "Often pooled" },
+                    { f: "Who gets your tip", a: "95% before Stripe fees", b: "Split with front-of-house", c: "Often pooled" },
                     { f: "Booking", a: "Direct with the chef", b: "Reservation", c: "Via a sales team" },
                   ].map((r, i, arr) => (
                     <tr key={r.f}>
@@ -427,7 +422,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         {/* ── Trust bar ── */}
         <div style={{ borderTop: "1px solid #f0f0f0", borderBottom: "1px solid #f0f0f0", padding: "18px 20px", marginTop: "40px", background: "#F7F3EA" }}>
           <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", gap: "28px", flexWrap: "wrap", justifyContent: "center" }}>
-            {["✓ Tips go directly to the chef", "✓ Stripe-secured payments", "✓ Free to join", "✓ No app needed", "✓ Verified chef profiles"].map((t) => (
+            {["✓ Direct-to-chef payment routing", "✓ Stripe-secured payments", "✓ Free to join", "✓ No app needed", "✓ Chef-owned profiles"].map((t) => (
               <span key={t} style={{ fontFamily: "-apple-system, system-ui", fontSize: "12.5px", color: "#7a7a7a", fontWeight: 500 }}>{t}</span>
             ))}
           </div>
@@ -445,19 +440,18 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "20px" }}>
                 <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#C9A96E", margin: 0 }}>
-                  The private chef scene in {cityName}
+                  Planning guide for {cityName}
                 </p>
                 <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "11px", color: "#aaaaaa", margin: 0 }}>
-                  Last reviewed {stats.lastReviewedISO}
+                  Editorial estimate · reviewed {contentReviewedISO}
                 </p>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "24px" }}>
                 {[
-                  { v: stats.chefsNearby,                   l: "Chefs in & around the city" },
-                  { v: stats.recentTips.toLocaleString(),   l: "Tips sent in the last 90 days" },
-                  { v: stats.avgTip,                        l: "Average tip left here" },
-                  { v: stats.topCuisine,                    l: "Most-requested cuisine" },
-                  { v: stats.peakNight,                     l: "Busiest night for bookings" },
+                  { v: eventCost,    l: "Typical private dinner range" },
+                  { v: mealPrepCost, l: "Typical meal-prep range" },
+                  { v: fullTimeCost, l: "Typical full-time range" },
+                  { v: "10–20%",    l: "Common optional tip range" },
                 ].map((s) => (
                   <div key={s.l}>
                     <p className="gold-text" style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "1.9rem", fontWeight: 500, margin: "0 0 4px" }}>{s.v}</p>
@@ -466,7 +460,7 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
                 ))}
               </div>
               <p style={{ fontFamily: "-apple-system, system-ui", fontSize: "12.5px", color: "#888888", lineHeight: 1.7, margin: "22px 0 0", maxWidth: "760px" }}>
-                Private chef demand in {cityName} peaks in {stats.peakMonth}, and {stats.topOccasion} are the most common reason locals book one. Tips here average {stats.avgTip} and go straight to the chef, with most diners booking for a {stats.peakNight} night.
+                These are editorial planning estimates, not live marketplace activity. Your chef sets the final price based on the menu, guest count, travel, ingredients, and service required.
               </p>
             </div>
           </div>

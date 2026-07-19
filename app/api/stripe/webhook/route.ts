@@ -22,13 +22,18 @@ export async function POST(request: NextRequest) {
     const metadata = session.metadata ?? {};
     const supabase = await createServiceClient();
 
-    await supabase.from("tips").insert({
+    const { error } = await supabase.from("tips").upsert({
       chef_id:          metadata.chef_id,
       amount_cents:     session.amount_total ?? 0,
       message:          metadata.message     || null,
       tipper_name:      metadata.tipper_name || "Anonymous",
       stripe_payment_id: session.payment_intent as string,
-    });
+    }, { onConflict: "stripe_payment_id", ignoreDuplicates: true });
+
+    if (error) {
+      console.error("Failed to persist completed tip", error.message);
+      return NextResponse.json({ error: "Webhook persistence failed" }, { status: 500 });
+    }
   }
 
   return NextResponse.json({ received: true });

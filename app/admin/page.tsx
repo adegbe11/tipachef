@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 const PLATFORM_FEE = 0.05; // 5%
-const ADMIN_EMAIL  = "adegbe11@gmail.com"; // change to your email
 
 interface Stat {
   label: string;
@@ -24,8 +22,6 @@ interface TipRow {
 
 export default function AdminPage() {
   const router  = useRouter();
-  const supabase = createClient();
-
   const [loading, setLoading] = useState(true);
   const [allowed, setAllowed] = useState(false);
   const [tips,    setTips]    = useState<TipRow[]>([]);
@@ -33,27 +29,15 @@ export default function AdminPage() {
 
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user || user.email !== ADMIN_EMAIL) {
+      const response = await fetch("/api/admin/stats", { cache: "no-store" });
+      if (!response.ok) {
         router.replace("/dashboard");
         return;
       }
+      const data = await response.json();
       setAllowed(true);
-
-      // Fetch all tips with chef info
-      const { data: tipData } = await supabase
-        .from("tips")
-        .select("*, chefs(name, slug)")
-        .order("created_at", { ascending: false })
-        .limit(200);
-
-      // Fetch chef count
-      const { count } = await supabase
-        .from("chefs")
-        .select("id", { count: "exact", head: true });
-
-      setTips((tipData ?? []) as TipRow[]);
-      setChefCount(count ?? 0);
+      setTips((data.tips ?? []) as TipRow[]);
+      setChefCount(data.chefCount ?? 0);
       setLoading(false);
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +96,7 @@ export default function AdminPage() {
             <p>Every tip sent to a connected chef automatically splits: <strong>95% → chef&apos;s Stripe account</strong>, <strong>5% → your Stripe account</strong> (the account whose API key is in your env vars).</p>
             <p>This is handled by Stripe Connect <code className="bg-amber-100 px-1 rounded">application_fee_amount</code>. You do not need to do anything — Stripe transfers your cut automatically on each payment.</p>
             <p>To withdraw your balance: go to your Stripe dashboard → Balance → Payouts → Add your bank account → funds arrive in 2 business days.</p>
-            <p className="text-amber-600 font-medium">⚠️ Tips to chefs who have NOT connected Stripe bypass the split — full amount goes through your platform account. You need to manually transfer those when the chef eventually connects.</p>
+            <p className="text-amber-600 font-medium">Tips cannot be accepted until a chef completes Stripe onboarding, preventing funds from being stranded in the platform account.</p>
           </div>
         </div>
 

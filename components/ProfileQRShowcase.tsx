@@ -292,7 +292,7 @@ export default function ProfileQRShowcase() {
                 {[
                   { icon: "⚡", text: "QR ready the moment you sign up" },
                   { icon: "🖨️", text: "Print-ready PNG or PDF included" },
-                  { icon: "💸", text: "100% of every tip goes to you" },
+                  { icon: "💸", text: "Keep 95% before Stripe processing fees" },
                 ].map((b) => (
                   <div key={b.text} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <span style={{ fontSize: "14px", flexShrink: 0 }}>{b.icon}</span>

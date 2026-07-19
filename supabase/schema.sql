@@ -13,6 +13,8 @@ create table if not exists chefs (
   role          text,
   restaurant    text,
   hook          text,
+  bio           text,
+  image_url     text,
   avatar_url    text,
   cover_url     text,
   goal_label    text,
@@ -23,6 +25,12 @@ create table if not exists chefs (
   tiktok_url    text,
   youtube_url   text,
   tip_reward    text,
+  city          text,
+  cuisines      text,
+  available_for_hire boolean default false,
+  hire_event_types text,
+  hire_rate     text,
+  hire_bio      text,
   created_at    timestamptz default now()
 );
 
@@ -61,8 +69,8 @@ create policy "Tips with messages are publicly readable" on tips
     message is not null
   );
 
-create policy "Anyone can insert a tip" on tips
-  for insert with check (true);
+-- Tip rows are written only by the verified Stripe webhook through the
+-- service-role client. No public insert policy is intentionally defined.
 
 -- ── Extras ───────────────────────────────────────────────
 create table if not exists extras (
@@ -99,3 +107,40 @@ $$ language plpgsql security definer;
 create trigger on_tip_created
   after insert on tips
   for each row execute function update_chef_goal();
+
+-- Posts and recipes
+create table if not exists posts (
+  id uuid default gen_random_uuid() primary key,
+  chef_id uuid references chefs(id) on delete cascade not null,
+  title text not null check (char_length(title) between 1 and 160),
+  body text,
+  post_type text not null default 'update' check (post_type in ('update', 'recipe')),
+  ingredients text,
+  prep_time text,
+  cook_time text,
+  servings text,
+  is_public boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+alter table posts enable row level security;
+create policy "Public posts are readable" on posts for select using (is_public = true or auth.uid() = chef_id);
+create policy "Chef manages own posts" on posts for all using (auth.uid() = chef_id) with check (auth.uid() = chef_id);
+
+-- Hiring leads are private to the recipient chef. Inserts are performed by
+-- the validated server route with the service-role client.
+create table if not exists hire_inquiries (
+  id uuid default gen_random_uuid() primary key,
+  chef_id uuid references chefs(id) on delete cascade not null,
+  name text not null check (char_length(name) between 1 and 100),
+  email text not null check (char_length(email) <= 254),
+  event_type text,
+  event_date date,
+  guest_count integer check (guest_count between 1 and 1000),
+  message text check (char_length(message) <= 2000),
+  status text not null default 'new' check (status in ('new', 'contacted', 'booked', 'closed')),
+  created_at timestamptz not null default now()
+);
+alter table hire_inquiries enable row level security;
+create policy "Chef reads own hire inquiries" on hire_inquiries for select using (auth.uid() = chef_id);
+create policy "Chef updates own hire inquiries" on hire_inquiries for update using (auth.uid() = chef_id) with check (auth.uid() = chef_id);

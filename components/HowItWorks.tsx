@@ -12,7 +12,7 @@ const STEPS = [
   {
     n:    "03",
     head: "Get paid. Instantly.",
-    body: "Tips land in your account within minutes. 100% to you. No 30-day hold, no management cut.",
+    body: "Payments are routed to your connected Stripe account. You keep 95% before Stripe processing fees, with no restaurant pool.",
   },
 ];
 

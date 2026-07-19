@@ -231,7 +231,7 @@ export default async function CityPage({ params }: { params: { city: string } })
               {[
                 { n: "01", title: "Find the QR code", body: `Look for a Tip a Chef QR code at your table, on the menu, or at the pass in ${cityName} restaurants that have joined.` },
                 { n: "02", title: "Scan and choose an amount", body: "Open your phone camera, scan, pick a tip amount and leave a personal message. Takes under thirty seconds." },
-                { n: "03", title: "The chef receives it directly", body: "100% of your tip goes to the chef's personal account via Stripe. No restaurant cut. No waiting." },
+                { n: "03", title: "The chef receives it directly", body: "95% routes to the chef's connected Stripe account before processing fees. No restaurant pool." },
               ].map((step) => (
                 <div key={step.n} style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start" }}>
                   <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "rgba(201,169,110,0.12)", border: "1.5px solid rgba(201,169,110,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

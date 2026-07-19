@@ -48,6 +48,18 @@ export default function Navbar() {
   }, [searchOpen]);
 
   useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setSearchOpen(false);
@@ -242,6 +254,8 @@ export default function Navbar() {
               onClick={() => setMenuOpen(!menuOpen)}
               className="flex flex-col gap-1.5 p-3 press"
               aria-label="Menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
             >
               <span className={`block h-px w-5 bg-ivory transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
               <span className={`block h-px w-5 bg-ivory transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
@@ -275,6 +289,11 @@ export default function Navbar() {
 
       {/* ── Full-screen mobile menu ───────────────────────────── */}
       <div
+        id="mobile-navigation"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Main navigation"
+        aria-hidden={!menuOpen}
         className={`fixed inset-0 z-40 glass-dark flex flex-col items-center justify-center gap-8 transition-all duration-500 md:hidden ${
           menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
@@ -284,6 +303,7 @@ export default function Navbar() {
             key={l.href}
             href={l.href}
             onClick={() => setMenuOpen(false)}
+            tabIndex={menuOpen ? 0 : -1}
             className="font-display text-4xl text-ivory/80 hover:text-ivory transition-colors italic"
           >
             {l.label}
@@ -293,6 +313,7 @@ export default function Navbar() {
           <a
             href="/login"
             onClick={() => setMenuOpen(false)}
+            tabIndex={menuOpen ? 0 : -1}
             className="press text-sm font-sans font-medium px-8 py-3 rounded-full border border-ember/40 text-ember"
           >
             Sign in
@@ -300,6 +321,7 @@ export default function Navbar() {
           <a
             href="/signup"
             onClick={() => setMenuOpen(false)}
+            tabIndex={menuOpen ? 0 : -1}
             className="press text-sm font-sans font-semibold px-8 py-3 rounded-full bg-ember text-graphite"
           >
             Sign up
