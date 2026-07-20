@@ -1,7 +1,7 @@
-// Byline that sits directly below the hero on every city page. Gives the page
-// a real, credentialed author (E-E-A-T "Experience") plus a visible
-// last-reviewed date so readers know the intel is maintained. The Person
-// JSON-LD half is wired in the page's graph.
+// Byline that sits directly below the hero on every city page. Attributes the
+// guide to the Tip a Chef editorial team plus a visible last-reviewed date so
+// readers know the intel is maintained. The Organization JSON-LD half is wired
+// in the page's graph.
 
 import Link from "next/link";
 import type { Author } from "@/lib/authors";
@@ -29,8 +29,8 @@ export default function CityByline({ author, reviewedISO, coversLabel }: Props) 
       <Avatar name={author.name} size={44} />
       <div>
         <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 14, fontWeight: 500, color: "#1d1d1f", margin: 0, lineHeight: 1.3 }}>
-          <span style={{ color: "#8a8a8a" }}>By</span>{" "}
-          <Link href={`/team/${author.slug}`} style={{ color: "#111111", fontWeight: 700, textDecoration: "none" }}>{author.name}</Link>{" "}
+          <span style={{ color: "#8a8a8a" }}>By the</span>{" "}
+          <Link href="/team" style={{ color: "#111111", fontWeight: 700, textDecoration: "none" }}>{author.name}</Link>{" "}
           <span style={{ color: "#8a8a8a" }}>· {author.role}</span>
         </p>
         <p style={{ fontFamily: "-apple-system, system-ui", fontSize: 12, color: "#9a9a9a", margin: "4px 0 0", lineHeight: 1.3 }}>

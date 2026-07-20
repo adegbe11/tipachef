@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { QRCodeSVG } from "qrcode.react";
 
 const TIP_AMOUNTS = [
   { emoji: "🧂", label: "Sea salt",    amount: 3  },
@@ -229,7 +230,7 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
             padding: "6px 12px",
           }}>
             <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#4ade80", boxShadow: "0 0 7px rgba(74,222,128,0.9)", animation: "profilePulse 2s infinite" }} />
-            <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", color: "rgba(74,222,128,0.85)", fontWeight: 700, letterSpacing: "0.07em" }}>LIVE</span>
+            <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "10px", color: "rgba(74,222,128,0.85)", fontWeight: 700, letterSpacing: "0.07em" }}>{chef.isDemo ? "DEMO" : "LIVE"}</span>
           </div>
         </div>
 
@@ -675,12 +676,13 @@ export default function ChefProfileView({ chef }: { chef: ChefViewData }) {
             padding: "6px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
           }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://tipachef.com/${chef.slug}&color=111111&bgcolor=FFFFFF`}
-              alt="QR"
-              width={56}
-              height={56}
+            <QRCodeSVG
+              value={`https://tipachef.com/${chef.slug}`}
+              size={120}
+              fgColor="#111111"
+              bgColor="#FFFFFF"
+              level="M"
+              aria-label="QR code for this chef's tip page"
               style={{ display: "block", width: "100%", height: "100%" }}
             />
           </div>

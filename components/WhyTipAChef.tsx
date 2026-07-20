@@ -2,13 +2,15 @@
 
 import { useEffect, useRef } from "react";
 
-const VS = [
+type Cell = boolean | "soon";
+
+const VS: { feature: string; us: Cell; bmac: Cell; patreon: Cell }[] = [
   { feature: "Chef-specific profiles and QR tipping", us: true, bmac: false, patreon: false },
   { feature: "Restaurant QR integration",      us: true,  bmac: false, patreon: false },
   { feature: "Back-of-house kitchen tipping",  us: true,  bmac: false, patreon: false },
   { feature: "Stripe-managed payouts",         us: true,  bmac: true,  patreon: false },
   { feature: "Chef-specific profiles",         us: true,  bmac: false, patreon: false },
-  { feature: "Monthly memberships",            us: true,  bmac: true,  patreon: true  },
+  { feature: "Monthly memberships",            us: "soon", bmac: true, patreon: true  },
   { feature: "Free to sign up",                us: true,  bmac: true,  patreon: false },
   { feature: "We never email your supporters", us: true,  bmac: true,  patreon: false },
   { feature: "Human customer support",         us: true,  bmac: true,  patreon: false },
@@ -27,7 +29,17 @@ function useReveal(ref: React.RefObject<HTMLElement | null>) {
   }, [ref]);
 }
 
-function Check({ val }: { val: boolean }) {
+function Check({ val }: { val: Cell }) {
+  if (val === "soon") {
+    return (
+      <span
+        className="mx-auto px-2 py-0.5 rounded-full text-[10px] font-sans font-semibold tracking-wide uppercase"
+        style={{ background: "rgba(201,169,110,0.1)", color: "rgba(201,169,110,0.8)", border: "1px solid rgba(201,169,110,0.25)" }}
+      >
+        Soon
+      </span>
+    );
+  }
   return val ? (
     <div className="w-6 h-6 rounded-full bg-ember/15 border border-ember/30 flex items-center justify-center mx-auto">
       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">

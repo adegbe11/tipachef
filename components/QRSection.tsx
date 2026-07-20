@@ -1,11 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link  from "next/link";
 import { useState, useEffect, useRef } from "react";
 
-const QR_URL =
-  "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Ftipachef.com%2Fmarco&bgcolor=F5EDD8&color=1a1208&margin=10&qzone=1";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function QRSection() {
   const [tipped, setTipped] = useState(false);
@@ -105,12 +103,14 @@ export default function QRSection() {
                   marginBottom: "14px",
                 }}
               >
-                <Image
-                  src={QR_URL}
-                  alt="Tip a Chef QR code"
-                  width={136}
-                  height={136}
-                  unoptimized
+                <QRCodeSVG
+                  value="https://tipachef.com/marco"
+                  size={136}
+                  bgColor="#F5EDD8"
+                  fgColor="#1a1208"
+                  level="M"
+                  includeMargin
+                  aria-label="Tip a Chef QR code"
                   style={{ borderRadius: "8px", display: "block" }}
                 />
                 <p
@@ -207,7 +207,7 @@ export default function QRSection() {
                       animation: "pulse 2s infinite",
                     }}
                   />
-                  <span style={{ fontSize: "9px", fontFamily: "-apple-system,system-ui", color: "rgba(255,255,255,0.3)", letterSpacing: "0.03em" }}>LIVE</span>
+                  <span style={{ fontSize: "9px", fontFamily: "-apple-system,system-ui", color: "rgba(255,255,255,0.3)", letterSpacing: "0.03em" }}>DEMO</span>
                 </div>
               </button>
 
@@ -240,7 +240,7 @@ export default function QRSection() {
           <div className="space-y-4 mb-10">
             {[
               { icon: "⚡", title: "Instant generation", desc: "Your unique QR is ready the moment you sign up." },
-              { icon: "🖨️", title: "Print-ready file", desc: "Download a hi-res PNG or PDF. Drop it on the menu." },
+              { icon: "🖨️", title: "Print-ready file", desc: "Download a hi-res PNG. Drop it on the menu." },
               { icon: "📱", title: "Works on any device", desc: "Diners scan with their camera. No app required." },
             ].map((f) => (
               <div key={f.title} className="flex items-start gap-3">

@@ -108,7 +108,7 @@ export const POSTS_11_TO_30: BlogPost[] = [
       { q: "Can I use Buy Me a Coffee without social media?", a: "Technically yes, but practically difficult. Discovery on Buy Me a Coffee relies on sharing your profile link, which usually happens through social media." },
       { q: "Which is better for chefs: Buy Me a Coffee or Tip a Chef?", a: "For chefs who create digital content and have an online following, Buy Me a Coffee is a reasonable option. For working chefs who want to be tipped by restaurant diners, Tip a Chef's kitchen-specific features are more relevant." },
       { q: "Can diners find me on Buy Me a Coffee without a link?", a: "Not easily. Buy Me a Coffee does not have a chef or restaurant search. Diners need your direct profile URL." },
-      { q: "Does Tip a Chef have a membership option like Buy Me a Coffee?", a: "Yes. Tip a Chef offers Fan, Foodie, and Patron membership tiers for recurring monthly support." },
+      { q: "Does Tip a Chef have a membership option like Buy Me a Coffee?", a: "Not yet. Tip a Chef currently focuses on one-time tips. Recurring monthly membership tiers are planned, and chefs can join the waitlist to be notified when they launch." },
     ],
     relatedSlugs: ["patreon-for-chefs", "creator-economy-comes-to-the-kitchen", "how-to-set-up-chef-profile-tip-a-chef", "how-much-to-charge-for-membership-tiers"],
   },
@@ -382,12 +382,12 @@ export const POSTS_11_TO_30: BlogPost[] = [
     date: "2026-05-17",
     readMinutes: 5,
     featuredImage: { url: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=1200&q=80", alt: "Chef reviewing pricing on a laptop in an empty restaurant" },
-    intro: "Pricing your membership tiers is the question most chefs spend too long on and overthink. Here is the short version: start low, offer something real, and adjust based on what converts. Here is the long version.",
+    intro: "Membership tiers are coming soon to Tip a Chef. When they arrive, pricing them is the question most chefs will spend too long on and overthink. Here is the short version: start low, offer something real, and adjust based on what converts. Here is the long version.",
     sections: [
       {
         h2: "The Three-Tier Framework",
         blocks: [
-          { type: "p", text: "Tip a Chef's membership structure — Fan, Foodie, Patron — maps to three distinct supporter motivations. Fan supporters want to express appreciation with minimal commitment. Foodie supporters want meaningful access to your craft. Patron supporters want a genuine relationship with you as a chef. Each tier should offer something proportionate to its price and distinct from the tier below." },
+          { type: "p", text: "Tip a Chef's upcoming membership structure — Fan, Foodie, Patron — maps to three distinct supporter motivations. Fan supporters want to express appreciation with minimal commitment. Foodie supporters want meaningful access to your craft. Patron supporters want a genuine relationship with you as a chef. Each tier should offer something proportionate to its price and distinct from the tier below." },
           { type: "h3", text: "Fan tier (£3-£7/month)" },
           { type: "p", text: "This is your entry point. At £5, the ask is low enough that any regular customer will consider it. Offer: your recipe newsletter, a supporter badge on your profile, early access to your menu changes. Keep this tier accessible. Its job is to convert casual fans into committed ones." },
           { type: "h3", text: "Foodie tier (£10-£20/month)" },
@@ -424,16 +424,16 @@ export const POSTS_11_TO_30: BlogPost[] = [
   // ─── POST 18 ───────────────────────────────────────────────────────────────
   {
     slug: "what-to-offer-membership-tiers",
-    seoTitle: "What to Offer Each Chef Membership Tier (With Real Examples)",
+    seoTitle: "What to Offer Each Chef Membership Tier (Practical Guide)",
     title: "What to Offer at Each Chef Membership Tier: Fan, Foodie, and Patron",
-    description: "The perks you offer each membership tier determine whether fans upgrade, stay, and refer others. Here are the best tier ideas for professional chefs with real examples.",
+    description: "The perks you offer each membership tier determine whether fans upgrade, stay, and refer others. Here are the best tier ideas for professional chefs.",
     keywords: ["chef membership perks", "what to offer chef membership", "chef fan tier ideas", "chef patron benefits", "membership tier examples chef"],
     category: "for-chefs",
     categoryLabel: "For Chefs",
     date: "2026-05-18",
     readMinutes: 5,
     featuredImage: { url: "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=1200&q=80", alt: "Chef sharing a recipe with a member at a private session" },
-    intro: "The right membership perks are specific to your cooking and honest about what you can deliver consistently. Here is a practical guide to what works at each tier — with real examples from chefs who have tested them.",
+    intro: "The right membership perks are specific to your cooking and honest about what you can deliver consistently. Here is a practical guide to what works at each tier, drawn from what has worked across creator membership platforms.",
     sections: [
       {
         h2: "Fan Tier Perks (£3-£7/month)",
@@ -475,7 +475,7 @@ export const POSTS_11_TO_30: BlogPost[] = [
         h2: "The Most Important Rule for All Tiers",
         blocks: [
           { type: "p", text: "Only promise what you will deliver every month without fail. A patron who pays £25 and receives nothing for two months will cancel and leave a negative impression that takes time to recover from. Under-promise and over-deliver. Start with one perk per tier and add more as your capacity grows." },
-          { type: "p", text: "The chefs who maintain the most successful membership programmes on Tip a Chef are not the ones with the most perks — they are the ones who deliver consistently, write personally, and treat their members as individuals rather than subscribers." },
+          { type: "p", text: "The creators who maintain the most successful membership programmes are not the ones with the most perks — they are the ones who deliver consistently, write personally, and treat their members as individuals rather than subscribers." },
         ],
       },
     ],
@@ -485,7 +485,7 @@ export const POSTS_11_TO_30: BlogPost[] = [
       { q: "What if I can't deliver a perk one month?", a: "Communicate early and make it up the following month. Transparency about capacity is far better than silence." },
       { q: "Do members expect physical perks?", a: "At the Patron tier, some physical acknowledgement (name on a wall, handwritten note) is appreciated. For Fan and Foodie, digital perks are entirely sufficient." },
       { q: "Can I change my perks after launching?", a: "Yes, but upgrade rather than downgrade. Adding perks is always welcome; removing them requires careful communication." },
-      { q: "What is the single most popular perk among chef memberships?", a: "The monthly recipe newsletter — personal, specific, and easy to deliver — consistently performs as the most appreciated perk at the Fan tier." },
+      { q: "What is the single most popular perk among chef memberships?", a: "The monthly recipe newsletter — personal, specific, and easy to deliver — is the strongest starting perk for a Fan tier, based on what works across creator membership platforms." },
     ],
     relatedSlugs: ["how-much-to-charge-for-membership-tiers", "how-to-set-up-chef-profile-tip-a-chef", "psychology-of-why-fans-tip-chefs", "how-to-get-first-10-supporters"],
   },
@@ -612,7 +612,7 @@ export const POSTS_11_TO_30: BlogPost[] = [
       {
         h2: "Generating Your QR Code",
         blocks: [
-          { type: "p", text: "Log into your Tip a Chef dashboard and navigate to the QR code section. Your code is automatically generated and links directly to your profile. Download it in high resolution — you will need at least 300dpi for print. The file will be a PNG or PDF suitable for any print application." },
+          { type: "p", text: "Log into your Tip a Chef dashboard and navigate to the QR code section. Your code is automatically generated and links directly to your profile. Download it as a high-resolution PNG — sharp enough for menus, table cards, and posters." },
           { type: "p", text: "The QR code links to tipachef.com/yourname. When a diner scans it, they land directly on your profile — your name, your restaurant, your photo, your bio — with the tip button immediately visible. No searching, no navigating. The whole flow from scan to tip takes under a minute." },
         ],
       },

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { QRCodeSVG } from "qrcode.react";
 import { createClient } from "@/lib/supabase/client";
 
 const ROLES = [
@@ -585,12 +586,13 @@ export default function Onboarding() {
           {/* QR card */}
           <div className="rounded-3xl p-6 mb-6 mx-auto max-w-xs" style={{ background: "#15100A", border: "1px solid rgba(201,169,110,0.15)" }}>
             <div className="bg-white rounded-2xl p-4 flex flex-col items-center mb-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(qrUrl)}&color=111111&bgcolor=ffffff`}
-                alt="QR code"
-                width={160}
-                height={160}
+              <QRCodeSVG
+                value={qrUrl}
+                size={160}
+                fgColor="#111111"
+                bgColor="#ffffff"
+                level="M"
+                aria-label="QR code linking to your tip page"
                 className="rounded-lg"
               />
             </div>
@@ -601,7 +603,7 @@ export default function Onboarding() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 mb-8">
             {[
-              { v: "$47",    l: "Avg tip earned" },
+              { v: "Free",   l: "To join"        },
               { v: "2 min",  l: "To set up"      },
               { v: "95%",    l: "Before Stripe fees" },
             ].map(s => (

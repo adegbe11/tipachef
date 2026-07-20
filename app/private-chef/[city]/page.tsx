@@ -215,8 +215,8 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
         url: `https://tipachef.com/private-chef/${citySlug}`,
         name: `Private Chef in ${cityName}`,
         dateModified: contentReviewedISO,
-        author: { "@id": `https://tipachef.com/team/${author.slug}#person` },
-        reviewedBy: { "@id": `https://tipachef.com/team/${author.slug}#person` },
+        author: { "@id": "https://tipachef.com/#organization" },
+        reviewedBy: { "@id": "https://tipachef.com/#organization" },
       },
       {
         "@type":       "Service",
@@ -291,11 +291,10 @@ export default async function PrivateChefCityPage({ params }: { params: { city: 
               <div aria-hidden style={{ position: "absolute", top: "-50px", right: "-50px", width: "300px", height: "300px", borderRadius: "50%", border: "2px solid rgba(26,18,8,0.07)" }} />
               <div aria-hidden style={{ position: "absolute", top: "-12px", right: "-12px", width: "220px", height: "220px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.18)" }} />
 
-              {/* social-proof badge */}
+              {/* value badge */}
               <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(26,18,8,0.14)", borderRadius: "100px", padding: "6px 14px", marginBottom: "18px", backdropFilter: "blur(2px)" }}>
-                <span style={{ color: "#3a2810", fontSize: "12px", letterSpacing: "1px" }}>★★★★★</span>
                 <span style={{ fontFamily: "-apple-system, system-ui", fontSize: "12px", fontWeight: 600, color: "#3a2810" }}>
-                  Loved by diners in {country}
+                  Book direct · Chefs keep 95% of tips
                 </span>
               </div>
 

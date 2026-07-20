@@ -1,16 +1,28 @@
-const ROWS = [
+type Cell = boolean | "soon";
+
+const ROWS: { feature: string; us: Cell; bmac: Cell; patreon: Cell }[] = [
   { feature: "Chef-specific profiles and QR tipping", us: true, bmac: false, patreon: false },
   { feature: "Restaurant QR integration",          us: true,  bmac: false, patreon: false },
   { feature: "Back-of-house kitchen tipping",      us: true,  bmac: false, patreon: false },
   { feature: "Stripe Connect payouts",             us: true,  bmac: false, patreon: false },
   { feature: "Chef-specific profiles",             us: true,  bmac: false, patreon: false },
-  { feature: "Monthly memberships",                us: true,  bmac: true,  patreon: true  },
+  { feature: "Monthly memberships",                us: "soon", bmac: true, patreon: true  },
   { feature: "Free to sign up",                    us: true,  bmac: true,  patreon: true  },
   { feature: "We never email your supporters",     us: true,  bmac: false, patreon: false },
   { feature: "Human customer support",             us: true,  bmac: false, patreon: false },
 ];
 
-function Tick({ yes }: { yes: boolean }) {
+function Tick({ yes }: { yes: Cell }) {
+  if (yes === "soon") {
+    return (
+      <span
+        className="mx-auto px-2 py-0.5 rounded-full text-[10px] font-sans font-semibold tracking-wide uppercase"
+        style={{ background: "rgba(201,168,76,0.1)", color: "rgba(201,168,76,0.8)", border: "1px solid rgba(201,168,76,0.25)" }}
+      >
+        Soon
+      </span>
+    );
+  }
   return yes ? (
     <div className="mx-auto w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(201,168,76,0.15)" }}>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">

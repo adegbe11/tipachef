@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link  from "next/link";
 import { useEffect, useRef } from "react";
 
-const QR_URL =
-  "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Ftipachef.com%2Fmarco-esposito&bgcolor=F5EDD8&color=1a1208&margin=12&qzone=1";
+import { QRCodeSVG } from "qrcode.react";
 
 const CHEF = {
   name:     "Marco Esposito",
@@ -248,12 +247,14 @@ export default function ProfileQRShowcase() {
                     boxShadow: "0 6px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.7)",
                   }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={QR_URL}
-                    alt="Tip Marco — scan to tip"
-                    width={160}
-                    height={160}
+                  <QRCodeSVG
+                    value="https://tipachef.com/marco-esposito"
+                    size={160}
+                    bgColor="#F5EDD8"
+                    fgColor="#1a1208"
+                    level="M"
+                    includeMargin
+                    aria-label="Tip Marco — scan to tip"
                     style={{ display: "block", borderRadius: "10px" }}
                   />
                 </div>
@@ -291,7 +292,7 @@ export default function ProfileQRShowcase() {
               <div style={{ display: "grid", gap: "10px", width: "220px" }}>
                 {[
                   { icon: "⚡", text: "QR ready the moment you sign up" },
-                  { icon: "🖨️", text: "Print-ready PNG or PDF included" },
+                  { icon: "🖨️", text: "Print-ready hi-res PNG included" },
                   { icon: "💸", text: "Keep 95% before Stripe processing fees" },
                 ].map((b) => (
                   <div key={b.text} style={{ display: "flex", alignItems: "center", gap: "10px" }}>

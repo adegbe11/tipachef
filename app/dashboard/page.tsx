@@ -214,7 +214,8 @@ function DashboardInner() {
   }
 
   function downloadQR() {
-    const canvas = document.querySelector("#qr-dl-canvas canvas") as HTMLCanvasElement;
+    // Use the hidden hi-res canvas so the file is print-quality (1024px ≈ 300dpi at 8.5cm)
+    const canvas = document.querySelector("#qr-dl-canvas-hires canvas") as HTMLCanvasElement;
     if (!canvas || !chef) return;
     const a = document.createElement("a");
     a.href = canvas.toDataURL("image/png");
@@ -1199,6 +1200,10 @@ function DashboardInner() {
                   <div className="bg-white rounded-2xl p-4 flex flex-col items-center mb-4">
                     <div id="qr-dl-canvas">
                       <QRCodeCanvas value={profileUrl} size={160} fgColor="#111111" bgColor="#FFFFFF" level="H" />
+                    </div>
+                    {/* Hidden hi-res canvas used only for the PNG download */}
+                    <div id="qr-dl-canvas-hires" aria-hidden="true" style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}>
+                      <QRCodeCanvas value={profileUrl} size={1024} fgColor="#111111" bgColor="#FFFFFF" level="H" includeMargin />
                     </div>
                   </div>
                   <p className="text-white font-semibold text-sm text-center">{chef.name || chef.slug}</p>

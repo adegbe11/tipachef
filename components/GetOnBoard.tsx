@@ -2,12 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-
-function qrUrl(slug: string) {
-  return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-    `https://tipachef.com/${slug}`
-  )}&bgcolor=F5EDD8&color=1a1208&margin=14&qzone=1`;
-}
+import { QRCodeSVG } from "qrcode.react";
 
 export default function GetOnBoard() {
   const [handle,  setHandle]  = useState("");
@@ -24,7 +19,7 @@ export default function GetOnBoard() {
     const slug = handle.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
     if (debounceRef.current) clearTimeout(debounceRef.current);
     if (slug.length < 2) { setQrSlug(""); setQrReady(false); return; }
-    debounceRef.current = setTimeout(() => { setQrReady(false); setQrSlug(slug); }, 400);
+    debounceRef.current = setTimeout(() => { setQrSlug(slug); setQrReady(true); }, 400);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [handle]);
 
@@ -199,15 +194,16 @@ export default function GetOnBoard() {
                 justifyContent: "center",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.6)",
               }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <QRCodeSVG
                   key={activeSlug}
-                  src={qrUrl(activeSlug)}
-                  alt={`tipachef.com/${activeSlug}`}
-                  width={152}
-                  height={152}
-                  onLoad={() => setQrReady(true)}
-                  style={{ display: "block", opacity: qrReady ? 1 : 0, transition: "opacity 0.4s ease" }}
+                  value={`https://tipachef.com/${activeSlug}`}
+                  size={152}
+                  bgColor="#F5EDD8"
+                  fgColor="#1a1208"
+                  level="M"
+                  includeMargin
+                  aria-label={`tipachef.com/${activeSlug}`}
+                  style={{ display: "block" }}
                 />
               </div>
 

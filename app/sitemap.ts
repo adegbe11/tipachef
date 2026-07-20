@@ -6,7 +6,6 @@ import { WORLD_CITIES } from "@/lib/world-cities";
 import { getAllLocationSlugs } from "@/lib/locations";
 import { ALL_CITIES } from "@/lib/all-cities";
 import { getIndexableCitySlugs } from "@/lib/city-seo";
-import { AUTHORS } from "@/lib/authors";
 import { getAllTippingSlugs } from "@/lib/tipping-guides";
 
 // Fixed dates per content type — prevents Google ignoring lastModified
@@ -148,14 +147,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Author / E-E-A-T pages
-  const authorPages: MetadataRoute.Sitemap = AUTHORS.map((a) => ({
-    url: `${base}/team/${a.slug}`,
-    lastModified: LAUNCH,
-    changeFrequency: "monthly" as const,
-    priority: 0.4,
-  }));
-
   // Tipping-guide cluster (do you tip / how much to tip a [type] chef)
   const tippingPages: MetadataRoute.Sitemap = getAllTippingSlugs().map((slug) => ({
     url: `${base}/tipping/${slug}`,
@@ -166,7 +157,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const all: MetadataRoute.Sitemap = [
     ...staticPages,
-    ...authorPages,
     ...tippingPages,
     ...blogPages,
     ...chefPages,

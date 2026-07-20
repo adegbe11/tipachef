@@ -4,7 +4,6 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
-      { protocol: 'https', hostname: 'api.qrserver.com' },
     ],
   },
   compress: true,
@@ -20,6 +19,12 @@ const nextConfig = {
         { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
       ],
     }];
+  },
+  async redirects() {
+    // Old fabricated-author profile URLs -> editorial standards page.
+    return [
+      { source: "/team/:slug", destination: "/team", permanent: true },
+    ];
   },
   // www -> non-www redirect is handled in Vercel dashboard (Domains settings).
   // Do NOT add it here — Vercel already redirects tipachef.com traffic and a

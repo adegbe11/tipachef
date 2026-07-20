@@ -59,7 +59,7 @@ export default function TippingGuidePage({ params }: { params: { slug: string } 
         headline: g.question,
         description: g.shortAnswer,
         dateModified: reviewedISO,
-        author: { "@id": `https://tipachef.com/team/${author.slug}#person` },
+        author: { "@id": "https://tipachef.com/#organization" },
         publisher: { "@id": "https://tipachef.com/#organization" },
         mainEntityOfPage: `https://tipachef.com/tipping/${g.slug}`,
       },
