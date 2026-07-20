@@ -32,6 +32,12 @@ create index if not exists chefs_city_idx on chefs (city);
 alter table tips add column if not exists tipper_name       text;
 alter table tips add column if not exists stripe_payment_id text;
 
+-- Required by the webhook's ON CONFLICT (stripe_payment_id) upsert — without
+-- this unique index every completed-tip webhook fails and tips are never
+-- recorded. (Postgres allows multiple NULLs in a unique index, so legacy rows
+-- without a payment id are unaffected.)
+create unique index if not exists tips_stripe_payment_id_key on tips (stripe_payment_id);
+
 -- Tips: ensure public Wall-of-Love policy exists (skip if already there)
 do $$
 begin

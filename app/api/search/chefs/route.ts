@@ -7,12 +7,14 @@ export async function GET(req: NextRequest) {
 
   const supabase = createServerClient();
 
+  // NB: production schema has no `restaurant` column — the restaurant name is
+  // stored in `bio` (see onboarding, which maps bio <-> restaurant).
   let query = supabase
     .from("chefs")
-    .select("id, name, slug, role, restaurant, image_url, bio, city, available_for_hire");
+    .select("id, name, slug, role, bio, image_url, city, available_for_hire");
 
   if (q.trim())     query = query.ilike("name", `%${q.trim()}%`);
-  if (venue.trim()) query = query.ilike("restaurant", `%${venue.trim()}%`);
+  if (venue.trim()) query = query.ilike("bio", `%${venue.trim()}%`);
 
   const { data, error } = await query.limit(24);
 
@@ -24,7 +26,7 @@ export async function GET(req: NextRequest) {
   // Remap DB columns to match client-side expectations
   const chefs = (data ?? []).map(c => {
     const r = c as unknown as Record<string, unknown>;
-    return { ...c, avatar_url: r.image_url ?? null, restaurant: r.restaurant ?? null };
+    return { ...c, avatar_url: r.image_url ?? null, restaurant: r.bio ?? null };
   });
   return NextResponse.json({ chefs });
 }
