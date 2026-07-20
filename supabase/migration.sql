@@ -38,6 +38,18 @@ alter table tips add column if not exists stripe_payment_id text;
 -- without a payment id are unaffected.)
 create unique index if not exists tips_stripe_payment_id_key on tips (stripe_payment_id);
 
+-- Legacy column: tips come from anonymous diners with no account, and no code
+-- references tips.user_id. Drop the NOT NULL so webhook inserts succeed.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'tips' and column_name = 'user_id' and is_nullable = 'NO'
+  ) then
+    alter table tips alter column user_id drop not null;
+  end if;
+end $$;
+
 -- Tips: ensure public Wall-of-Love policy exists (skip if already there)
 do $$
 begin
